@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
     return (
+
         <nav className="navbar navbar-expand-md navbar-dark bg-primary">
             <Link to="/" className="navbar-brand">
                 <img src={brandIcon} width="80" height="60" alt="Randome"
@@ -16,12 +17,13 @@ export default function Navbar() {
             <div className="collapse navbar-collapse ml-auto" style={{ flexGrow: "0" }} id="mainNavbar">
                 <div className="navbar-nav">
                     <Link className="nav-item nav-link text-secondary" to="/browse">Randomizers</Link>
-                    <Link className="nav-item nav-link text-secondary" to="/">Contact Us</Link>
+                    <Link className="nav-item nav-link text-secondary" to="/">Create</Link>
                     <Link className="nav-item nav-link text-secondary" to="/">Signup</Link>
                     <Link className="nav-item nav-link text-secondary" to="/">Login</Link>
                 </div>
             </div>
 
         </nav>
+
     );
 }
