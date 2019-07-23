@@ -34,7 +34,7 @@ $grays: map-merge(
   $grays
 );
 
-$lightBlue:    #BEE2E7 !default;
+$lightBlue:    rgb(247, 248, 252) !default;
 $indigo:  #4F57AA !default;
 $purple:  #454857 !default;
 $pink:    #72818B !default;
@@ -69,13 +69,13 @@ $colors: map-merge(
 );
 
 $primary:       $indigo !default;
-$secondary:     $lightBlue !default;
-$success:       $purple !default;
-$info:          $indigo !default;
-$warning:       $pink !default;
+$secondary:     $purple !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $orange !default;
 $danger:        $red !default;
 $light:         $pink !default;
-$dark:          $purple !default;
+$dark:          $gray-600 !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -726,15 +726,15 @@ $navbar-toggler-padding-x:          .75rem !default;
 $navbar-toggler-font-size:          $font-size-lg !default;
 $navbar-toggler-border-radius:      $btn-border-radius !default;
 
-$navbar-dark-color:                 rgba($white, .5) !default;
-$navbar-dark-hover-color:           rgba($white, .75) !default;
+$navbar-dark-color:                 rgba($white, 0.65) !default;
+$navbar-dark-hover-color:           rgba($white, 0.9) !default;
 $navbar-dark-active-color:          $white !default;
 $navbar-dark-disabled-color:        rgba($white, .25) !default;
 $navbar-dark-toggler-icon-bg:       str-replace(url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='#{$navbar-dark-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"), "#", "%23") !default;
 $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
-$navbar-light-color:                rgba($black, .5) !default;
-$navbar-light-hover-color:          rgba($black, .7) !default;
+$navbar-light-color:                rgba($black, 0.7) !default;
+$navbar-light-hover-color:          rgba($black, .4) !default;
 $navbar-light-active-color:         rgba($black, .9) !default;
 $navbar-light-disabled-color:       rgba($black, .3) !default;
 $navbar-light-toggler-icon-bg:      str-replace(url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='#{$navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"), "#", "%23") !default;

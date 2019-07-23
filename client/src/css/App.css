@@ -1,0 +1,14 @@
+body {
+    background-color: rgb(247, 248, 252);
+}
+
+.large-input {
+    font-size: 150%;
+    letter-spacing: 0.5px;
+}
+
+@media (min-width: 768px) {
+    .w-md-75 {
+        width: 75% !important;
+    }
+}

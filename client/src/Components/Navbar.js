@@ -1,11 +1,12 @@
 import React from "react";
 import brandIcon from "../Images/brand.png";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-export default function Navbar() {
+function Navbar({ location }) {
+
     return (
 
-        <nav className="navbar navbar-expand-md navbar-dark bg-primary">
+        <nav className="container-fluid navbar navbar-expand-md navbar-dark bg-primary border-bottom shadow">
             <Link to="/" className="navbar-brand">
                 <img src={brandIcon} width="80" height="60" alt="Randome"
                     className="d-inline-block align-middle" />
@@ -16,10 +17,12 @@ export default function Navbar() {
             </button>
             <div className="collapse navbar-collapse ml-auto" style={{ flexGrow: "0" }} id="mainNavbar">
                 <div className="navbar-nav">
-                    <Link className="nav-item nav-link text-secondary" to="/browse">Randomizers</Link>
-                    <Link className="nav-item nav-link text-secondary" to="/">Create</Link>
-                    <Link className="nav-item nav-link text-secondary" to="/">Signup</Link>
-                    <Link className="nav-item nav-link text-secondary" to="/">Login</Link>
+                    <LinksContainer location={location}>
+                        <NavbarLink text="Home" to="/" />
+                        <NavbarLink text="Randomizers" to="/browse" />
+                        <NavbarLink text="FAQ" to="/faq" />
+                        <NavbarLink text="Login" to="/login" />
+                    </LinksContainer>
                 </div>
             </div>
 
@@ -27,3 +30,19 @@ export default function Navbar() {
 
     );
 }
+
+function LinksContainer({ location, children }) {
+    const withProps = React.Children.map(children, child => React.cloneElement(child, { location: location }));
+    return <>{withProps}</>;
+}
+function NavbarLink({ text, to, location }) {
+    const path = location.pathname;
+    let classnames = "nav-item nav-link";
+    classnames += path === to ? " active" : "";
+    return (
+        <Link className={classnames} to={to}>{text}</ Link>
+    );
+}
+
+
+export default withRouter(Navbar);
