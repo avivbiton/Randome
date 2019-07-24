@@ -32,7 +32,7 @@ function Navbar({ location }) {
 }
 
 function LinksContainer({ location, children }) {
-    const withProps = React.Children.map(children, child => React.cloneElement(child, { location: location }));
+    const withProps = React.Children.map(children, child => React.cloneElement(child, { location }));
     return <>{withProps}</>;
 }
 function NavbarLink({ text, to, location }) {
