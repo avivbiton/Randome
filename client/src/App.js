@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import reduxStore from "./redux/store";
 import LandingPage from "./Components/Pages/LandingPage";
 import Navbar from "./Components/Navbar";
+import RandomizerPage from "./Components/Pages/RandomizerPage/RandomizerPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={LandingPage} />
+          <Route exact path="/randomizer/:id" component={RandomizerPage} />
         </Switch>
       </Router>
     </Provider>
