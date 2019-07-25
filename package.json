@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "dev": "concurrently \"nodemon ./bin/www\" \"cd client && npm start\"",
     "prod": "cd client && npm run build && cd .. &&set NODE_ENV=production&& node ./bin/www",
     "lint": "eslint src/ --fix"
@@ -11,6 +11,7 @@
   "dependencies": {
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "firebase": "^6.3.1",
     "morgan": "~1.9.0"
   },
   "devDependencies": {
