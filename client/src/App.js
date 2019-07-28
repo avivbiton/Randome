@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./css/Bootstrap.css";
 import "./css/App.css";
 
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { initializeAuth } from "./Authentication/auth";
 import { Provider } from "react-redux";
 import reduxStore from "./redux/store";
