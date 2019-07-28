@@ -5,7 +5,17 @@ const LoadRoutes = require("./routes/index");
 const notFoundHandler = require("./routes/notFoundRoute");
 const errorHandler = require("./routes/errorHandler");
 
+const admin = require("firebase-admin");
+
 const app = express();
+
+const serviceAccount = require("../firebase-admin.json");
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: process.env.FIREBASE_DB
+});
+
 
 app.use(logger("dev"));
 app.use(express.json());

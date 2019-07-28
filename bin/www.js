@@ -6,6 +6,7 @@
 var app = require("../src/app.js");
 var debug = require("debug")("randome:server");
 var http = require("http");
+require("dotenv").config();
 
 /**
  * Get port from environment and store in Express.
