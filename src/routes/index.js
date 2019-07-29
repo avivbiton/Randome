@@ -1,9 +1,7 @@
-var express = require("express");
-var router = express.Router();
+const authIndex = require("./auth/authIndex");
 
-/* GET home page. */
-router.get("/", function(req, res) {
-	res.end("test");
-});
+function LoadRoutes(app) {
+	app.use("/auth", authIndex);
+}
 
-module.exports = router;
+module.exports = LoadRoutes;

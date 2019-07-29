@@ -29,6 +29,7 @@
             "error",
             "always"
         ],
-        "no-unused-vars": 0
+        "no-unused-vars": 0,
+        "require-atomic-updates": 0
     }
 }
