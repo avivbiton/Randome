@@ -1,23 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { useInput } from "../Hooks/useInput";
 import Input from "./Form/Input";
+import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Actions/errorActions";
+import Button from "./Form/Button";
+import { registerUser } from "../Authentication/auth";
+import { validateRegisterForm } from "../Logic/formValidation";
 
-function RegisterForm({ title, onRegister }) {
+
+function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError, loggedIn }) {
 
     const { value: displayName, bind: bindDisplayName } = useInput("");
     const { value: email, bind: bindEmail } = useInput("");
     const { value: password, bind: bindPassword } = useInput("");
     const { value: confirmPassword, bind: bindConfirmPassword } = useInput("");
 
-    const [errors] = useState({});
-
+    const [isLoading, setLoading] = useState(false);
+    const [buttonDisable, setButtonDisable] = useState(false);
 
     function formSubmitHandler(e) {
         e.preventDefault();
+        clearErrors();
 
-
-        onRegister({ displayName, email, password, confirmPassword });
+        setLoading(true);
+        const foundErrors = validateRegisterForm({ displayName });
+        if (foundErrors.length !== 0) {
+            pushManyErrors(foundErrors);
+            setLoading(false);
+            return;
+        }
+        registerUser({ displayName, email, password, confirmPassword }).catch(() => setLoading(false));
     }
+
+
+    function validatePasswordMatch() {
+        if (password !== confirmPassword) {
+            pushError({ name: "confirmPassword", message: "Passwords do not match." });
+            setButtonDisable(true);
+        } else {
+            setButtonDisable(false);
+            removeError("confirmPassword");
+        }
+    }
+
+
+    useEffect(() =>
+        validatePasswordMatch()
+        , [password, confirmPassword, pushError, removeError]);
+
 
     return (
         <form onSubmit={formSubmitHandler} noValidate>
@@ -25,17 +55,21 @@ function RegisterForm({ title, onRegister }) {
                 <h3 className="card-header bg-primary text-white">{title}</h3>
                 <div className="card-body">
                     <div className="card-text">
-                        <input type="text" className="form-control large-input"
-                            name="displayName" placeholder="Display Name" {...bindDisplayName} />
-                        <input className="form-control large-input mt-3"
-                            type="email" name="email" placeholder="Email" {...bindEmail} />
+                        <Input type="text" className="form-control large-input"
+                            name="displayName" placeholder="Display Name"
+                            {...bindDisplayName} error={errors.displayName} />
+                        <Input className="form-control large-input mt-3"
+                            type="email" name="email" placeholder="Email"
+                            {...bindEmail} error={errors.email} />
                         <Input className="form-control large-input mt-3"
                             type="password" name="password" placeholder="Password"
                             {...bindPassword} error={errors.password} />
                         <Input className="form-control large-input mt-3"
                             type="password" name="passwordConfirm" placeholder="Confirm Password"
                             {...bindConfirmPassword} error={errors.confirmPassword} />
-                        <button className="btn btn-primary btn-block mt-3">Register</button>
+                        <Button className="btn btn-primary btn-block mt-3" loading={isLoading} disabled={buttonDisable || isLoading}>
+                            Register
+                            </Button>
                     </div>
                 </div>
             </div>
@@ -43,4 +77,12 @@ function RegisterForm({ title, onRegister }) {
     );
 }
 
-export default RegisterForm;
+
+const mapStateToProps = state => ({
+    errors: state.errors,
+    loggedIn: !!state.auth.user
+});
+
+
+
+export default connect(mapStateToProps, { clearErrors, pushError, pushManyErrors, removeError })(RegisterForm);

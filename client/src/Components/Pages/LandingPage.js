@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RegisterForm from "../RegisterForm";
-import { registerUser } from "../../Authentication/auth";
+import { connect } from "react-redux";
 
 class LandingPage extends Component {
 
@@ -27,8 +27,10 @@ class LandingPage extends Component {
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <RegisterForm title="Join Our Community"
-                            onRegister={({ displayName, email, password }) => registerUser({ displayName, email, password })} />
+                        {!this.props.user ?
+                            <RegisterForm title="Join Our Community" />
+                            :
+                            null}
                     </div>
                 </div>
             </div>
@@ -39,4 +41,8 @@ class LandingPage extends Component {
 
 
 
-export default LandingPage;
+const mapStateToProps = state => ({
+    user: state.auth.user
+});
+
+export default connect(mapStateToProps)(LandingPage);
