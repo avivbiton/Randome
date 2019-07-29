@@ -1,4 +1,4 @@
-import onAuthChanged from "./onAuthChanged";
+import updateUserState from "./updateUserState";
 import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
@@ -15,9 +15,15 @@ export function registerUser({ displayName, email, password }) {
     return new Promise((resolve, reject) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(creds => {
-                creds.user.updateProfile({ displayName: displayName })
-                    .then(() => resolve(true))
-                    .catch(error => reject(error));
+                creds.user.updateProfile({ displayName: displayName, photoURL: "/favicon.ico" })
+                    .then(() => {
+                        updateProfileState(firebase.auth().currentUser);
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        reject(error);
+                    });
             })
             .catch(error => {
                 handleFormErrors(transformError(error));
@@ -34,12 +40,14 @@ export function loginUser(email, password) {
         });
 }
 
-export function applyAuthState() {
-    API.auth.getCurrent()
-        .then(data => {
-            store.dispatch(setCurrentUser(data));
-        })
-        .catch(() => removeAuthState());
+export function updateProfileState(user) {
+    const userData = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid
+    }
+    store.dispatch(setCurrentUser(userData));
 }
 
 export function removeAuthState() {
@@ -53,6 +61,5 @@ export function logOutUser() {
 }
 
 export function initializeAuth() {
-    onAuthChanged();
-
+    firebase.auth().onAuthStateChanged(updateUserState);
 }

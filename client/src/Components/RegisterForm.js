@@ -32,19 +32,21 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
         registerUser({ displayName, email, password, confirmPassword }).catch(() => setLoading(false));
     }
 
-    useEffect(() => {
-        function validatePasswordMatch() {
-            if (password !== confirmPassword) {
-                pushError({ name: "confirmPassword", message: "Passwords do not match." });
-                setButtonDisable(true);
-            } else {
-                setButtonDisable(false);
-                removeError("confirmPassword");
-            }
-        }
 
-        validatePasswordMatch();
-    }, [password, confirmPassword, pushError, removeError]);
+    function validatePasswordMatch() {
+        if (password !== confirmPassword) {
+            pushError({ name: "confirmPassword", message: "Passwords do not match." });
+            setButtonDisable(true);
+        } else {
+            setButtonDisable(false);
+            removeError("confirmPassword");
+        }
+    }
+
+
+    useEffect(() =>
+        validatePasswordMatch()
+        , [password, confirmPassword, pushError, removeError]);
 
 
     return (
