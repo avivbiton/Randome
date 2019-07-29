@@ -1,5 +1,8 @@
-export function handleFormErrors(errors) {
+import store from "../redux/store";
+import { pushError } from "../redux/Actions/errorActions";
 
-    //Push errors to redux
+export function handleFormErrors({ name, message }) {
+
+    store.dispatch(pushError({ name, message }));
 }
 

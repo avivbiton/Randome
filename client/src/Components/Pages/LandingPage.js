@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RegisterForm from "../RegisterForm";
-import { registerUser } from "../../Authentication/auth";
+
 
 class LandingPage extends Component {
 
@@ -27,8 +27,7 @@ class LandingPage extends Component {
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <RegisterForm title="Join Our Community"
-                            onRegister={({ displayName, email, password }) => registerUser({ displayName, email, password })} />
+                        <RegisterForm title="Join Our Community" />
                     </div>
                 </div>
             </div>

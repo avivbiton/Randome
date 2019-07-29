@@ -5,6 +5,7 @@ import { setCurrentUser } from "../redux/Actions/authAction";
 import API from "../API/api";
 import firebase from "firebase/app";
 import { handleFormErrors } from "../Logic/errorHandler";
+import transformError from "../firebase/transformError";
 
 export function setAuthorizationToken(token) {
     axios.defaults.headers.common["Authorization"] = token;
@@ -18,8 +19,9 @@ export function registerUser({ displayName, email, password }) {
                     .then(() => resolve(true))
                     .catch(error => reject(error));
             })
-            .catch(errors => {
-                handleFormErrors(errors);
+            .catch(error => {
+                handleFormErrors(transformError(error));
+                reject(error);
             });
     });
 }

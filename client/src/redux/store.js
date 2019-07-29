@@ -3,12 +3,14 @@ import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 // import reducers here
 import auth from "./Reducers/authReducer";
+import errors from "./Reducers/errorReducer";
 
 const initialState = {};
 
 const rootReducer = combineReducers({
  // set reducers here
-    auth
+    auth,
+    errors
 });
 
 const middleware = []; //[thunk];
