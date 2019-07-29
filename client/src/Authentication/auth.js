@@ -3,9 +3,25 @@ import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 import API from "../API/api";
+import firebase from "firebase/app";
+import { handleFormErrors } from "../Logic/errorHandler";
 
 export function setAuthorizationToken(token) {
     axios.defaults.headers.common["Authorization"] = token;
+}
+
+export function registerUser({ displayName, email, password }) {
+    return new Promise((resolve, reject) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(creds => {
+                creds.user.updateProfile({ displayName: displayName })
+                    .then(() => resolve(true))
+                    .catch(error => reject(error));
+            })
+            .catch(errors => {
+                handleFormErrors(errors);
+            });
+    });
 }
 
 export function applyAuthState() {
@@ -17,7 +33,13 @@ export function applyAuthState() {
 }
 
 export function removeAuthState() {
-    store.disptach(setCurrentUser(null));
+    store.dispatch(setCurrentUser(null));
+}
+
+export function logOutUser() {
+    removeAuthState();
+    firebase.auth().signOut();
+    window.location = "/";
 }
 
 export function initializeAuth() {
