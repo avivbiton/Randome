@@ -20,7 +20,7 @@ function RandomizerPage({ match }) {
             }
         }
         fetchRandomizerData();
-    }, []);
+    }, [match.params.id]);
 
     function onRollClicked() {
         setResult(generateSchemaResult(currentRandomizer.schema));

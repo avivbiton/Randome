@@ -6,8 +6,9 @@ import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Ac
 import Button from "./Form/Button";
 import { registerUser } from "../Authentication/auth";
 import { validateRegisterForm } from "../Logic/formValidation";
+import { redirectOnCondition } from "../Effects/common";
 
-function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError }) {
+function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError, loggedIn }) {
 
     const { value: displayName, bind: bindDisplayName } = useInput("");
     const { value: email, bind: bindEmail } = useInput("");
@@ -43,7 +44,7 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
         }
 
         validatePasswordMatch();
-    }, [password, confirmPassword]);
+    }, [password, confirmPassword, pushError, removeError]);
 
 
     return (
@@ -76,7 +77,8 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
 
 
 const mapStateToProps = state => ({
-    errors: state.errors
+    errors: state.errors,
+    loggedIn: !!state.auth.user
 });
 
 

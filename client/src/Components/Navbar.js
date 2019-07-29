@@ -48,7 +48,7 @@ function Navbar({ location, user }) {
 function UserDropdown({ user }) {
     return (
         <div className="dropdown mx-2">
-            <img className="nav-item dropdown-toggle rounded-circle navbar-brand" style={{ width: "3.5rem", maxHeight: "4rem" }} src={user.picture} id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+            <img className="nav-item dropdown-toggle rounded-circle navbar-brand" style={{ width: "3.5rem", maxHeight: "4rem" }} src={user.picture} id="dropdownMenuButton" alt="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                 <Link className="dropdown-item" to="/profile">{user.name}</Link>
                 <Link className="dropdown-item" to="/settings">Settings</Link>

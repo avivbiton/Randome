@@ -4,7 +4,7 @@ import "./css/Bootstrap.css";
 import "./css/App.css";
 
 import firebase from "firebase/app";
-import { initializeAuth } from "./Authentication/auth";
+import { initializeAuth, loginUser } from "./Authentication/auth";
 import { Provider } from "react-redux";
 import reduxStore from "./redux/store";
 import LandingPage from "./Components/Pages/LandingPage";
@@ -28,7 +28,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/randomizer/:id" component={RandomizerPage} />
-          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
         </Switch>
       </Router>
     </Provider>

@@ -26,6 +26,14 @@ export function registerUser({ displayName, email, password }) {
     });
 }
 
+export function loginUser(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => window.location = "/")
+        .catch(error => {
+            handleFormErrors(transformError(error));
+        });
+}
+
 export function applyAuthState() {
     API.auth.getCurrent()
         .then(data => {
