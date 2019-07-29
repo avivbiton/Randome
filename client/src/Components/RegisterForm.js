@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useInput } from "../Hooks/useInput";
 import Input from "./Form/Input";
-import { clearErrors } from "../redux/Actions/errorActions";
+import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Actions/errorActions";
 import Button from "./Form/Button";
 import { registerUser } from "../Authentication/auth";
+import { validateRegisterForm } from "../Logic/formValidation";
 
-function RegisterForm({ title, errors, clearErrors }) {
+function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError }) {
 
     const { value: displayName, bind: bindDisplayName } = useInput("");
     const { value: email, bind: bindEmail } = useInput("");
@@ -14,13 +15,36 @@ function RegisterForm({ title, errors, clearErrors }) {
     const { value: confirmPassword, bind: bindConfirmPassword } = useInput("");
 
     const [isLoading, setLoading] = useState(false);
+    const [buttonDisable, setButtonDisable] = useState(false);
 
     function formSubmitHandler(e) {
         e.preventDefault();
         clearErrors();
+
         setLoading(true);
+        const foundErrors = validateRegisterForm({ displayName });
+        if (foundErrors.length !== 0) {
+            pushManyErrors(foundErrors);
+            setLoading(false);
+            return;
+        }
         registerUser({ displayName, email, password, confirmPassword }).catch(() => setLoading(false));
     }
+
+    useEffect(() => {
+        function validatePasswordMatch() {
+            if (password !== confirmPassword) {
+                pushError({ name: "confirmPassword", message: "Passwords do not match." });
+                setButtonDisable(true);
+            } else {
+                setButtonDisable(false);
+                removeError("confirmPassword");
+            }
+        }
+
+        validatePasswordMatch();
+    }, [password, confirmPassword]);
+
 
     return (
         <form onSubmit={formSubmitHandler} noValidate>
@@ -40,7 +64,9 @@ function RegisterForm({ title, errors, clearErrors }) {
                         <Input className="form-control large-input mt-3"
                             type="password" name="passwordConfirm" placeholder="Confirm Password"
                             {...bindConfirmPassword} error={errors.confirmPassword} />
-                        <Button className="btn btn-primary btn-block mt-3" loading={isLoading}>Register</Button>
+                        <Button className="btn btn-primary btn-block mt-3" loading={isLoading} disabled={buttonDisable}>
+                            Register
+                            </Button>
                     </div>
                 </div>
             </div>
@@ -55,4 +81,4 @@ const mapStateToProps = state => ({
 
 
 
-export default connect(mapStateToProps, { clearErrors })(RegisterForm);
+export default connect(mapStateToProps, { clearErrors, pushError, pushManyErrors, removeError })(RegisterForm);

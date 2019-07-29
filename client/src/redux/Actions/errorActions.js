@@ -1,4 +1,4 @@
-import { PUSH_ERROR, CLEAR_ERRORS } from "../actionTypes";
+import { PUSH_ERROR, CLEAR_ERRORS, PUSH_ERROR_ARRAY, REMOVE_ERROR } from "../actionTypes";
 
 /**
  * 
@@ -12,8 +12,26 @@ export const pushError = ({ name, message }) => {
     };
 };
 
+/**
+ * 
+ * @param errors an array of errors to push
+ */
+export const pushManyErrors = (errors) => {
+    return {
+        type: PUSH_ERROR_ARRAY,
+        payload: errors
+    };
+};
+
 export const clearErrors = () => {
     return {
         type: CLEAR_ERRORS
+    };
+};
+
+export const removeError = errorName => {
+    return {
+        type: REMOVE_ERROR,
+        payload: errorName
     };
 };
