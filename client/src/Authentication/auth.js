@@ -33,11 +33,17 @@ export function registerUser({ displayName, email, password }) {
 }
 
 export function loginUser(email, password) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => window.location = "/")
-        .catch(error => {
-            handleFormErrors(transformError(error));
-        });
+    return new Promise((resolve, reject) => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                window.location = "/";
+                resolve();
+            })
+            .catch(error => {
+                handleFormErrors(transformError(error));
+                reject();
+            });
+    });
 }
 
 export function updateProfileState(user) {

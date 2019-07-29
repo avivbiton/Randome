@@ -6,7 +6,7 @@ import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Ac
 import Button from "./Form/Button";
 import { registerUser } from "../Authentication/auth";
 import { validateRegisterForm } from "../Logic/formValidation";
-import { redirectOnCondition } from "../Effects/common";
+
 
 function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError, loggedIn }) {
 
@@ -67,7 +67,7 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
                         <Input className="form-control large-input mt-3"
                             type="password" name="passwordConfirm" placeholder="Confirm Password"
                             {...bindConfirmPassword} error={errors.confirmPassword} />
-                        <Button className="btn btn-primary btn-block mt-3" loading={isLoading} disabled={buttonDisable}>
+                        <Button className="btn btn-primary btn-block mt-3" loading={isLoading} disabled={buttonDisable || isLoading}>
                             Register
                             </Button>
                     </div>

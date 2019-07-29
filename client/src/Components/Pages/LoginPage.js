@@ -20,25 +20,22 @@ const uiConfig = {
     ]
 };
 
-function LoginPage({ onLogin, errors, clearErrors, hasUser }) {
+function LoginPage({ onLogin, errors, clearErrors, loggedIn}) {
 
     const email = useInput("");
     const password = useInput("");
 
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => redirectOnCondition(hasUser), [hasUser]);
+    useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
 
     function onSubmit(e) {
         e.preventDefault();
         clearErrors();
         setLoading(true);
-        onLogin(email.value, password.value);
+        onLogin(email.value, password.value)
+            .catch(() => setLoading(false));
     }
-
-    useEffect(() => {
-        setLoading(false);
-    }, [errors]);
 
     return (
         <div className="container h-100 d-flex justify-content-center">
@@ -68,7 +65,7 @@ function LoginPage({ onLogin, errors, clearErrors, hasUser }) {
 
 const mapStateToProps = state => ({
     errors: state.errors,
-    hasUser: !!state.auth.user
+    loggedIn: !!state.auth.user
 });
 
 export default connect(mapStateToProps, { clearErrors })(LoginPage);
