@@ -2,9 +2,25 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const randomizerSchema = new Schema({
-	name: String,
-	description: String,
-	jsonSchema: String,
+	name: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	description: {
+		type: String,
+		required: true,
+		minlength: 1,
+		maxlength: 200
+	},
+	jsonSchema: {
+		type: String,
+		required: true
+	},
+	owner: {
+		type: String,
+		required: true
+	},
 	private: {
 		type: Boolean,
 		default: false
@@ -18,8 +34,14 @@ const randomizerSchema = new Schema({
 		default: Date.now
 	},
 	meta: {
-		likes: Number,
-		favorites: Number
+		likes: {
+			type: Number,
+			default: 0
+		},
+		favorites: {
+			type: Number,
+			default: 0
+		}
 	}
 });
 

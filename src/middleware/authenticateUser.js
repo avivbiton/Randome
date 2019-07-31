@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const AuthenticationError = require("../Errors/AuthenticationError");
 
 module.exports = async (req, res, next) => {
 
@@ -9,6 +10,6 @@ module.exports = async (req, res, next) => {
 		req.user = decoded;
 		next();
 	} catch (error) {
-		res.json(error);
+		next(new AuthenticationError());
 	}
 };

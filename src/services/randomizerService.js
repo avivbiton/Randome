@@ -1,8 +1,8 @@
 const Randomizer = require("../Models/Randomizer");
-const handleError = require("./errorHandler").handleError;
+const errorHandler = require("./errorHandler");
 const maxPerFetch = 10;
-
-const CastError = require("mongoose").Error.CastError;
+const MongooseError = require("mongoose").Error;
+const ValidationError = require("../Errors/ValidationError");
 
 
 const fetchLatest = async (page) => {
@@ -12,7 +12,7 @@ const fetchLatest = async (page) => {
 		return docs;
 	}
 	catch (error) {
-		return handleError(error);
+		return errorHandler.handleUnkownError(error);
 	}
 };
 
@@ -23,17 +23,19 @@ const findById = async (id) => {
 		return found;
 
 	} catch (error) {
-		if(error instanceof CastError) {
+		if (error instanceof MongooseError.CastError) {
 			return null;
 		}
-		return handleError(error);
+
+		return errorHandler.handleUnkownError(error);
 	}
 };
 
-const createNew = async (name, description, schema) => {
+const createNew = async (ownerId, name, description, schema) => {
 	try {
 		const newRandomizer = new Randomizer({
 			name,
+			owner: ownerId,
 			description,
 			jsonSchema: schema,
 			meta: {
@@ -45,7 +47,11 @@ const createNew = async (name, description, schema) => {
 		await newRandomizer.save();
 		return true;
 	} catch (error) {
-		return handleError(error);
+		if (error instanceof MongooseError.ValidationError) {
+			throw new ValidationError("Data sent is invalid or missing", 400);
+		}
+
+		return errorHandler.handleUnkownError(error);
 	}
 };
 

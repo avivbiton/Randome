@@ -1,9 +1,10 @@
 const randomizerService = require("../../services/randomizerService");
 const requireBody = require("../../middleware/requireBody");
-
+const authenticateUser = require("../../middleware/authenticateUser");
 
 const createNew = [
 	requireBody(["name", "description", "schema"]),
+	authenticateUser,
 	async (req, res, next) => {
 		const data = {
 			name: req.body.name,
@@ -12,8 +13,9 @@ const createNew = [
 		};
 
 		try {
-			await randomizerService.createNew(data.name, data.description, data.schema);
-			return res.json({ success: "Randomizer created successfully" });
+			//TODO: test this
+			await randomizerService.createNew(req.user.uid, data.name, data.description, data.schema);
+			return res.status(201).send("Created.");
 		} catch (error) {
 			next(error);
 		}
