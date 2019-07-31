@@ -2,6 +2,8 @@ const Randomizer = require("../Models/Randomizer");
 const handleError = require("./errorHandler").handleError;
 const maxPerFetch = 10;
 
+const CastError = require("mongoose").Error.CastError;
+
 
 const fetchLatest = async (page) => {
 	const skip = maxPerFetch * page;
@@ -10,10 +12,23 @@ const fetchLatest = async (page) => {
 		return docs;
 	}
 	catch (error) {
-		handleError(error);
+		return handleError(error);
 	}
 };
 
+
+const findById = async (id) => {
+	try {
+		const found = await Randomizer.findById(id).lean().exec();
+		return found;
+
+	} catch (error) {
+		if(error instanceof CastError) {
+			return null;
+		}
+		return handleError(error);
+	}
+};
 
 const createNew = async (name, description, schema) => {
 	try {
@@ -30,8 +45,7 @@ const createNew = async (name, description, schema) => {
 		await newRandomizer.save();
 		return true;
 	} catch (error) {
-		handleError(error);
-		return false;
+		return handleError(error);
 	}
 };
 
@@ -39,5 +53,6 @@ const createNew = async (name, description, schema) => {
 
 module.exports = {
 	fetchLatest,
-	createNew
+	createNew,
+	findById
 };

@@ -1,25 +1,23 @@
 const randomizerService = require("../../services/randomizerService");
-
-const createNew = async (req, res, next) => {
-
-	const data = {
-		name: req.body.name,
-		description: req.body.description,
-		schema: req.body.schema
-	};
+const requireBody = require("../../middleware/requireBody");
 
 
-	try {
-		const success = await randomizerService.createNew(data.name, data.description, data.schema);
-		if (success) {
-			res.json({ success: "Randomizer created successfully" });
-		} else {
-			res.json({ error: "Failed to create randomizer" });
+const createNew = [
+	requireBody(["name", "description", "schema"]),
+	async (req, res, next) => {
+		const data = {
+			name: req.body.name,
+			description: req.body.description,
+			schema: req.body.schema
+		};
+
+		try {
+			await randomizerService.createNew(data.name, data.description, data.schema);
+			return res.json({ success: "Randomizer created successfully" });
+		} catch (error) {
+			next(error);
 		}
-	} catch (error) {
-		next(error);
-	}
 
-};
+	}];
 
 module.exports = createNew;
