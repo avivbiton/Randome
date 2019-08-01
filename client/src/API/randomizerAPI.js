@@ -10,9 +10,15 @@ class RandomizerAPI {
             return null;
         }
     }
-    async fetchLatest() {
+    async fetch(page = 0, sortBy = "createdAt") {
         try {
-            const response = await axios.get("/randomizer/latest");
+            const response = await axios.get("/randomizer/fetch",
+                {
+                    params: {
+                        page,
+                        sortBy
+                    }
+                });
             return response.data;
         } catch (error) {
             return null;

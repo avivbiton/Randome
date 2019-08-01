@@ -3,10 +3,10 @@ import Display from "./Display";
 import API from "../../../API/api";
 
 const SORT_TYPES = {
-    LATEST: "latest",
-    MOST_LIKES: "mostLikes",
-    MOST_FAVORITES: "mostFavorites",
-    RECENTLY_UPDATED: "recentlyUpdated"
+    LATEST: "createdAt",
+    MOST_LIKES: "meta.likes",
+    MOST_FAVORITES: "meta.favorites",
+    RECENTLY_UPDATED: "updatedAt"
 };
 
 export default function Browse() {
@@ -16,11 +16,11 @@ export default function Browse() {
     const [filter, setFilter] = useState("");
 
     useEffect(() => {
-        fetchLatest();
+        fetchItems();
     }, [sortType]);
 
-    async function fetchLatest() {
-        setItems(await API.randomizers.fetchLatest());
+    async function fetchItems() {
+        setItems(await API.randomizers.fetch(0, sortType));
     }
     return (
         <div className="container-fluid">
