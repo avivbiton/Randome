@@ -10,6 +10,14 @@ class RandomizerAPI {
             return null;
         }
     }
+    async fetchLatest() {
+        try {
+            const response = await axios.get("/randomizer/latest");
+            return response.data;
+        } catch (error) {
+            return null;
+        }
+    }
 }
 
 export default new RandomizerAPI();

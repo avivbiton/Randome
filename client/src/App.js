@@ -13,6 +13,7 @@ import Navbar from "./Components/Navbar";
 import RandomizerPage from "./Components/Pages/RandomizerPage/RandomizerPage";
 import { useAuth } from "./Hooks/useAuth";
 import NotFound from "./Components/Pages/NotFound";
+import Browse from "./Components/Pages/browseRandomizerPage/Browse";
 
 const config = {
   apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
@@ -37,6 +38,7 @@ function App() {
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/randomizer/:id" component={RandomizerPage} />
             <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
+            <Route exact path="/browse" component={Browse} />
             <Route path="*" render={NotFound} />
           </Switch>
         </Router>
