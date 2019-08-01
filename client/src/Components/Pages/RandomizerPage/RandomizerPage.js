@@ -4,7 +4,7 @@ import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
 import ResultDisplayer from "./ResultDisplayer";
 
-function RandomizerPage({ match }) {
+function RandomizerPage({ match, history }) {
 
     const [currentRandomizer, setRandomizer] = useState(null);
     const [currentResult, setResult] = useState(null);
@@ -14,21 +14,24 @@ function RandomizerPage({ match }) {
             const id = match.params.id;
             try {
                 const randomizer = await randomizerAPI.fetchRandomizer(id);
+                if (randomizer === null) return redirectOnError();
                 setRandomizer(randomizer);
             } catch (error) {
-                // todo: redirect to error page / not found page
+                redirectOnError();
             }
         }
         fetchRandomizerData();
     }, [match.params.id]);
 
     function onRollClicked() {
-        setResult(generateSchemaResult(currentRandomizer.schema));
+        setResult(generateSchemaResult(currentRandomizer.jsonSchema));
+    }
+
+    function redirectOnError() {
+        history.push("/not-found");
     }
 
     if (currentRandomizer === null) return <Loading />;
-
-
     return (
         <div className="container">
             <div className="row">
@@ -62,6 +65,7 @@ function Loading() {
         </div>
     );
 }
+
 
 
 export default withRouter(RandomizerPage);
