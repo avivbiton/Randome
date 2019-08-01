@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Display({ sortType, items }) {
+export default function Display({ items }) {
 
 
 
