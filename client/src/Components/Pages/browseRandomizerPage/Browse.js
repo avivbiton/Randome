@@ -11,8 +11,9 @@ const SORT_TYPES = {
 
 export default function Browse() {
 
-    const [latestItems, setItems] = useState(null);
+    const [items, setItems] = useState(null);
     const [sortType, setSort] = useState(SORT_TYPES.LATEST);
+    const [filter, setFilter] = useState("");
 
     useEffect(() => {
         fetchLatest();
@@ -21,33 +22,36 @@ export default function Browse() {
     async function fetchLatest() {
         setItems(await API.randomizers.fetchLatest());
     }
-
     return (
         <div className="container-fluid">
-            <div className="row">
+            <div className="row mt-4">
                 <div className="col">
-                    <h4>Sort By</h4>
+                    <input type="text" className="form-control form-control-lg large-input" placeholder="filter"
+                        onChange={e => setFilter(e.target.value)} />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-4">
                 <div className="col">
-                    <button className="btn btn-outline-info btn-lg mx-1" onClick={() => setSort(SORT_TYPES.LATEST)}>
+                    <button className="btn btn-outline-info btn-lg mx-1"
+                        onClick={() => setSort(SORT_TYPES.LATEST)}>
                         Latest
                     </button>
-                    <button className="btn btn-outline-info btn-lg mx-1" onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
+                    <button className="btn btn-outline-info btn-lg mx-1"
+                        onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                         Most Likes
                     </button>
                     <button className="btn btn-outline-info btn-lg mx-1"
                         onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                         Most Favorites
                     </button>
-                    <button className="btn btn-outline-info btn-lg mx-1" onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
+                    <button className="btn btn-outline-info btn-lg mx-1"
+                        onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                         Recently Updated
                     </button>
                     <hr />
                 </div>
             </div>
-            <Display items={latestItems} />
+            <Display filter={filter} items={items} />
         </div >
     );
 }
