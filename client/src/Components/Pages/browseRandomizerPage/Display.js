@@ -12,8 +12,8 @@ export default function Display({ items, filter }) {
 
     useEffect(onFilterChange, [items, filter]);
 
+    if (!displayItems || !items) return <LoadingDisplay />;
 
-    if (!displayItems) return <div>Loading...</div>;
     return (
         <div className="container-fluid">
             <div className="row">
@@ -38,6 +38,20 @@ export default function Display({ items, filter }) {
     );
 }
 
+
+function LoadingDisplay() {
+    return (
+        <div className="container">
+            <div className="row text-center">
+                <div className="col">
+                    <div className="spinner-grow" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function NoItemsFound() {
     return (

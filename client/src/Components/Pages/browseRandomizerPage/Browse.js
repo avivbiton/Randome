@@ -16,6 +16,7 @@ export default function Browse() {
     const [filter, setFilter] = useState("");
 
     useEffect(() => {
+        setItems(null);
         fetchItems();
     }, [sortType]);
 
