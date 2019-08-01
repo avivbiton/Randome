@@ -1,14 +1,15 @@
 const Randomizer = require("../Models/Randomizer");
 const errorHandler = require("./errorHandler");
-const maxPerFetch = 10;
+const maxPerFetch = 100;
 const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
 
 
-const fetchLatest = async (page) => {
+const fetch = async (page, sortBy = "createdAt") => {
 	const skip = maxPerFetch * page;
+
 	try {
-		const docs = await Randomizer.find().skip(skip).limit(maxPerFetch).sort({ createdAt: "desc" }).lean().exec();
+		const docs = await Randomizer.find({}, "name description meta _id").skip(skip).limit(maxPerFetch).sort({ [sortBy]: "desc" }).lean().exec();
 		return docs;
 	}
 	catch (error) {
@@ -58,7 +59,7 @@ const createNew = async (ownerId, name, description, schema) => {
 
 
 module.exports = {
-	fetchLatest,
+	fetch,
 	createNew,
 	findById
 };
