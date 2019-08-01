@@ -11,6 +11,7 @@ import LandingPage from "./Components/Pages/LandingPage";
 import LoginPage from "./Components/Pages/LoginPage";
 import Navbar from "./Components/Navbar";
 import RandomizerPage from "./Components/Pages/RandomizerPage/RandomizerPage";
+import { useAuth } from "./Hooks/useAuth";
 
 const config = {
   apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
@@ -21,16 +22,21 @@ initializeAuth();
 
 
 function App() {
+
+  const { initializing } = useAuth();
+
+  if(initializing) return <div></div>;
+
   return (
     <Provider store={reduxStore}>
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/randomizer/:id" component={RandomizerPage} />
-          <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
-        </Switch>
-      </Router>
+        <Router>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={LandingPage} />
+            <Route exact path="/randomizer/:id" component={RandomizerPage} />
+            <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
+          </Switch>
+        </Router>
     </Provider>
   );
 }

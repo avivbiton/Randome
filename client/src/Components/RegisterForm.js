@@ -8,7 +8,7 @@ import { registerUser } from "../Authentication/auth";
 import { validateRegisterForm } from "../Logic/formValidation";
 
 
-function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError, loggedIn }) {
+function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError }) {
 
     const { value: displayName, bind: bindDisplayName } = useInput("");
     const { value: email, bind: bindEmail } = useInput("");
@@ -46,7 +46,7 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
 
     useEffect(() =>
         validatePasswordMatch()
-        , [password, confirmPassword, pushError, removeError]);
+        , [password, confirmPassword]);
 
 
     return (
