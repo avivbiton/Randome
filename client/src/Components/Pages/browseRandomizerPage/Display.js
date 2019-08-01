@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../LoadingSpinner";
 
 export default function Display({ items, filter }) {
 
@@ -12,7 +13,16 @@ export default function Display({ items, filter }) {
 
     useEffect(onFilterChange, [items, filter]);
 
-    if (!displayItems || !items) return <LoadingDisplay />;
+    if (!displayItems || !items)
+        return (
+            <div className="container">
+                <div className="row text-center">
+                    <div className="col">
+                        <LoadingSpinner animation="grow" size="lg"  />
+                    </div>
+                </div>
+            </div>
+        );
 
     return (
         <div className="container-fluid">
@@ -33,21 +43,6 @@ export default function Display({ items, filter }) {
                             </div>
                         )
                 }
-            </div>
-        </div>
-    );
-}
-
-
-function LoadingDisplay() {
-    return (
-        <div className="container">
-            <div className="row text-center">
-                <div className="col">
-                    <div className="spinner-grow" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </div>
-                </div>
             </div>
         </div>
     );
