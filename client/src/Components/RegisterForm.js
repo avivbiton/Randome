@@ -64,8 +64,8 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
             <div className="card-body">
                 <div className="card-title">
                     {
-                        errors.UNKOWN ?
-                            <div className="text-danger">{errors.UNKOWN}</div> :
+                        errors.form ?
+                            <div className="text-danger">{errors.form}</div> :
                             null
                     }
                 </div>

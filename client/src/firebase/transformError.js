@@ -5,7 +5,8 @@ const errorMap = {
     "auth/wrong-password": "password",
     "auth/user-disabled": "email",
     "auth/user-not-found": "email",
-    "auth/operation-not-allowed": "email"
+    "auth/operation-not-allowed": "email",
+    "auth/network-request-failed": "form"
 };
 
 /**
@@ -20,8 +21,8 @@ export default function transformError({ code, message }) {
         };
     } else {
         return {
-            name: "UNKOWN",
-            message
+            name: "form",
+            message: "An error has occured, please try again later."
         };
     }
 }

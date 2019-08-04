@@ -41,8 +41,8 @@ function LoginPage({ onLogin, errors, clearErrors, loggedIn }) {
                 <div className="card-body">
                     <div className="card-title">
                         {
-                            errors.UNKOWN ?
-                                <div className="text-danger">{errors.UNKOWN}</div> :
+                            errors.form ?
+                                <div className="text-danger">{errors.form}</div> :
                                 null
                         }
                     </div>
