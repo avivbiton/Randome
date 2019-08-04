@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import RegisterForm from "../RegisterForm";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 class LandingPage extends Component {
@@ -9,7 +10,7 @@ class LandingPage extends Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-6">
+                    <section className="col-md-6">
                         <h1 className="display-3 text-primary mt-3">Randome</h1>
                         <p className="lead">
                             Create, share and use a large variety of randomizers. Randome stores a collection of pre-built randomizers that will kick in your inspiration, give you some ideas or just make you laugh.
@@ -19,19 +20,19 @@ class LandingPage extends Component {
                         </p>
                         <div className="row">
                             <div className="col-md-6">
-                                <button className="btn btn-outline-primary btn-lg btn-block mb-2 mb-md-0">Get Started</button>
+                                <Link className="btn btn-outline-primary btn-lg btn-block mb-2 mb-md-0" to="/browse">Browse Our Collection</Link>
                             </div>
                             <div className="col-md-6">
-                                <button className="btn btn-outline-secondary btn-lg btn-block">Create one yourself</button>
+                                <button className="btn btn-outline-secondary btn-lg btn-block">Start Creating</button>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-6 d-flex justify-content-end mt-4">
+                    </section>
+                    <section className="col-md-6 d-flex justify-content-end mt-4">
                         {!this.props.user ?
-                            <RegisterForm title="Join Our Community" largeInput />
+                            <RegisterForm title="Join Our Community" />
                             :
                             null}
-                    </div>
+                    </section>
                 </div>
             </div>
 

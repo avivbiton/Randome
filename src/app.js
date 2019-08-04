@@ -13,7 +13,8 @@ database.initializeConnection();
 
 
 app.use((req, res, next) => {
-	req.setTimeout(10000);
+	req.setTimeout(25000);
+	next();
 });
 
 middleware.useMiddleware(app);
