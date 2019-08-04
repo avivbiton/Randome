@@ -14,7 +14,7 @@ function RandomizerPage({ match, history }) {
             const id = match.params.id;
             try {
                 const randomizer = await randomizerAPI.fetchRandomizer(id);
-                if (randomizer === null) return redirectOnError();
+                if (randomizer === false || randomizer === null) return redirectOnError();
                 setRandomizer(randomizer);
             } catch (error) {
                 redirectOnError();
