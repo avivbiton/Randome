@@ -14,14 +14,22 @@ export default function Browse() {
     const [items, setItems] = useState(null);
     const [sortType, setSort] = useState(SORT_TYPES.LATEST);
     const [filter, setFilter] = useState("");
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         setItems(null);
+        setError(null);
         fetchItems();
     }, [sortType]);
 
     async function fetchItems() {
-        setItems(await API.randomizers.fetch(0, sortType));
+        const itemsData = await API.randomizers.fetch(0, sortType);
+        console.log(itemsData);
+        if (itemsData) {
+            setItems(itemsData);
+        } else {
+            setError("Could not retrive items, Please try again later.");
+        }
     }
     return (
         <div className="container-fluid">
@@ -52,7 +60,7 @@ export default function Browse() {
                     <hr />
                 </div>
             </div>
-            <Display filter={filter} items={items} />
+            <Display filter={filter} items={items} error={error} />
         </div >
     );
 }

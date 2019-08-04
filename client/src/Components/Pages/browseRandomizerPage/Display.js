@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../../LoadingSpinner";
 
-export default function Display({ items, filter }) {
+export default function Display({ items, filter, error }) {
 
     const [displayItems, setDisplayItems] = useState(items);
     function onFilterChange() {
@@ -13,12 +13,24 @@ export default function Display({ items, filter }) {
 
     useEffect(onFilterChange, [items, filter]);
 
+    if (error)
+        return (
+            <div className="container-fluid">
+                <div className="row text-center lead">
+                    <div className="col">
+                        {error}
+                    </div>
+                </div>
+            </div>
+        );
+
+
     if (!displayItems || !items)
         return (
             <div className="container">
                 <div className="row text-center">
                     <div className="col">
-                        <LoadingSpinner animation="grow" size="lg"  />
+                        <LoadingSpinner animation="grow" size="lg" />
                     </div>
                 </div>
             </div>

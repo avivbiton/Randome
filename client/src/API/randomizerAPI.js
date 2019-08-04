@@ -7,7 +7,7 @@ class RandomizerAPI {
             return response.data;
         }
         catch (error) {
-            return null;
+            return false;
         }
     }
     async fetch(page = 0, sortBy = "createdAt") {
@@ -21,7 +21,7 @@ class RandomizerAPI {
                 });
             return response.data;
         } catch (error) {
-            return null;
+            return false;
         }
     }
 }
