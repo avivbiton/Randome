@@ -1,7 +1,12 @@
-import React from "react";
+import React, {useEffect } from "react";
+import { connect } from "react-redux";
 import RegisterForm from "../RegisterForm";
+import { redirectOnCondition } from "../../Effects/common";
 
-function RegisterPage() {
+function RegisterPage({ loggedIn }) {
+
+    useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
+
     return (
         <div className="container h-100 d-flex justify-content-center">
             <div className="row">
@@ -13,4 +18,8 @@ function RegisterPage() {
     );
 }
 
-export default RegisterPage;
+const mapStateToProps = state => ({
+    loggedIn: !!state.auth.user
+});
+
+export default connect(mapStateToProps)(RegisterPage);

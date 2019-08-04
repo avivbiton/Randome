@@ -34,6 +34,12 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
     }
 
 
+    useEffect(() => {
+        return () => {
+           clearErrors();
+        };
+    }, []);
+
     function validatePasswordMatch() {
         if (password !== confirmPassword) {
             pushError({ name: "confirmPassword", message: "Passwords do not match." });
@@ -65,13 +71,13 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
                 </div>
                 <Input type="text" className="form-control large-input" placeholder="Display Name"
                     {...bindDisplayName} error={errors.displayName} />
-                <Input type="email" className="form-control large-input mt-4" placeholder="Email"
+                <Input type="email" className="form-control large-input mt-2" placeholder="Email"
                     {...bindEmail} error={errors.email} />
-                <Input type="password" className="form-control large-input mt-4" placeholder="Password"
+                <Input type="password" className="form-control large-input mt-2" placeholder="Password"
                     {...bindPassword} error={errors.password} />
-                <Input type="password" className="form-control large-input mt-4" placeholder="ConfirmPassword"
+                <Input type="password" className="form-control large-input mt-2" placeholder="ConfirmPassword"
                     {...bindConfirmPassword} error={errors.confirmPassword} />
-                <Button type="submit" className="btn btn-outline-primary btn-lg btn-block mt-4" loading={isLoading}
+                <Button type="submit" className="btn btn-outline-primary btn-lg btn-block mt-2" loading={isLoading}
                     disabled={buttonDisable || isLoading}>Register</Button>
                 <div className="text-muted text-center mt-1">Already have an account? <Link to="/login">Login</Link></div>
             </div>
@@ -85,8 +91,7 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
 
 
 const mapStateToProps = state => ({
-    errors: state.errors,
-    loggedIn: !!state.auth.user
+    errors: state.errors
 });
 
 

@@ -8,9 +8,9 @@ class LandingPage extends Component {
     render() {
         return (
             <div className="container">
-                <h1 className="display-3 text-primary mt-3">Randome</h1>
                 <div className="row">
                     <div className="col-md-6">
+                        <h1 className="display-3 text-primary mt-3">Randome</h1>
                         <p className="lead">
                             Create, share and use a large variety of randomizers. Randome stores a collection of pre-built randomizers that will kick in your inspiration, give you some ideas or just make you laugh.
                         </p>
@@ -26,9 +26,9 @@ class LandingPage extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 d-flex justify-content-end mt-4">
                         {!this.props.user ?
-                            <RegisterForm title="Join Our Community" />
+                            <RegisterForm title="Join Our Community" largeInput />
                             :
                             null}
                     </div>

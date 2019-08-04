@@ -17,6 +17,13 @@ function LoginPage({ onLogin, errors, clearErrors, loggedIn }) {
 
     useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
 
+
+    useEffect(() => {
+        return () => {
+            clearErrors();
+        };
+    }, []);
+
     function onSubmit(e) {
         e.preventDefault();
         clearErrors();
