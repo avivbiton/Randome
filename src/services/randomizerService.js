@@ -10,7 +10,8 @@ const fetch = async (page, sortBy = "createdAt") => {
 	const skip = maxPerFetch * page;
 
 	try {
-		const docs = await Randomizer.find({}, "name description meta _id").skip(skip).limit(maxPerFetch).sort({ [sortBy]: "desc" }).lean().exec();
+		const docs = await Randomizer.find({ private: false }, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
+			.sort({ [sortBy]: "desc" }).lean().exec();
 		return docs;
 	}
 	catch (error) {

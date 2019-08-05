@@ -66,5 +66,10 @@ export function logOutUser() {
 }
 
 export function initializeAuth() {
+    const config = {
+        apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
+        authDomain: "randome-1564044096001.firebaseapp.com",
+    };
+    firebase.initializeApp(config);
     firebase.auth().onAuthStateChanged(updateUserState);
 }

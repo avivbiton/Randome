@@ -18,8 +18,8 @@ const randomizerSchema = new Schema({
 		required: true
 	},
 	owner: {
-		type: String,
-		required: true
+		name: String,
+		id: String
 	},
 	private: {
 		type: Boolean,

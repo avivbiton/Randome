@@ -6,11 +6,15 @@ const createNew = [
 	requireBody(["name", "description", "schema"]),
 	authenticateUser,
 	async (req, res, next) => {
+
+		//TODO: do some checks here
 		const data = {
 			name: req.body.name,
 			description: req.body.description,
 			schema: req.body.schema
 		};
+
+		
 
 		try {
 			//TODO: test this
