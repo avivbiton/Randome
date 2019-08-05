@@ -11,6 +11,11 @@ import LandingPage from "./Components/Pages/LandingPage";
 import LoginPage from "./Components/Pages/LoginPage";
 import Navbar from "./Components/Navbar";
 import RandomizerPage from "./Components/Pages/RandomizerPage/RandomizerPage";
+import { useAuth } from "./Hooks/useAuth";
+import NotFound from "./Components/Pages/NotFound";
+import Browse from "./Components/Pages/browseRandomizerPage/Browse";
+import RegisterPage from "./Components/Pages/RegisterPage";
+import LoadingSpinner from "./Components/LoadingSpinner";
 
 const config = {
   apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
@@ -21,6 +26,19 @@ initializeAuth();
 
 
 function App() {
+
+  const { initializing } = useAuth();
+
+  if (initializing) return (
+    <div className="container">
+      <div className="row text-center mt-4">
+        <div className="col">
+          <LoadingSpinner size="lg" animation="grow" />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <Provider store={reduxStore}>
       <Router>
@@ -29,6 +47,9 @@ function App() {
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/randomizer/:id" component={RandomizerPage} />
           <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
+          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/browse" component={Browse} />
+          <Route path="*" render={NotFound} />
         </Switch>
       </Router>
     </Provider>

@@ -2,7 +2,6 @@ import updateUserState from "./updateUserState";
 import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
-import API from "../API/api";
 import firebase from "firebase/app";
 import { handleFormErrors } from "../Logic/errorHandler";
 import transformError from "../firebase/transformError";
@@ -52,7 +51,7 @@ export function updateProfileState(user) {
         email: user.email,
         photoURL: user.photoURL,
         uid: user.uid
-    }
+    };
     store.dispatch(setCurrentUser(userData));
 }
 

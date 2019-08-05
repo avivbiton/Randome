@@ -1,40 +1,28 @@
+require("dotenv").config();
 const express = require("express");
-const path = require("path");
-const logger = require("morgan");
+
+const database = require("./database");
+const firebase = require("./firebase");
 const LoadRoutes = require("./routes/index");
-const notFoundHandler = require("./routes/notFoundRoute");
-const errorHandler = require("./routes/errorHandler");
-
-const admin = require("firebase-admin");
-
+const production = require("./production");
+const middleware = require("./middleware/startup");
 const app = express();
 
-const serviceAccount = require("../firebase-admin.json");
+firebase.initialize();
+database.initializeConnection();
 
-admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
-	databaseURL: process.env.FIREBASE_DB
+
+app.use((req, res, next) => {
+	req.setTimeout(25000);
+	next();
 });
 
+middleware.useMiddleware(app);
 
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 if (process.env.NODE_ENV === "production")
-	serveProductionBuild();
-
+	production.initializeProductionBuild();
 
 LoadRoutes(app);
-
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-function serveProductionBuild() {
-	app.use(express.static(path.join(__dirname + "/..", "client", "build")));
-	app.get("/", (req, res) => {
-		res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-	});
-}
 
 
 module.exports = app;
