@@ -78,10 +78,10 @@ function ItemDisplay({ name, description, likes, favorites, id, owner }) {
                 <br />
                 <Link className="btn btn-primary btn-block btn-lg mt-auto" to={`/randomizer/${id}`}>View</Link>
             </div>
-            <div className="card-footer">
-                <i className="fas fa-thumbs-up fa-lg mx-2"></i><span className="lead">{likes}</span>
-                <i className="fas fa-heart fa-lg mx-2"></i><span className="lead">{favorites}</span>
-                <div className="mr-auto">by {owner}</div>
+            <div className="card-footer d-inline-flex align-items-center">
+                <i className="fas fa-thumbs-up fa-lg mx-2 like-icon"></i><span className="lead">{likes}</span>
+                <i className="fas fa-heart fa-lg mx-2 heart-icon"></i><span className="lead">{favorites}</span>
+                <div className="ml-auto">by {owner}</div>
             </div>
         </div>
     );

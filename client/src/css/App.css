@@ -12,3 +12,11 @@ body {
         width: 75% !important;
     }
 }
+
+.heart-icon {
+    color: #DF4B5F;
+}
+
+.like-icon {
+    color: #40c2ee;
+}
