@@ -10,13 +10,17 @@ const validationSchema = new Schema({
 		type: String,
 		required: true,
 		length: {
-			min: 4,
-			max: 12
+			min: 2,
+			max: 25
 		}
 	},
 	description: {
 		type: String,
-		required: true
+		required: true,
+		length: {
+			min: 1,
+			max: 250
+		}
 	}
 });
 

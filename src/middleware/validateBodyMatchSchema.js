@@ -9,7 +9,7 @@ const validateBodyMatchSchema = schema => (req, res, next) => {
 	});
 
 	const errors = validateSchema(schema,dataObject);
-	if(errors.length !== 0) {
+	if(Object.keys(errors).length !== 0) {
 		return res.status(400).json(errors);
 	}
 	return next();
