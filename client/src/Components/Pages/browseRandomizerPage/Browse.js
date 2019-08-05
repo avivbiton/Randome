@@ -59,6 +59,9 @@ function Browse({ location, history }) {
                 <div className="col">
                     <input type="text" className="form-control form-control-lg large-input" placeholder="filter"
                         onChange={e => setFilter(e.target.value)} />
+                    <div className="text-muted mt-1">
+                        * filter is limited to 100 items, please use advanced search to find a specific randomizer.
+                    </div>
                 </div>
             </div>
             <div className="row mt-4">
