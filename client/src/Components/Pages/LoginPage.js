@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import { connect } from "react-redux";
-import { useInput } from "../../Hooks/useInput";
+import { useInput } from "../../Hooks/formInput";
 import { clearErrors } from "../../redux/Actions/errorActions";
 import { redirectOnCondition } from "../../Effects/common";
 import FirebaseLoginUI from "../FirebaseLoginUI";

@@ -1,24 +1,42 @@
 const randomizerService = require("../../services/randomizerService");
 const requireBody = require("../../middleware/requireBody");
 const authenticateUser = require("../../middleware/authenticateUser");
+const Schema = require("validate");
+
+const validateBodyMatchSchema = require("../../middleware/validateBodyMatchSchema");
+
+const validationSchema = new Schema({
+	name: {
+		type: String,
+		required: true,
+		length: {
+			min: 4,
+			max: 12
+		}
+	},
+	description: {
+		type: String,
+		required: true
+	}
+});
 
 const createNew = [
-	requireBody(["name", "description", "schema"]),
+	requireBody(["name", "description", "schema", "private"]),
+	validateBodyMatchSchema(validationSchema),
 	authenticateUser,
 	async (req, res, next) => {
-
-		//TODO: do some checks here
 		const data = {
 			name: req.body.name,
 			description: req.body.description,
-			schema: req.body.schema
+			schema: req.body.schema,
+			private: req.body.private
 		};
 
-		
+
+		//TODO: verify the schema here
 
 		try {
-			//TODO: test this
-			await randomizerService.createNew(req.user.uid, data.name, data.description, data.schema);
+			await randomizerService.createNew(req.user.uid, data.name, data.description, data.schema, data.private);
 			return res.status(201).send("Created.");
 		} catch (error) {
 			next(error);

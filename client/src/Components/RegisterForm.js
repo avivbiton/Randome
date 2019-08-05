@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { useInput } from "../Hooks/useInput";
+import { useInput } from "../Hooks/formInput";
 import Input from "./Form/Input";
 import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Actions/errorActions";
 import Button from "./Form/Button";

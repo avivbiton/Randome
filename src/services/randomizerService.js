@@ -2,7 +2,7 @@ const Randomizer = require("../Models/Randomizer");
 const errorHandler = require("./errorHandler");
 const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
-
+const admin = require("firebase-admin");
 
 const maxPerFetch = 100;
 
@@ -34,17 +34,22 @@ const findById = async (id) => {
 	}
 };
 
-const createNew = async (ownerId, name, description, schema) => {
+const createNew = async (ownerId, name, description, schema, private) => {
 	try {
+		const userData = await admin.auth().getUser(ownerId);
 		const newRandomizer = new Randomizer({
 			name,
-			owner: ownerId,
+			owner: {
+				id: ownerId,
+				name: userData.displayName
+			},
 			description,
 			jsonSchema: schema,
 			meta: {
 				likes: 0,
 				favorites: 0
-			}
+			},
+			private
 		});
 
 		await newRandomizer.save();

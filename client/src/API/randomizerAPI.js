@@ -29,13 +29,17 @@ class RandomizerAPI {
         }
     }
 
-    async create(name, description, schema) {
+    async create(name, description, schema, isPrivate) {
         try {
-            const response = await axios.post("/randomizer/create", { name, description, schema });
+            const response = await axios.post("/randomizer/create", { name, description, schema, private: isPrivate });
             return response.data;
         }
         catch (error) {
-            return new RequestError(error);
+            if (error.response) {
+                throw new RequestError(error.response.data, "Invalid data");
+            }
+
+            throw new RequestError({ form: "Something went wrong, please try again later." }, "Server error");
         }
     }
 }
