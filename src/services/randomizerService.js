@@ -1,9 +1,10 @@
 const Randomizer = require("../Models/Randomizer");
 const errorHandler = require("./errorHandler");
-const maxPerFetch = 100;
 const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
 
+
+const maxPerFetch = 100;
 
 const fetch = async (page, sortBy = "createdAt") => {
 	const skip = maxPerFetch * page;
