@@ -51,7 +51,7 @@ function App() {
           <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/browse" component={Browse} />
-          <PrivateRoute exact path="/create" component={CreatePage} requireLogin  />
+          <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
           <Route path="*" render={NotFound} />
         </Switch>
       </Router>
