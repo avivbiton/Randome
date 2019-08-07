@@ -1,60 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
 import { useInput } from "../Hooks/formInput";
 import Input from "./Form/Input";
-import { clearErrors, pushManyErrors, pushError, removeError } from "../redux/Actions/errorActions";
 import Button from "./Form/Button";
 import { registerUser } from "../Authentication/auth";
-import { validateRegisterForm } from "../Logic/formValidation";
 import { Link } from "react-router-dom";
 import FirebaseUILogin from "./FirebaseLoginUI";
+import { validateSchema } from "../Services/formValidation";
+import { registerSchema } from "../schemas";
 
-function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, removeError }) {
+function RegisterForm({ title }) {
 
     const { value: displayName, bind: bindDisplayName } = useInput("");
     const { value: email, bind: bindEmail } = useInput("");
     const { value: password, bind: bindPassword } = useInput("");
     const { value: confirmPassword, bind: bindConfirmPassword } = useInput("");
 
+    const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [buttonDisable, setButtonDisable] = useState(false);
 
     function formSubmitHandler(e) {
         e.preventDefault();
-        clearErrors();
-
         setLoading(true);
-        const foundErrors = validateRegisterForm({ displayName });
-        if (foundErrors.length !== 0) {
-            pushManyErrors(foundErrors);
+
+        if (isFormValid() === false) {
             setLoading(false);
             return;
         }
-        registerUser({ displayName, email, password, confirmPassword }).catch(() => setLoading(false));
+
+        registerUser({ displayName, email, password })
+            .catch(errors => {            
+                setErrors(errors);
+                setLoading(false);
+            });
     }
 
-
-    useEffect(() => {
-        return () => {
-           clearErrors();
-        };
-    }, []);
-
-    function validatePasswordMatch() {
+    useEffect(function validatePasswordMatch() {
         if (password !== confirmPassword) {
-            pushError({ name: "confirmPassword", message: "Passwords do not match." });
+            setErrors({ ...errors, confirmPassword: "Passwords do not match." });
             setButtonDisable(true);
         } else {
             setButtonDisable(false);
             removeError("confirmPassword");
         }
     }
-
-
-    useEffect(() =>
-        validatePasswordMatch()
         , [password, confirmPassword]);
 
+
+    const removeError = useCallback((errorName) => {
+        const newErrors = errors;
+        delete newErrors[errorName];
+        setErrors(newErrors);
+    });
+
+    function isFormValid() {
+        const errors = validateSchema(registerSchema, { displayName, email, password });
+        if (errors.length !== 0) {
+            setErrors(errors);
+            return false;
+        }
+        return true;
+    }
 
     return (
         <form onSubmit={formSubmitHandler} className="card shadow my-auto" style={{ maxWidth: "365px" }}>
@@ -90,10 +96,6 @@ function RegisterForm({ title, errors, clearErrors, pushManyErrors, pushError, r
 }
 
 
-const mapStateToProps = state => ({
-    errors: state.errors
-});
 
 
-
-export default connect(mapStateToProps, { clearErrors, pushError, pushManyErrors, removeError })(RegisterForm);
+export default RegisterForm;

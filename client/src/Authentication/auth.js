@@ -3,7 +3,6 @@ import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 import firebase from "firebase/app";
-import { handleFormErrors } from "../Logic/errorHandler";
 import transformError from "../firebase/transformError";
 
 export function setAuthorizationToken(token) {
@@ -11,6 +10,7 @@ export function setAuthorizationToken(token) {
 }
 
 export function registerUser({ displayName, email, password }) {
+
     return new Promise((resolve, reject) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(creds => {
@@ -25,8 +25,7 @@ export function registerUser({ displayName, email, password }) {
                     });
             })
             .catch(error => {
-                handleFormErrors(transformError(error));
-                reject(error);
+                reject(transformError(error));
             });
     });
 }

@@ -16,13 +16,11 @@ const errorMap = {
 export default function transformError({ code, message }) {
     if (errorMap[code]) {
         return {
-            name: errorMap[code],
-            message
+            [errorMap[code]]: message
         };
     } else {
         return {
-            name: "form",
-            message: "An error has occured, please try again later."
+            form: "An error has occured, please try again later."
         };
     }
 }
