@@ -34,12 +34,11 @@ export function registerUser({ displayName, email, password }) {
 export function loginUser(email, password) {
     return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {         
+            .then(() => {
                 resolve();
             })
             .catch(error => {
-                handleFormErrors(transformError(error));
-                reject();
+                reject(transformError(error));
             });
     });
 }
@@ -60,7 +59,7 @@ export function removeAuthState() {
 
 export async function logOutUser() {
     removeAuthState();
-    await firebase.auth().signOut();  
+    await firebase.auth().signOut();
 }
 
 export function initializeAuth() {
