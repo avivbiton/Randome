@@ -39,10 +39,10 @@ function Browse({ location, history }) {
 
     async function fetchItems(page, sort) {
         const itemsData = await API.randomizers.fetch(page, sort);
-        if (itemsData) {
+        try {
             setItems(itemsData);
-        } else {
-            setError("Could not retrive items, Please try again later.");
+        } catch (error) {
+            setError(error.message);
         }
     }
 

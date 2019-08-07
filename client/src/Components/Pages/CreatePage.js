@@ -29,7 +29,7 @@ function CreatePage({ history }) {
     }
 
     function feedSampleData() {
-
+        // TODO: Add sample json data
     }
     return (
         <div className="container">

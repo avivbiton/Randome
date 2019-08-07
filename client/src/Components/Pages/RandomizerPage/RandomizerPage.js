@@ -14,7 +14,7 @@ function RandomizerPage({ match, history }) {
             const id = match.params.id;
             try {
                 const randomizer = await randomizerAPI.fetchRandomizer(id);
-                if (randomizer === false || randomizer === null) return  history.push("/not-found");
+                if (!randomizer) return history.push("/not-found");
                 setRandomizer(randomizer);
             } catch (error) {
                 history.push("/not-found");
@@ -26,7 +26,7 @@ function RandomizerPage({ match, history }) {
     function onRollClicked() {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
     }
-    
+
     if (currentRandomizer === null) return <Loading />;
     return (
         <div className="container">

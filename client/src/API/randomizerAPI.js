@@ -3,15 +3,13 @@ import RequestError from "./RequestError";
 
 class RandomizerAPI {
 
-    // TODO: return RequestError instead of false
-
     async fetchRandomizer(id) {
         try {
             const response = await axios.get(`/randomizer/get/${id}`);
             return response.data;
         }
         catch (error) {
-            return false;
+            throw new RequestError(error, "Could not fetch randomizer");
         }
     }
     async fetch(page = 0, sortBy = "createdAt") {
@@ -25,7 +23,7 @@ class RandomizerAPI {
                 });
             return response.data;
         } catch (error) {
-            return false;
+            throw new RequestError(error, "Could not retrive items, Please try again later.");
         }
     }
 

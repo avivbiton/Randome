@@ -34,8 +34,7 @@ export function registerUser({ displayName, email, password }) {
 export function loginUser(email, password) {
     return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                window.location = "/";
+            .then(() => {         
                 resolve();
             })
             .catch(error => {
@@ -59,10 +58,9 @@ export function removeAuthState() {
     store.dispatch(setCurrentUser(null));
 }
 
-export function logOutUser() {
+export async function logOutUser() {
     removeAuthState();
-    firebase.auth().signOut();
-    window.location = "/";
+    await firebase.auth().signOut();  
 }
 
 export function initializeAuth() {
