@@ -6,11 +6,11 @@ const admin = require("firebase-admin");
 
 const maxPerFetch = 100;
 
-const fetch = async (page, sortBy = "createdAt") => {
+const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
     const skip = maxPerFetch * page;
 
     try {
-        const docs = await Randomizer.find({ private: false }, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
+        const docs = await Randomizer.find(search, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
             .sort({ [sortBy]: "desc" }).lean().exec();
         return docs;
     }
@@ -20,9 +20,9 @@ const fetch = async (page, sortBy = "createdAt") => {
 };
 
 
-const findById = async (id) => {
+const findById = async (id, projection = null) => {
     try {
-        const found = await Randomizer.findById(id).lean().exec();
+        const found = await Randomizer.findById(id, projection).lean().exec();
         return found;
 
     } catch (error) {
@@ -52,13 +52,12 @@ const createNew = async (ownerId, name, description, schema, private) => {
             private
         });
 
-        await newRandomizer.save();
-        return true;
+        return await newRandomizer.save();
+
     } catch (error) {
         if (error instanceof MongooseError.ValidationError) {
             throw new ValidationError("Data sent is invalid or missing", 400);
         }
-
         return errorHandler.handleUnkownError(error);
     }
 };

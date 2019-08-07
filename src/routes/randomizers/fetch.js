@@ -6,7 +6,7 @@ const fetch = async (req, res, next) => {
     const sortBy = req.query.sortBy || "createdAt";
 
     try {
-        const docs = await randomizerService.fetch(page, sortBy);
+        const docs = await randomizerService.fetch({ private: false }, page, sortBy);
         res.json(docs);
     } catch (error) {
         next(error);

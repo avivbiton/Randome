@@ -1,7 +1,7 @@
 const HttpError = require("../Errors/HttpError");
 
 function errorHandler(err, req, res, next) {
-    //TODO: Remove this later
+    //TODO: Remove this later, when we add proper logging
     console.log(err);
 
     const developmentMode = process.env.NODE_ENV === "development";
