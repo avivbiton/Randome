@@ -3,6 +3,8 @@ import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 import firebase from "firebase/app";
+import "firebase/auth";
+
 import transformError from "../firebase/transformError";
 
 export function setAuthorizationToken(token) {

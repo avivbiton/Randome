@@ -1,6 +1,9 @@
 import React from "react";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebase from "firebase";
+
 import uiConfig from "../uiConfig";
 
 export default function FirebaseLoginUI() {

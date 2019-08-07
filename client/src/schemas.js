@@ -1,4 +1,3 @@
-
 import Schema from "validate";
 
 // NOTE: email and password is already handled by firebase

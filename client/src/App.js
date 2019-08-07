@@ -9,6 +9,7 @@ import "./css/App.css";
 import { initializeAuth, loginUser } from "./Authentication/auth";
 import { useAuth } from "./Hooks/useAuth";
 
+
 // Redux
 import { Provider } from "react-redux";
 import reduxStore from "./redux/store";

@@ -1,4 +1,6 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 
 export default {
     // Popup signin flow rather than redirect flow.
