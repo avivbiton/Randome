@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
 import ResultDisplayer from "./ResultDisplayer";
+import API from "../../../API/api";
 
 function RandomizerPage({ match, history }) {
 
@@ -28,6 +29,25 @@ function RandomizerPage({ match, history }) {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
     }
 
+    async function onLikePressed() {
+        try {
+            const increase = await API.randomizers.likeRandomizer(match.params.id);
+            const newRandomizer = currentRandomizer;
+            if (increase) {
+                newRandomizer.meta.likes += 1;
+            } else {
+                newRandomizer.meta.likes -= 1;
+            }
+            console.log(newRandomizer);
+
+            //CONTINUE: Fix this
+            setRandomizer(newRandomizer);
+        } catch (error) {
+            //tODO: display error popup
+        }
+
+    }
+
     if (currentRandomizer === null) return <Loading />;
     return (
         <div className="container">
@@ -36,7 +56,7 @@ function RandomizerPage({ match, history }) {
                     <h1 className="display-3">{currentRandomizer.name}</h1>
                     <div className="d-inline-flex align-items-center">
 
-                        <button className="btn shadow-sm px-4 btn-outline-info">
+                        <button className="btn shadow-sm px-4 btn-outline-info" onClick={onLikePressed}>
                             <i className="far fa-thumbs-up mr-1"></i> {currentRandomizer.meta.likes}
                         </button>
                         <button className="btn shadow-sm px-4 btn-outline-softRed ml-4">

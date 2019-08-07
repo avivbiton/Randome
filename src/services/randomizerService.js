@@ -1,4 +1,6 @@
 const Randomizer = require("../Models/Randomizer");
+const mongoose = require("mongoose");
+const Account = require("../Models/Account");
 const errorHandler = require("./errorHandler");
 const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
@@ -62,10 +64,34 @@ const createNew = async (ownerId, name, description, schema, private) => {
     }
 };
 
+/**
+ * Increase / decrease a randomizer like counter by 1. returns true if increased otherwise returns false
+ * @param {} randomizerId 
+ * @param {*} account 
+ */
+const likeRandomizer = async (randomizerId, account) => {
 
+    const hasLike = account.meta.likes.some(objId => {
+        return objId.toString() == randomizerId.toString();
+    });
+
+    const update = hasLike ? { $inc: { "meta.likes": -1 } } : { $inc: { "meta.likes": 1 } };
+    if (hasLike === false) {
+        await Account.findOneAndUpdate({ _id: account._id }, { "meta.likes": [...account.meta.likes, randomizerId] });
+    } else {
+        const removedLike = account.meta.likes.filter(i => i.toString() !== randomizerId.toString());
+        await Account.findOneAndUpdate({ _id: account._id }, { "meta.likes": removedLike });
+    }
+
+    await Randomizer.findByIdAndUpdate(randomizerId, update).exec();
+
+    return !hasLike;
+
+};
 
 module.exports = {
     fetch,
     createNew,
-    findById
+    findById,
+    likeRandomizer
 };
