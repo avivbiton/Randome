@@ -1,5 +1,4 @@
-const Account = require("../../Models/Account");
-
+const Account = require("../Models/Account");
 
 async function createAccount(userId) {
 

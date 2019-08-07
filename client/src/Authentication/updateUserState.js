@@ -1,4 +1,5 @@
 import { setAuthorizationToken, updateProfileState } from "./auth";
+import checkForValidAccount from "./checkForAccount";
 
 function updateUserState(user) {
 
@@ -6,6 +7,7 @@ function updateUserState(user) {
         updateProfileState(user);
         user.getIdToken().then(token => {
             setAuthorizationToken(token);
+            checkForValidAccount();
         });
     } else {
         setAuthorizationToken("");
