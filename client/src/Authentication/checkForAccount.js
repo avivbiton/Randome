@@ -5,7 +5,7 @@ async function checkForValidAccount() {
         await API.account.validateExists();
     } catch (error) {
         console.log(error);
-        if (error.error.status == 404) {
+        if (error.error.status === 404) {
             // does no exists
             try {
                 await API.account.createNewAccount();

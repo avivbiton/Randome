@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./RandomizerPage.css";
 import { withRouter } from "react-router-dom";
 import { ContentGenerator } from "randomcontentgenerator";
@@ -29,24 +29,20 @@ function RandomizerPage({ match, history }) {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
     }
 
-    async function onLikePressed() {
+    const onLikePressed = useCallback(async function onLikePressed() {
         try {
             const increase = await API.randomizers.likeRandomizer(match.params.id);
-            const newRandomizer = currentRandomizer;
             if (increase) {
-                newRandomizer.meta.likes += 1;
+                currentRandomizer.meta.likes++;
             } else {
-                newRandomizer.meta.likes -= 1;
+                currentRandomizer.meta.likes--;
             }
-            console.log(newRandomizer);
-
-            //CONTINUE: Fix this
-            setRandomizer(newRandomizer);
+            setRandomizer({ ...currentRandomizer });
         } catch (error) {
             //tODO: display error popup
         }
 
-    }
+    }, [currentRandomizer, match.params.id]);
 
     if (currentRandomizer === null) return <Loading />;
     return (
