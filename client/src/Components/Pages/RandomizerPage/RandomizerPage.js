@@ -14,23 +14,19 @@ function RandomizerPage({ match, history }) {
             const id = match.params.id;
             try {
                 const randomizer = await randomizerAPI.fetchRandomizer(id);
-                if (randomizer === false || randomizer === null) return redirectOnError();
+                if (randomizer === false || randomizer === null) return  history.push("/not-found");
                 setRandomizer(randomizer);
             } catch (error) {
-                redirectOnError();
+                history.push("/not-found");
             }
         }
         fetchRandomizerData();
-    }, [match.params.id]);
+    }, [match.params.id, history]);
 
     function onRollClicked() {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
     }
-
-    function redirectOnError() {
-        history.push("/not-found");
-    }
-
+    
     if (currentRandomizer === null) return <Loading />;
     return (
         <div className="container">
