@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./RandomizerPage.css";
 import { withRouter } from "react-router-dom";
 import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
@@ -33,8 +34,19 @@ function RandomizerPage({ match, history }) {
             <div className="row">
                 <div className="col text-center">
                     <h1 className="display-3">{currentRandomizer.name}</h1>
+                    <div className="d-inline-flex align-items-center">
+
+                        <button className="btn shadow-sm px-4 btn-outline-info">
+                            <i className="far fa-thumbs-up mr-1"></i> {currentRandomizer.meta.likes}
+                        </button>
+                        <button className="btn shadow-sm px-4 btn-outline-softRed ml-4">
+                            <i className="far fa-heart mr-1"></i> {currentRandomizer.meta.favorites}
+                        </button>
+                    </div>
+
                     <p className="lead">{currentRandomizer.description}</p>
                     <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>Roll the Dice</button>
+
                 </div>
             </div>
             <div className="row mt-3">
@@ -42,7 +54,7 @@ function RandomizerPage({ match, history }) {
                     <ResultDisplayer result={currentResult} />
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
