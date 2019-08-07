@@ -3,33 +3,28 @@ import { Link } from "react-router-dom";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import { connect } from "react-redux";
-import { useInput } from "../../Hooks/useInput";
-import { clearErrors } from "../../redux/Actions/errorActions";
+import { useInput } from "../../Hooks/formInput";
 import { redirectOnCondition } from "../../Effects/common";
 import FirebaseLoginUI from "../FirebaseLoginUI";
 
-function LoginPage({ onLogin, errors, clearErrors, loggedIn }) {
+function LoginPage({ onLogin, loggedIn }) {
 
     const email = useInput("");
     const password = useInput("");
 
+    const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
     useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
 
-
-    useEffect(() => {
-        return () => {
-            clearErrors();
-        };
-    }, []);
-
     function onSubmit(e) {
         e.preventDefault();
-        clearErrors();
         setLoading(true);
         onLogin(email.value, password.value)
-            .catch(() => setLoading(false));
+            .catch(errors => {
+                setLoading(false);
+                setErrors(errors);
+            });
     }
 
     return (
@@ -66,8 +61,7 @@ function LoginPage({ onLogin, errors, clearErrors, loggedIn }) {
 
 
 const mapStateToProps = state => ({
-    errors: state.errors,
     loggedIn: !!state.auth.user
 });
 
-export default connect(mapStateToProps, { clearErrors })(LoginPage);
+export default connect(mapStateToProps)(LoginPage);

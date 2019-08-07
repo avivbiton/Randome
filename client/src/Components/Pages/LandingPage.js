@@ -23,7 +23,7 @@ class LandingPage extends Component {
                                 <Link className="btn btn-outline-primary btn-lg btn-block mb-2 mb-md-0" to="/browse">Browse Our Collection</Link>
                             </div>
                             <div className="col-md-6">
-                                <button className="btn btn-outline-secondary btn-lg btn-block">Start Creating</button>
+                                <Link className="btn btn-outline-secondary btn-lg btn-block" to="/create">Start Creating</Link>
                             </div>
                         </div>
                     </section>

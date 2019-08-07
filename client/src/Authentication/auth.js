@@ -3,7 +3,8 @@ import axios from "axios";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 import firebase from "firebase/app";
-import { handleFormErrors } from "../Logic/errorHandler";
+import "firebase/auth";
+
 import transformError from "../firebase/transformError";
 
 export function setAuthorizationToken(token) {
@@ -11,6 +12,7 @@ export function setAuthorizationToken(token) {
 }
 
 export function registerUser({ displayName, email, password }) {
+
     return new Promise((resolve, reject) => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(creds => {
@@ -25,8 +27,7 @@ export function registerUser({ displayName, email, password }) {
                     });
             })
             .catch(error => {
-                handleFormErrors(transformError(error));
-                reject(error);
+                reject(transformError(error));
             });
     });
 }
@@ -35,12 +36,10 @@ export function loginUser(email, password) {
     return new Promise((resolve, reject) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => {
-                window.location = "/";
                 resolve();
             })
             .catch(error => {
-                handleFormErrors(transformError(error));
-                reject();
+                reject(transformError(error));
             });
     });
 }
@@ -59,12 +58,16 @@ export function removeAuthState() {
     store.dispatch(setCurrentUser(null));
 }
 
-export function logOutUser() {
+export async function logOutUser() {
     removeAuthState();
-    firebase.auth().signOut();
-    window.location = "/";
+    await firebase.auth().signOut();
 }
 
 export function initializeAuth() {
+    const config = {
+        apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
+        authDomain: "randome-1564044096001.firebaseapp.com",
+    };
+    firebase.initializeApp(config);
     firebase.auth().onAuthStateChanged(updateUserState);
 }

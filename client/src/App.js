@@ -1,29 +1,32 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+// CSS
 import "./css/Bootstrap.css";
 import "./css/App.css";
 
-import firebase from "firebase/app";
+// authentication imports
 import { initializeAuth, loginUser } from "./Authentication/auth";
+import { useAuth } from "./Hooks/useAuth";
+
+
+// Redux
 import { Provider } from "react-redux";
 import reduxStore from "./redux/store";
+
+// Components
 import LandingPage from "./Components/Pages/LandingPage";
 import LoginPage from "./Components/Pages/LoginPage";
 import Navbar from "./Components/Navbar";
 import RandomizerPage from "./Components/Pages/RandomizerPage/RandomizerPage";
-import { useAuth } from "./Hooks/useAuth";
 import NotFound from "./Components/Pages/NotFound";
 import Browse from "./Components/Pages/browseRandomizerPage/Browse";
 import RegisterPage from "./Components/Pages/RegisterPage";
 import LoadingSpinner from "./Components/LoadingSpinner";
+import PrivateRoute from "./Components/PrivateRoute";
+import CreatePage from "./Components/Pages/CreatePage";
 
-const config = {
-  apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
-  authDomain: "randome-1564044096001.firebaseapp.com",
-};
-firebase.initializeApp(config);
 initializeAuth();
-
 
 function App() {
 
@@ -49,6 +52,7 @@ function App() {
           <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/browse" component={Browse} />
+          <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
           <Route path="*" render={NotFound} />
         </Switch>
       </Router>

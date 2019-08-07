@@ -13,14 +13,14 @@ database.initializeConnection();
 
 
 app.use((req, res, next) => {
-	req.setTimeout(25000);
-	next();
+    req.setTimeout(25000);
+    next();
 });
 
 middleware.useMiddleware(app);
 
 if (process.env.NODE_ENV === "production")
-	production.initializeProductionBuild();
+    production.initializeProductionBuild();
 
 LoadRoutes(app);
 

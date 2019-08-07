@@ -4,7 +4,6 @@ import { Link, withRouter } from "react-router-dom";
 import { logOutUser } from "../Authentication/auth";
 
 function Navbar({ user }) {
-
     return (
         <nav className="container-fluid navbar navbar-expand-md navbar-dark bg-primary border-bottom shadow">
             <Link to="/" className="navbar-brand">
