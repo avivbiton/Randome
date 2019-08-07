@@ -26,6 +26,8 @@ function Browse({ location, history }) {
                 sort: currentQuery.sort || SORT_TYPES.LATEST
             })
         });
+        // should execute only once
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

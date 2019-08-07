@@ -29,11 +29,17 @@ function RegisterForm({ title }) {
         }
 
         registerUser({ displayName, email, password })
-            .catch(errors => {            
+            .catch(errors => {
                 setErrors(errors);
                 setLoading(false);
             });
     }
+
+    const removeError = useCallback((errorName) => {
+        const newErrors = errors;
+        delete newErrors[errorName];
+        setErrors(newErrors);
+    }, [errors, setErrors]);
 
     useEffect(function validatePasswordMatch() {
         if (password !== confirmPassword) {
@@ -44,14 +50,7 @@ function RegisterForm({ title }) {
             removeError("confirmPassword");
         }
     }
-        , [password, confirmPassword]);
-
-
-    const removeError = useCallback((errorName) => {
-        const newErrors = errors;
-        delete newErrors[errorName];
-        setErrors(newErrors);
-    });
+        , [password, confirmPassword, removeError, errors]);
 
     function isFormValid() {
         const errors = validateSchema(registerSchema, { displayName, email, password });
