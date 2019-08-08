@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import "./RandomizerPage.css";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
 import ResultDisplayer from "./ResultDisplayer";
-import API from "../../../API/api";
+import LikeAndFavoriteCounter from "./LikeAndFavoriteCounter";
 
 function RandomizerPage({ match, history }) {
 
@@ -29,37 +28,16 @@ function RandomizerPage({ match, history }) {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
     }
 
-    const onLikePressed = useCallback(async function onLikePressed() {
-        try {
-            const increase = await API.randomizers.likeRandomizer(match.params.id);
-            if (increase) {
-                currentRandomizer.meta.likes++;
-            } else {
-                currentRandomizer.meta.likes--;
-            }
-            setRandomizer({ ...currentRandomizer });
-        } catch (error) {
-            //tODO: display error popup
-        }
-
-    }, [currentRandomizer, match.params.id]);
-
     if (currentRandomizer === null) return <Loading />;
     return (
         <div className="container">
             <div className="row">
                 <div className="col text-center">
                     <h1 className="display-3">{currentRandomizer.name}</h1>
-                    <div className="d-inline-flex align-items-center">
-
-                        <button className="btn shadow-sm px-4 btn-outline-info" onClick={onLikePressed}>
-                            <i className="far fa-thumbs-up mr-1"></i> {currentRandomizer.meta.likes}
-                        </button>
-                        <button className="btn shadow-sm px-4 btn-outline-softRed ml-4">
-                            <i className="far fa-heart mr-1"></i> {currentRandomizer.meta.favorites}
-                        </button>
-                    </div>
-
+                    <LikeAndFavoriteCounter
+                        id={match.params.id}
+                        likeCount={currentRandomizer.meta.likes}
+                        favoriteCount={currentRandomizer.meta.favorites} />
                     <p className="lead">{currentRandomizer.description}</p>
                     <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>Roll the Dice</button>
 
