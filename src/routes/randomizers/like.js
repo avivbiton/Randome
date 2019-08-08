@@ -7,7 +7,7 @@ const likeRandomizer = [
     requireBody(["id"]),
     async (req, res, next) => {
         try {
-            const increase = await service.likeRandomizer(req.body.id, req.account[0]);
+            const increase = await service.likeRandomizer(req.body.id, req.account);
             return res.status(200).json({ increase: increase });
         } catch (error) {
             next(error);

@@ -16,9 +16,18 @@ class AccountAPI {
             await axios.get("/account/exists");
             return true;
         } catch (error) {
-            if (error.response) {    
-                throw new RequestError(error.response); 
+            if (error.response) {
+                throw new RequestError(error.response);
             }
+            throw new RequestError(error);
+        }
+    }
+
+    async getAccount() {
+        try {
+            const response = await axios.get("/account/info");
+            return response.data;
+        } catch (error) {
             throw new RequestError(error);
         }
     }

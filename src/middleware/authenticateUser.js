@@ -8,7 +8,8 @@ module.exports = async (req, res, next) => {
         const decoded = await admin.auth().verifyIdToken(authToken);
         req.user = decoded;
         try {
-            req.account = await Account.find({ userId: decoded.uid }).lean().exec();
+            const data = await Account.find({ userId: decoded.uid }).lean().exec();
+            req.account = data[0];
         } catch (error) {
             req.account = null;
         }

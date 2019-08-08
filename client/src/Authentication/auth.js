@@ -6,6 +6,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 import transformError from "../firebase/transformError";
+import checkForValidAccount from "./checkForAccount";
+import fetchAccountInfo from "./fetchAccountInfo";
 
 export function setAuthorizationToken(token) {
     axios.defaults.headers.common["Authorization"] = token;
@@ -18,7 +20,7 @@ export function registerUser({ displayName, email, password }) {
             .then(creds => {
                 creds.user.updateProfile({ displayName: displayName, photoURL: "/favicon.ico" })
                     .then(() => {
-                        updateProfileState(firebase.auth().currentUser);
+                        //updateProfileState(firebase.auth().currentUser);
                         resolve();
                     })
                     .catch(error => {
@@ -44,16 +46,6 @@ export function loginUser(email, password) {
     });
 }
 
-export function updateProfileState(user) {
-    const userData = {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid
-    };
-    store.dispatch(setCurrentUser(userData));
-}
-
 export function removeAuthState() {
     store.dispatch(setCurrentUser(null));
 }
@@ -61,6 +53,7 @@ export function removeAuthState() {
 export async function logOutUser() {
     removeAuthState();
     await firebase.auth().signOut();
+    window.location = "/";
 }
 
 export function initializeAuth() {
@@ -69,5 +62,10 @@ export function initializeAuth() {
         authDomain: "randome-1564044096001.firebaseapp.com",
     };
     firebase.initializeApp(config);
-    firebase.auth().onAuthStateChanged(updateUserState);
+    firebase.auth().onAuthStateChanged(async user => {
+        await updateUserState(user);
+        await checkForValidAccount();
+        await fetchAccountInfo();
+
+    });
 }

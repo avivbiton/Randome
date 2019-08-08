@@ -1,6 +1,7 @@
 import { SET_CURRENT_USER } from "../actionTypes";
 const initState = {
-    user: null
+    user: null,
+    account: null
 };
 
 export default function (state = initState, action) {
