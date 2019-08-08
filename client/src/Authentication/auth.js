@@ -1,7 +1,7 @@
 import updateUserState from "./updateUserState";
 import axios from "axios";
 import store from "../redux/store";
-import { setCurrentUser } from "../redux/Actions/authAction";
+import { logout } from "../redux/Actions/authAction";
 import firebase from "firebase/app";
 import "firebase/auth";
 
@@ -20,7 +20,6 @@ export function registerUser({ displayName, email, password }) {
             .then(creds => {
                 creds.user.updateProfile({ displayName: displayName, photoURL: "/favicon.ico" })
                     .then(() => {
-                        //updateProfileState(firebase.auth().currentUser);
                         resolve();
                     })
                     .catch(error => {
@@ -47,7 +46,7 @@ export function loginUser(email, password) {
 }
 
 export function removeAuthState() {
-    store.dispatch(setCurrentUser(null));
+    store.dispatch(logout);
 }
 
 export async function logOutUser() {
