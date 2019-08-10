@@ -1,4 +1,3 @@
-import updateUserState from "./updateUserState";
 import axios from "axios";
 import store from "../redux/store";
 import { logout } from "../redux/Actions/authAction";
@@ -6,8 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 import transformError from "../firebase/transformError";
-import checkForValidAccount from "./checkForAccount";
-import fetchAccountInfo from "./fetchAccountInfo";
+
 
 export function setAuthorizationToken(token) {
     axios.defaults.headers.common["Authorization"] = token;
@@ -53,18 +51,4 @@ export async function logOutUser() {
     removeAuthState();
     await firebase.auth().signOut();
     window.location = "/";
-}
-
-export function initializeAuth() {
-    const config = {
-        apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
-        authDomain: "randome-1564044096001.firebaseapp.com",
-    };
-    firebase.initializeApp(config);
-    firebase.auth().onAuthStateChanged(async user => {
-        await updateUserState(user);
-        await checkForValidAccount();
-        await fetchAccountInfo();
-
-    });
 }

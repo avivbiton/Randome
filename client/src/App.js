@@ -6,7 +6,7 @@ import "./css/Bootstrap.css";
 import "./css/App.css";
 
 // authentication imports
-import { initializeAuth, loginUser } from "./Authentication/auth";
+import { loginUser } from "./Authentication/auth";
 import { useAuth } from "./Hooks/useAuth";
 
 
@@ -25,8 +25,6 @@ import RegisterPage from "./Components/Pages/RegisterPage";
 import LoadingSpinner from "./Components/LoadingSpinner";
 import PrivateRoute from "./Components/PrivateRoute";
 import CreatePage from "./Components/Pages/CreatePage";
-
-initializeAuth();
 
 function App() {
 
