@@ -2,6 +2,8 @@ import React, { useState, useCallback, useMemo } from "react";
 import API from "../../../API/api";
 import { useSelector } from "react-redux";
 import "./RandomizerPage.css";
+import toastr from "toastr";
+import { toastrDefault } from "../../../config";
 
 export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount }) {
 
@@ -40,10 +42,10 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
                 }
                 await API.randomizers.likeRandomizer(id);
             } else {
-                //TODO: Diplay login required popup
+                toastr.error("Please login in and try again", "Login Required", toastrDefault);
             }
         } catch (error) {
-            //tODO: display error popup
+            toastr.error("Opss, something went wrong, try again later.", "Error", toastrDefault);
         }
 
     }, [hasLiked, accountMeta, likes, id]);
@@ -60,10 +62,10 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
                 }
                 // TODO: Send api request here
             } else {
-                //TODO: Diplay login required popup
+                toastr.error("Please login in and try again", "Login Required", toastrDefault);
             }
         } catch (error) {
-            //tODO: display error popup
+            toastr.error("Opss, something went wrong, try again later.", "Error", toastrDefault);
         }
 
     }, [hasFavorited, accountMeta, favorites, id]);
