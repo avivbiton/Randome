@@ -64,34 +64,48 @@ const createNew = async (ownerId, name, description, schema, private) => {
     }
 };
 
-/**
- * Increase / decrease a randomizer like counter by 1. returns true if increased otherwise returns false
- * @param {} randomizerId 
- * @param {*} account 
- */
+
 const likeRandomizer = async (randomizerId, account) => {
 
     const hasLike = account.meta.likes.some(objId => {
         return objId.toString() == randomizerId.toString();
     });
 
-    const update = hasLike ? { $inc: { "meta.likes": -1 } } : { $inc: { "meta.likes": 1 } };
+    const inc = hasLike ? -1 : 1;
     if (hasLike === false) {
-        await Account.findOneAndUpdate({ _id: account._id }, { "meta.likes": [...account.meta.likes, randomizerId] });
+        await Account.findOneAndUpdate({ _id: account._id }, { $push: { "meta.likes": randomizerId } });
     } else {
-        const removedLike = account.meta.likes.filter(i => i.toString() !== randomizerId.toString());
-        await Account.findOneAndUpdate({ _id: account._id }, { "meta.likes": removedLike });
+        await Account.findOneAndUpdate({ _id: account._id }, { $pull: { "meta.likes": randomizerId } });
     }
 
-    await Randomizer.findByIdAndUpdate(randomizerId, update).exec();
+    await Randomizer.findByIdAndUpdate(randomizerId, { $inc: { "meta.likes": inc } }).exec();
 
     return !hasLike;
 
+};
+
+const favoriteRandomizer = async (randomizerId, account) => {
+
+    const hasFavorite = account.meta.favorites.some(objId => {
+        return objId.toString() == randomizerId.toString();
+    });
+
+    const inc = hasFavorite ? -1 : 1;
+    if (hasFavorite === false) {
+        await Account.findOneAndUpdate({ _id: account._id }, { $push: { "meta.favorites": randomizerId } });
+    } else {
+        await Account.findOneAndUpdate({ _id: account._id }, { $pull: { "meta.favorites": randomizerId } });
+    }
+
+    await Randomizer.findByIdAndUpdate(randomizerId, { $inc: { "meta.favorites": inc } }).exec();
+
+    return !hasFavorite;
 };
 
 module.exports = {
     fetch,
     createNew,
     findById,
-    likeRandomizer
+    likeRandomizer,
+    favoriteRandomizer
 };
