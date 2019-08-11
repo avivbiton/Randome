@@ -60,7 +60,7 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
                     setFavorites(favorites + 1);
                     accountMeta.favorites.push(id);
                 }
-                // TODO: Send api request here
+                await API.randomizers.favoriteRandomizer(id);
             } else {
                 toastr.error("Please login in and try again", "Login Required", toastrDefault);
             }
