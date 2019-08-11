@@ -44,7 +44,7 @@ export function loginUser(email, password) {
 }
 
 export function removeAuthState() {
-    store.dispatch(logout);
+    store.dispatch(logout());
 }
 
 export async function logOutUser() {

@@ -7,8 +7,10 @@ async function updateUserState(user) {
         updateProfileState(user);
         const token = await user.getIdToken();
         setAuthorizationToken(token);
+        return true;
     } else {
         setAuthorizationToken("");
+        return false;
     }
 }
 

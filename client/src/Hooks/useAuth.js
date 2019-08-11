@@ -12,22 +12,19 @@ const config = {
 firebase.initializeApp(config);
 export const useAuth = () => {
 
-    const [state, setState] = useState(() => {
-        return { initializing: true };
-    });
+    const [state, setState] = useState( { initializing: true });
 
     async function onChange(user) {
-        await updateUserState(user);
-        await checkForValidAccount();
-        await fetchAccountInfo();
-
+        const loggedIn = await updateUserState(user);
+        if (loggedIn) {
+            await checkForValidAccount();
+            await fetchAccountInfo();
+        }
         setState({ initializing: false });
     }
 
     useEffect(() => {
-        // listen for auth state changes
         const unsubscribe = firebase.auth().onAuthStateChanged(onChange);
-        // unsubscribe to the listener when unmounting
         return () => unsubscribe();
     }, []);
 
