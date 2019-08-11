@@ -1,4 +1,6 @@
 const Randomizer = require("../Models/Randomizer");
+const mongoose = require("mongoose");
+const Account = require("../Models/Account");
 const errorHandler = require("./errorHandler");
 const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
@@ -63,9 +65,47 @@ const createNew = async (ownerId, name, description, schema, private) => {
 };
 
 
+const likeRandomizer = async (randomizerId, account) => {
+
+    const hasLike = account.meta.likes.some(objId => {
+        return objId.toString() == randomizerId.toString();
+    });
+
+    const inc = hasLike ? -1 : 1;
+    if (hasLike === false) {
+        await Account.findOneAndUpdate({ _id: account._id }, { $push: { "meta.likes": randomizerId } });
+    } else {
+        await Account.findOneAndUpdate({ _id: account._id }, { $pull: { "meta.likes": randomizerId } });
+    }
+
+    await Randomizer.findByIdAndUpdate(randomizerId, { $inc: { "meta.likes": inc } }).exec();
+
+    return !hasLike;
+
+};
+
+const favoriteRandomizer = async (randomizerId, account) => {
+
+    const hasFavorite = account.meta.favorites.some(objId => {
+        return objId.toString() == randomizerId.toString();
+    });
+
+    const inc = hasFavorite ? -1 : 1;
+    if (hasFavorite === false) {
+        await Account.findOneAndUpdate({ _id: account._id }, { $push: { "meta.favorites": randomizerId } });
+    } else {
+        await Account.findOneAndUpdate({ _id: account._id }, { $pull: { "meta.favorites": randomizerId } });
+    }
+
+    await Randomizer.findByIdAndUpdate(randomizerId, { $inc: { "meta.favorites": inc } }).exec();
+
+    return !hasFavorite;
+};
 
 module.exports = {
     fetch,
     createNew,
-    findById
+    findById,
+    likeRandomizer,
+    favoriteRandomizer
 };

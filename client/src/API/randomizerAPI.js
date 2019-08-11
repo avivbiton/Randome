@@ -40,6 +40,28 @@ class RandomizerAPI {
             throw new RequestError({ form: "Something went wrong, please try again later." }, "Server error");
         }
     }
+
+    async likeRandomizer(id) {
+        try {
+            const response = await axios.post("/randomizer/like", { id });
+            return response.data.increase;
+        } catch (error) {
+            if (error.response)
+                throw new RequestError(error.response.data, "Unable to like.");
+            throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
+        }
+    }
+
+    async favoriteRandomizer(id) {
+        try {
+            const response = await axios.post("/randomizer/favorite", { id });
+            return response.data.increase;
+        } catch (error) {
+            if (error.response)
+                throw new RequestError(error.response.data, "Unable to favorite.");
+            throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
+        }
+    }
 }
 
 export default new RandomizerAPI();

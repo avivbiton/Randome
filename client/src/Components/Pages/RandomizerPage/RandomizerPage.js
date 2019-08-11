@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
 import ResultDisplayer from "./ResultDisplayer";
+import LikeAndFavoriteCounter from "./LikeAndFavoriteCounter";
 
 function RandomizerPage({ match, history }) {
 
@@ -33,8 +34,13 @@ function RandomizerPage({ match, history }) {
             <div className="row">
                 <div className="col text-center">
                     <h1 className="display-3">{currentRandomizer.name}</h1>
+                    <LikeAndFavoriteCounter
+                        id={match.params.id}
+                        likeCount={currentRandomizer.meta.likes}
+                        favoriteCount={currentRandomizer.meta.favorites} />
                     <p className="lead">{currentRandomizer.description}</p>
                     <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>Roll the Dice</button>
+
                 </div>
             </div>
             <div className="row mt-3">
@@ -42,7 +48,7 @@ function RandomizerPage({ match, history }) {
                     <ResultDisplayer result={currentResult} />
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

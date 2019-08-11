@@ -37,15 +37,14 @@ $grays: map-merge(
 $lightBlue:    rgb(247, 248, 252) !default;
 $indigo:  #4F57AA !default;
 $purple:  #454857 !default;
-$pink:    #72818B !default;
+$lightGray:    #72818B !default;
 $red:     #8F002E !default;
-
-
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
 $green:   #28a745 !default;
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
+$begonia: #DF4B5F !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -54,7 +53,7 @@ $colors: map-merge(
     "lightBlue":       $lightBlue,
     "indigo":     $indigo,
     "purple":     $purple,
-    "pink":       $pink,
+    "lightGray":       $lightGray,
     "red":        $red,
     "orange":     $orange,
     "yellow":     $yellow,
@@ -63,7 +62,8 @@ $colors: map-merge(
     "cyan":       $cyan,
     "white":      $white,
     "gray":       $gray-600,
-    "gray-dark":  $gray-800
+    "gray-dark":  $gray-800,
+    "begonia": $begonia
   ),
   $colors
 );
@@ -74,8 +74,9 @@ $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $orange !default;
 $danger:        $red !default;
-$light:         $pink !default;
+$light:         $lightGray !default;
 $dark:          $gray-600 !default;
+$softRed:           $begonia !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -88,7 +89,8 @@ $theme-colors: map-merge(
     "warning":    $warning,
     "danger":     $danger,
     "light":      $light,
-    "dark":       $dark
+    "dark":       $dark,
+    "softRed":        $softRed
   ),
   $theme-colors
 );
@@ -1100,7 +1102,7 @@ $close-text-shadow:                 0 1px 0 $white !default;
 // Code
 
 $code-font-size:                    87.5% !default;
-$code-color:                        $pink !default;
+$code-color:                        $lightGray !default;
 
 $kbd-padding-y:                     .2rem !default;
 $kbd-padding-x:                     .4rem !default;

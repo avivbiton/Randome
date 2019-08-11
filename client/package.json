@@ -16,6 +16,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.4",
+    "toastr": "^2.1.4",
     "validate": "^4.5.1"
   },
   "scripts": {
