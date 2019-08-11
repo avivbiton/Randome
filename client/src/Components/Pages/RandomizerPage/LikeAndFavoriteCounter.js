@@ -21,12 +21,12 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
     const hasLiked = useMemo(() => {
         if (accountMeta === null) return false;
         return accountMeta.likes.some(i => i === id);
-    }, [accountMeta]);
+    }, [id, accountMeta]);
 
     const hasFavorited = useMemo(() => {
         if (accountMeta === null) return false;
         return accountMeta.favorites.some(i => i === id);
-    }, [accountMeta]);
+    }, [id, accountMeta]);
 
     const onLikePressed = useCallback(async function onLikePressed() {
         try {
@@ -38,15 +38,15 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
                     setLikes(likes + 1);
                     accountMeta.likes.push(id);
                 }
+                await API.randomizers.likeRandomizer(id);
             } else {
                 //TODO: Diplay login required popup
             }
-            await API.randomizers.likeRandomizer(id);
         } catch (error) {
             //tODO: display error popup
         }
 
-    }, [accountMeta, likes, id]);
+    }, [hasLiked, accountMeta, likes, id]);
 
     const onFavoritePressed = useCallback(async function onFavoritePressed() {
         try {
@@ -58,17 +58,15 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
                     setFavorites(favorites + 1);
                     accountMeta.favorites.push(id);
                 }
+                // TODO: Send api request here
             } else {
                 //TODO: Diplay login required popup
             }
-
-            // TODO: Send api request here
-
         } catch (error) {
             //tODO: display error popup
         }
 
-    }, [accountMeta, likes, id]);
+    }, [hasFavorited, accountMeta, favorites, id]);
 
     let likeButtonStyles = "btn shadow-sm px-4 btn-outline-info";
     likeButtonStyles += hasLiked ? " btn-like-active" : "";
