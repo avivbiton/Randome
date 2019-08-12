@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import useReactRouter from "use-react-router";
+import queryString from "query-string";
 
 import "./Profie.css";
 import Sidemenu from "./Sidemenu";
@@ -8,11 +10,20 @@ import MyRandomizers from "./MyRandomizers";
 import Favorites from "./Favorites";
 
 export default function ProfilePage() {
-    const [currentPage, setPage] = useState(0);
+    const { history, location } = useReactRouter();
+    const [currentPage, setPage] = useState(() => {
+        return queryString.parse(location.search).index || 0;
+    });
+    
+    useEffect(() => {
+        setPage(queryString.parse(location.search).index || 0);
+    }, [location.search]);
 
     const onActiveChanged = useCallback(index => {
-        setPage(index);
-    }, [setPage]);
+        const currentQuery = queryString.parse(location.search);
+        currentQuery.index = index;
+        history.push({ search: queryString.stringify(currentQuery) });
+    }, [history, location.search]);
 
     return (
         <div className="container mt-4">
@@ -24,8 +35,8 @@ export default function ProfilePage() {
                 </div>
                 <div className="col-md-8">
                     <PageSwitcher currentPageIndex={currentPage}>
-                        <PageSection index={0} component={MyRandomizers} />
-                        <PageSection index={1} component={Favorites} />
+                        <PageSection index="0" component={MyRandomizers} />
+                        <PageSection index="1" component={Favorites} />
                     </PageSwitcher>
                 </div>
             </div>
