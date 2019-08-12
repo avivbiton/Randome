@@ -1,5 +1,4 @@
 const Randomizer = require("../Models/Randomizer");
-const mongoose = require("mongoose");
 const Account = require("../Models/Account");
 const errorHandler = require("./errorHandler");
 const MongooseError = require("mongoose").Error;
@@ -21,6 +20,27 @@ const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
     }
 };
 
+
+const fetchByOwnerId = async (uid) => {
+
+    try {
+        const docs = await Randomizer.find({ "owner.id": uid }, "name description meta _id private createdAt updatedAt").lean().exec();
+        return docs;
+    } catch (error) {
+        return errorHandler.handleUnkownError(error);
+    }
+};
+
+const fetchManyById = async (arrayId) => {
+
+    try {
+        return await Randomizer.find({ "_id": { $in: arrayId } }).lean().exec();
+
+    } catch (error) {
+        errorHandler.handleUnkownError(error);
+    }
+
+};
 
 const findById = async (id, projection = null) => {
     try {
@@ -107,5 +127,7 @@ module.exports = {
     createNew,
     findById,
     likeRandomizer,
-    favoriteRandomizer
+    favoriteRandomizer,
+    fetchByOwnerId,
+    fetchManyById
 };
