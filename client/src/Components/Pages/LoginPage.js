@@ -4,8 +4,8 @@ import Input from "../Form/Input";
 import Button from "../Form/Button";
 import { connect } from "react-redux";
 import { useInput } from "../../Hooks/formInput";
-import { redirectOnCondition } from "../../Effects/common";
 import FirebaseLoginUI from "../FirebaseLoginUI";
+import useReactRouter from "use-react-router";
 
 function LoginPage({ onLogin, loggedIn }) {
 
@@ -15,7 +15,12 @@ function LoginPage({ onLogin, loggedIn }) {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
+    const { history } = useReactRouter();
+
+    useEffect(() => {
+        if (loggedIn)
+            history.push("/");
+    }, [loggedIn]);
 
     function onSubmit(e) {
         e.preventDefault();
