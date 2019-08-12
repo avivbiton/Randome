@@ -6,6 +6,7 @@ import API from "../../API/api";
 
 import Input from "../Form/Input";
 import Button from "../Form/Button";
+import Textarea from "../Form/Textarea";
 
 function CreatePage({ history }) {
 
@@ -48,16 +49,12 @@ function CreatePage({ history }) {
             <div className="border p-4 shadow mb-4">
                 <Input type="text" className="form-control form-control-lg" placeholder="Choose a name"
                     {...bindName} error={errors.name} />
-                <textarea rows="5" placeholder="Short description, explaining what your randomizers does." className="form-control form-control-lg mt-2"
-                    {...bindDescription}></textarea>
-                <div className="invalid-feedback">
-                    {errors.description}
-                </div>
-                <textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
-                    {...bindSchema}></textarea>
-                <div className="invalid-feedback">
-                    {errors.schema}
-                </div>
+                <Textarea rows="5" placeholder="Short description, explaining what your randomizers does." className="form-control form-control-lg mt-2"
+                    {...bindDescription}
+                    error={errors.description} />
+                <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
+                    {...bindSchema}
+                    error={errors.schema} />
                 <div className="form-check">
                     <input type="checkbox" className="form-check-input mt-2" id="checkboxIsPrivate"
                         {...bindPrivate} />
