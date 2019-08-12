@@ -48,7 +48,7 @@ function UserDropdown({ user }) {
             <img className="nav-item dropdown-toggle rounded-circle navbar-brand" style={{ width: "3rem", maxHeight: "3.5rem" }} src={user.photoURL} id="dropdownMenuButton" alt="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
             <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                 <Link className="dropdown-item" to="/profile">{user.displayName}</Link>
-                <Link className="dropdown-item" to="/settings">Settings</Link>
+                <Link className="dropdown-item" to="/create">Create</Link>
                 <button className="btn btn-link dropdown-item" onClick={() => logOutUser()}>Logout</button>
             </div>
         </div>
