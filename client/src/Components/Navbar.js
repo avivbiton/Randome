@@ -19,9 +19,7 @@ function Navbar({ user }) {
             </button>
             <div className="collapse navbar-collapse" id="mainNavbar">
                 <div className="navbar-nav mr-auto">
-                    <NavbarLink text="Home" to="/" />
                     <NavbarLink text="Collection" to="/browse" />
-                    <NavbarLink text="FAQ" to="/faq" />
                 </div>
                 <div className="navbar-nav ml-auto">
                     {user ?
