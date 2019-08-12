@@ -8,7 +8,7 @@ export default function Sidemenu({ items, onActiveChanged }) {
         if(onActiveChanged !== null && typeof onActiveChanged !== "undefined") {
             onActiveChanged(index);
         }
-    }, [setActive]);
+    }, [setActive, onActiveChanged]);
 
     return (
         <div className="card">

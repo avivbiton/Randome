@@ -13,3 +13,12 @@
 .menu-item:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
+
+.icon-button {
+    padding: none;
+}
+
+.icon-button:hover{
+    color: rgba(0, 0, 0, 0.5);
+}
