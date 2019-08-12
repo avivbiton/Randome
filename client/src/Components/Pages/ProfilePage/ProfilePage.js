@@ -14,7 +14,7 @@ export default function ProfilePage() {
     const [currentPage, setPage] = useState(() => {
         return queryString.parse(location.search).index || 0;
     });
-    
+
     useEffect(() => {
         setPage(queryString.parse(location.search).index || 0);
     }, [location.search]);
@@ -30,6 +30,7 @@ export default function ProfilePage() {
             <div className="row">
                 <div className="col-md-3 float-left pr-4">
                     <Sidemenu
+                        active={currentPage}
                         items={["My Randomizers", "Favorites", "Settings", "Account"]}
                         onActiveChanged={onActiveChanged} />
                 </div>

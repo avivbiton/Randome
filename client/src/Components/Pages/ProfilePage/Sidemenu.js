@@ -1,14 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 
-export default function Sidemenu({ items, onActiveChanged }) {
+export default function Sidemenu({ active, items, onActiveChanged }) {
 
-    const [active, setActive] = useState(0);
     const onButtonClicked = useCallback(index => {
-        setActive(index);
-        if(onActiveChanged !== null && typeof onActiveChanged !== "undefined") {
+        if (onActiveChanged !== null && typeof onActiveChanged !== "undefined") {
             onActiveChanged(index);
         }
-    }, [setActive, onActiveChanged]);
+    }, [onActiveChanged]);
 
     return (
         <div className="card">
@@ -18,7 +16,7 @@ export default function Sidemenu({ items, onActiveChanged }) {
             <ul className="list-group">
                 {items.map((i, index) => {
                     let classNames = "btn menu-item";
-                    if (active === index) {
+                    if (active == index) {
                         classNames += " menu-hover";
                     }
                     return (

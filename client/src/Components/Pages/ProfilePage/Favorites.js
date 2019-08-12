@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../LoadingSpinner";
 import API from "../../../API/api";
 import toastr from "toastr";
@@ -17,7 +17,6 @@ export default function Favorites() {
                 toastr.error("Sorry, something went wrong, please try again later.", "Error", toastrDefault);
             }
         }
-
         fetchFavorites();
     }, []);
 
