@@ -27,15 +27,15 @@ export default function MyRandomizers() {
 
     const onViewClicked = useCallback(id => {
         history.push(`/randomizer/${id}`);
-    });
+    }, [history]);
 
     const onEditClicked = useCallback(id => {
-
-    });
+        console.log(id);
+    }, []);
 
     const onDeleteClicked = useCallback(id => {
-
-    });
+        console.log(id);
+    }, []);
 
 
     if (randomizers === null) return <LoadingSpinner className="d-flex mx-auto" size="lg" animation="grow" />;

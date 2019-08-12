@@ -20,7 +20,7 @@ function LoginPage({ onLogin, loggedIn }) {
     useEffect(() => {
         if (loggedIn)
             history.push("/");
-    }, [loggedIn]);
+    }, [loggedIn, history]);
 
     function onSubmit(e) {
         e.preventDefault();

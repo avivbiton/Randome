@@ -10,7 +10,7 @@ function RegisterPage({ loggedIn }) {
     useEffect(() => {
         if (loggedIn)
             history.push("/");
-    }, [loggedIn]);
+    }, [loggedIn, history]);
 
     return (
         <div className="container h-100 d-flex justify-content-center">
