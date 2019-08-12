@@ -5,6 +5,7 @@ import Sidemenu from "./Sidemenu";
 import PageSwitcher from "./PageSwitcher";
 import PageSection from "./PageSection";
 import MyRandomizers from "./MyRandomizers";
+import Favorites from "./Favorites";
 
 export default function ProfilePage() {
     const [currentPage, setPage] = useState(0);
@@ -24,6 +25,7 @@ export default function ProfilePage() {
                 <div className="col-md-8">
                     <PageSwitcher currentPageIndex={currentPage}>
                         <PageSection index={0} component={MyRandomizers} />
+                        <PageSection index={1} component={Favorites} />
                     </PageSwitcher>
                 </div>
             </div>

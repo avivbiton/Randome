@@ -34,7 +34,8 @@ const fetchByOwnerId = async (uid) => {
 const fetchManyById = async (arrayId) => {
 
     try {
-        return await Randomizer.find({ "_id": { $in: arrayId } }).lean().exec();
+        return await Randomizer.find({ "_id": { $in: arrayId } },
+            "name owner.name private meta description createdAt updatedAt _id").lean().exec();
 
     } catch (error) {
         errorHandler.handleUnkownError(error);
