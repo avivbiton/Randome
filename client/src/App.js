@@ -26,6 +26,7 @@ import RegisterPage from "./Components/Pages/RegisterPage";
 import LoadingSpinner from "./Components/LoadingSpinner";
 import PrivateRoute from "./Components/PrivateRoute";
 import CreatePage from "./Components/Pages/CreatePage";
+import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage";
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/browse" component={Browse} />
           <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
+          <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
           <Route path="*" render={NotFound} />
         </Switch>
       </Router>
