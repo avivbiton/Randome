@@ -1,15 +1,14 @@
-import { setAuthorizationToken } from "./auth";
+import { setAuthorizationToken, removeAuthState } from "./auth";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 
-async function updateUserState(user) {
+async function updateAuthState(user) {
     if (user) {
         updateProfileState(user);
-        const token = await user.getIdToken();
-        setAuthorizationToken(token);
+        setAuthorizationToken(user);
         return true;
     } else {
-        setAuthorizationToken("");
+        removeAuthState();
         return false;
     }
 }
@@ -25,4 +24,4 @@ function updateProfileState(user) {
     store.dispatch(setCurrentUser(userData));
 }
 
-export default updateUserState;
+export default updateAuthState;
