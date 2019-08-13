@@ -5,11 +5,13 @@ import { toastrDefault } from "../../../config";
 import LoadingSpinner from "../../LoadingSpinner";
 import useReactRouter from "use-react-router";
 import Moment from "react-moment";
+import DeleteModal from "./DeleteModal";
 
 
 export default function MyRandomizers() {
 
     const [randomizers, setRandomizers] = useState(null);
+    const [modalTrigger, setModalTrigger] = useState(null);
     const { history } = useReactRouter();
 
     useEffect(() => {
@@ -24,7 +26,6 @@ export default function MyRandomizers() {
         fetch();
     }, []);
 
-
     const onViewClicked = useCallback(id => {
         history.push(`/randomizer/${id}`);
     }, [history]);
@@ -34,9 +35,13 @@ export default function MyRandomizers() {
     }, []);
 
     const onDeleteClicked = useCallback(id => {
-        console.log(id);
-    }, []);
+        modalTrigger(id);
+    }, [modalTrigger]);
 
+    
+    const onDeleteEvent = useCallback(id => {
+        setRandomizers(randomizers.filter(r => r._id !== id));
+    }, [randomizers]);
 
     if (randomizers === null) return <LoadingSpinner className="d-flex mx-auto" size="lg" animation="grow" />;
 
@@ -52,6 +57,10 @@ export default function MyRandomizers() {
     return (
         <div className="container-fluid">
             <h1>My Randomizers</h1>
+            <DeleteModal
+                setTrigger={trigger => setModalTrigger(trigger)}
+                onDelete={onDeleteEvent}
+            />
             <table className="table table-responsive">
                 <thead>
                     <tr className="text-center">
