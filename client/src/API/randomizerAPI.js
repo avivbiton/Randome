@@ -57,11 +57,14 @@ class RandomizerAPI {
             return response.data;
         }
         catch (error) {
+            if (error.response.status == 500) {
+                throw new RequestError({ serverError: "Something went wrong, please try again" });
+            }
             if (error.response) {
                 throw new RequestError(error.response.data, "Invalid data");
             }
 
-            throw new RequestError({ form: "Something went wrong, please try again later." }, "Server error");
+            throw new RequestError({ serverError: "Something went wrong, please try again later." }, "Server error");
         }
     }
 
