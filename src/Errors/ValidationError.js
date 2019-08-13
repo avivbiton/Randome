@@ -1,8 +1,10 @@
 const HttpError = require("./HttpError");
 
 class ValidationError extends HttpError {
-    constructor() {
-        super("Invalid data", 400);
+    constructor(message) {
+        super();
+        this.message = message;
+        this.statusCode = 400;
     }
 }
 
