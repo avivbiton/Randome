@@ -89,6 +89,15 @@ class RandomizerAPI {
             throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
         }
     }
+
+    async deleteRandomizer(id) {
+        try {
+
+            await axios.delete(`/randomizer/${id}`)
+        } catch (error) {
+            throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
+        }
+    }
 }
 
 export default new RandomizerAPI();
