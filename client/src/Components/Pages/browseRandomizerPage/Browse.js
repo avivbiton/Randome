@@ -40,8 +40,8 @@ function Browse({ location, history }) {
 
 
     async function fetchItems(page, sort) {
-        const itemsData = await API.randomizers.fetch(page, sort);
         try {
+            const itemsData = await API.randomizers.fetch(page, sort);
             setItems(itemsData);
         } catch (error) {
             setError(error.message);
