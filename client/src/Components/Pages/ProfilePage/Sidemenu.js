@@ -16,6 +16,7 @@ export default function Sidemenu({ active, items, onActiveChanged }) {
             <ul className="list-group">
                 {items.map((i, index) => {
                     let classNames = "btn menu-item";
+                    // eslint-disable-next-line
                     if (active == index) {
                         classNames += " menu-hover";
                     }
