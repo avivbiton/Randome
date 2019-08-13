@@ -27,6 +27,30 @@ class RandomizerAPI {
         }
     }
 
+    async fetchMyRandomizers() {
+        try {
+            const response = await axios.get("/randomizer/own");
+            return response.data;
+        } catch (error) {
+            throw new RequestError(error);
+        }
+    }
+
+
+    async fetchByMeta(type) {
+        try {
+
+            const response = await axios.get("/randomizer/meta", {
+                params: {
+                    type
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw new RequestError(error);
+        }
+    }
+
     async create(name, description, schema, isPrivate) {
         try {
             const response = await axios.post("/randomizer/create", { name, description, schema, private: isPrivate });

@@ -39,7 +39,9 @@ function RandomizerPage({ match, history }) {
                         likeCount={currentRandomizer.meta.likes}
                         favoriteCount={currentRandomizer.meta.favorites} />
                     <p className="lead">{currentRandomizer.description}</p>
-                    <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>Roll the Dice</button>
+                    <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>
+                        Roll the Dice<i className="fas fa-dice ml-2" />
+                    </button>
 
                 </div>
             </div>

@@ -1,11 +1,16 @@
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import RegisterForm from "../RegisterForm";
-import { redirectOnCondition } from "../../Effects/common";
+import useReactRouter from "use-react-router";
 
 function RegisterPage({ loggedIn }) {
 
-    useEffect(() => redirectOnCondition(loggedIn), [loggedIn]);
+    const { history } = useReactRouter();
+    
+    useEffect(() => {
+        if (loggedIn)
+            history.push("/");
+    }, [loggedIn, history]);
 
     return (
         <div className="container h-100 d-flex justify-content-center">

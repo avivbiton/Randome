@@ -72,10 +72,9 @@ function NoItemsFound() {
 function ItemDisplay({ name, description, likes, favorites, id, owner }) {
     return (
         <div className="card shadow-sm h-100 border-info" style={{ width: "18rem", minHeight: "300px" }}>
-            <h5 className="card-header bg-primary text-white">{name}</h5>
             <div className="card-body d-flex flex-column">
-                {description}
-                <br />
+                <h3 className="card-title">{name}</h3>
+                <p className="lead">{description}</p>
                 <Link className="btn btn-outline-info btn-block btn-lg mt-auto" to={`/randomizer/${id}`}>View</Link>
             </div>
             <div className="card-footer d-inline-flex align-items-center text-white bg-info">

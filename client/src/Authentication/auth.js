@@ -6,9 +6,13 @@ import "firebase/auth";
 
 import transformError from "../firebase/transformError";
 
+let currentAuthInterceptor = null;
 
-export function setAuthorizationToken(token) {
-    axios.defaults.headers.common["Authorization"] = token;
+export function setAuthorizationToken(user) {
+    currentAuthInterceptor = axios.interceptors.request.use(async function (config) {
+        config.headers["Authorization"] = await user.getIdToken();
+        return config;
+    });
 }
 
 export function registerUser({ displayName, email, password }) {
@@ -45,9 +49,14 @@ export function loginUser(email, password) {
 
 export function removeAuthState() {
     store.dispatch(logout());
+    if (currentAuthInterceptor !== null) {
+        axios.interceptors.request.eject(currentAuthInterceptor);
+        currentAuthInterceptor = null;
+    }
 }
 
 export async function logOutUser() {
+
     removeAuthState();
     await firebase.auth().signOut();
     window.location = "/";

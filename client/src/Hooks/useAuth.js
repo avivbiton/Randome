@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
-import updateUserState from "../Authentication/updateUserState";
+import updateAuthState from "../Authentication/updateUserState";
 import checkForValidAccount from "../Authentication/checkForAccount";
 import fetchAccountInfo from "../Authentication/fetchAccountInfo";
 
@@ -12,10 +12,10 @@ const config = {
 firebase.initializeApp(config);
 export const useAuth = () => {
 
-    const [state, setState] = useState( { initializing: true });
+    const [state, setState] = useState({ initializing: true });
 
     async function onChange(user) {
-        const loggedIn = await updateUserState(user);
+        const loggedIn = await updateAuthState(user);
         if (loggedIn) {
             await checkForValidAccount();
             await fetchAccountInfo();
@@ -24,8 +24,10 @@ export const useAuth = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.auth().onAuthStateChanged(onChange);
-        return () => unsubscribe();
+        const onAuthChange = firebase.auth().onAuthStateChanged(onChange);
+        return () => {
+            onAuthChange();
+        };
     }, []);
 
     return state;
