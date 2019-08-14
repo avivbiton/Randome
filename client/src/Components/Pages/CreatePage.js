@@ -12,9 +12,9 @@ import Textarea from "../Form/Textarea";
 
 function CreatePage({ history }) {
 
-    const { value: name, bind: bindName } = useInput("");
-    const { value: description, bind: bindDescription } = useInput("");
-    const { value: schema, bind: bindSchema } = useInput("");
+    const [name, bindName] = useInput("");
+    const [description, bindDescription] = useInput("");
+    const [schema, bindSchema] = useInput("");
     const { value: isPrivate, bind: bindPrivate } = useCheckbox();
 
     const [errors, setErrors] = useState({});

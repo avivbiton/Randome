@@ -10,10 +10,10 @@ import { registerSchema } from "../schemas";
 
 function RegisterForm({ title }) {
 
-    const { value: displayName, bind: bindDisplayName } = useInput("");
-    const { value: email, bind: bindEmail } = useInput("");
-    const { value: password, bind: bindPassword } = useInput("");
-    const { value: confirmPassword, bind: bindConfirmPassword } = useInput("");
+    const [displayName, bindDisplayName] = useInput("");
+    const [email, bindEmail] = useInput("");
+    const [password, bindPassword] = useInput("");
+    const [confirmPassword, bindConfirmPassword] = useInput("");
 
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
