@@ -6,6 +6,8 @@ import "firebase/auth";
 
 import transformError from "../firebase/transformError";
 import { updateProfileState } from "./updateUserState";
+import { validateSchema } from "../Services/formValidation";
+import { registerSchema } from "../schemas";
 
 let currentAuthInterceptor = null;
 
@@ -90,4 +92,14 @@ async function reauthenticateUser(password) {
     const currentUser = firebase.auth().currentUser;
     return await currentUser
         .reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, password));
+}
+
+export async function changeProfile(displayName, photoURL) {
+    const errors = validateSchema(registerSchema, { displayName, photoURL });
+    if(errors.length !== 0)
+        throw errors;
+
+    await firebase.auth().currentUser.updateProfile({ displayName, photoURL });
+    updateProfileState(firebase.auth().currentUser);
+
 }

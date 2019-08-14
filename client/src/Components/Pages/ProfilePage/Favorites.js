@@ -28,7 +28,7 @@ export default function Favorites() {
         history.push(`/randomizer/${id}`);
     }, [history]);
 
-    if (favorites === null) return <LoadingSpinner />;
+    if (favorites === null) return <div className="d-flex justify-content-center"><LoadingSpinner /></div>;
 
     if (favorites.length === 0)
         return (

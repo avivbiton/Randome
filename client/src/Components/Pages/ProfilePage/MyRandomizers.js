@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import API from "../../../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../../../config";
@@ -49,8 +50,10 @@ export default function MyRandomizers() {
     if (randomizers.length === 0)
         return (
             <div className="container">
-                <div className="text-center text-muted">
+                <div className="text-center lead">
                     You don't have any randomizers yet.
+                    <br />
+                    You can <Link to="/create">create one</Link> right now.
                 </div>
             </div>
         );
