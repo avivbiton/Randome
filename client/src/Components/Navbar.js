@@ -42,7 +42,6 @@ function Navbar() {
 
 
 function UserDropdown({ user }) {
-    console.log(user);
     return (
         <div className="dropdown mx-2">
             <img className="nav-item dropdown-toggle rounded-circle navbar-brand" style={{ width: "3rem", maxHeight: "3.5rem" }} src={user.photoURL} id="dropdownMenuButton" alt="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
