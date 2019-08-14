@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 import transformError from "../firebase/transformError";
+import { updateProfileState } from "./updateUserState";
 
 let currentAuthInterceptor = null;
 
@@ -22,10 +23,10 @@ export function registerUser({ displayName, email, password }) {
             .then(creds => {
                 creds.user.updateProfile({ displayName: displayName, photoURL: "/favicon.ico" })
                     .then(() => {
+                        updateProfileState(firebase.auth().currentUser);
                         resolve();
                     })
-                    .catch(error => {
-                        console.error(error);
+                    .catch(error => { 
                         reject(error);
                     });
             })

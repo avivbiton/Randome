@@ -14,13 +14,9 @@ async function updateAuthState(user) {
 }
 
 
-function updateProfileState(user) {
-    const userData = {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid
-    };
+export function updateProfileState(user) {
+   
+    const userData = user.providerData[0];
     store.dispatch(setCurrentUser(userData));
 }
 
