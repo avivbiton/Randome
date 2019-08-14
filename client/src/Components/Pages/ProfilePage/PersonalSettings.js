@@ -17,11 +17,11 @@ export default function PersonalSettings() {
 
     return (
         <fieldset disabled={isPasswordProvider ? "" : "disabled"}>
-            <EmailSection />
-            <PasswordSection />
             {isPasswordProvider === false ?
                 <ThirdPartyNotice providerId={user.providerId} /> : null
             }
+            <EmailSection />
+            <PasswordSection />
         </fieldset>
     );
 }
@@ -29,11 +29,11 @@ export default function PersonalSettings() {
 
 function ThirdPartyNotice({ providerId }) {
     return (
-        <p className="text-muted mt-2">
+        <p className="mt-2 border shadow-sm p-3 bg-white">
             You can not change your Email / Password when logging in with third party provider (Like: Google or Facebook)
             Refer to your provider website to change your Password / Email.
             <br />
-            <span className="lead">Your Provide Is: {providerId}</span>
+            <span className="lead">Your Provider Is: {providerId}</span>
         </p>
     );
 }

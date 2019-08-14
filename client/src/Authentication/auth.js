@@ -1,4 +1,3 @@
-import axios from "axios";
 import store from "../redux/store";
 import { logout } from "../redux/Actions/authAction";
 import firebase from "firebase/app";
@@ -8,15 +7,6 @@ import transformError from "../firebase/transformError";
 import { updateProfileState } from "./updateUserState";
 import { validateSchema } from "../Services/formValidation";
 import { registerSchema } from "../schemas";
-
-let currentAuthInterceptor = null;
-
-export function setAuthorizationToken(user) {
-    currentAuthInterceptor = axios.interceptors.request.use(async function (config) {
-        config.headers["Authorization"] = await user.getIdToken();
-        return config;
-    });
-}
 
 export function registerUser({ displayName, email, password }) {
 
@@ -52,10 +42,6 @@ export function loginUser(email, password) {
 
 export function removeAuthState() {
     store.dispatch(logout());
-    if (currentAuthInterceptor !== null) {
-        axios.interceptors.request.eject(currentAuthInterceptor);
-        currentAuthInterceptor = null;
-    }
 }
 
 export async function logOutUser() {
@@ -101,5 +87,6 @@ export async function changeProfile(displayName, photoURL) {
 
     await firebase.auth().currentUser.updateProfile({ displayName, photoURL });
     updateProfileState(firebase.auth().currentUser);
+    //TODO: Update the owner's randomizers to reflect displayName changes
 
 }

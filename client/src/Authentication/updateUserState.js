@@ -1,11 +1,10 @@
-import { setAuthorizationToken, removeAuthState } from "./auth";
+import { removeAuthState } from "./auth";
 import store from "../redux/store";
 import { setCurrentUser } from "../redux/Actions/authAction";
 
 async function updateAuthState(user) {
     if (user) {
         updateProfileState(user);
-        setAuthorizationToken(user);
         return true;
     } else {
         removeAuthState();
@@ -16,7 +15,13 @@ async function updateAuthState(user) {
 
 export function updateProfileState(user) {
    
-    const userData = user.providerData[0];
+    const userData = {
+        displayName: user.displayName,
+        uid: user.uid,
+        photoURL: user.photoURL,
+        email: user.email,
+        providerId: user.providerData[0].providerId
+    };
     store.dispatch(setCurrentUser(userData));
 }
 
