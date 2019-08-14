@@ -1,10 +1,10 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { logOutUser } from "../Authentication/auth";
 
-function Navbar({ user }) {
-    console.log(user);
+function Navbar() {
+    const user = useSelector(state => state.auth.user);
     return (
         <nav className="container-fluid navbar navbar-expand-md navbar-dark bg-primary border-bottom shadow">
             <Link to="/" className="navbar-brand">
@@ -42,6 +42,7 @@ function Navbar({ user }) {
 
 
 function UserDropdown({ user }) {
+    console.log(user);
     return (
         <div className="dropdown mx-2">
             <img className="nav-item dropdown-toggle rounded-circle navbar-brand" style={{ width: "3rem", maxHeight: "3.5rem" }} src={user.photoURL} id="dropdownMenuButton" alt="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
@@ -63,9 +64,5 @@ const NavbarLink = withRouter(function ({ text, to, location }) {
     );
 });
 
-const mapStateToProps = state => ({
-    user: state.auth.user
-});
 
-
-export default connect(mapStateToProps)(Navbar);
+export default Navbar;
