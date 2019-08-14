@@ -2,6 +2,8 @@ const randomizerService = require("../../services/randomizerService");
 const requireBody = require("../../middleware/requireBody");
 const authenticateUser = require("../../middleware/authenticateUser");
 const Schema = require("validate");
+const ValidationError = require("../../Errors/ValidationError");
+const ContentGenerator = require("randomcontentgenerator").ContentGenerator;
 
 const validateBodyMatchSchema = require("../../middleware/validateBodyMatchSchema");
 
@@ -40,13 +42,19 @@ const createNew = [
 
         const { name, description, schema, private } = req.body;
 
-        //TODO: verify the schema here
-
+        if (new ContentGenerator(schema).isValid() !== true) {
+            return res.status(400).json({ schema: "Invalid schema" });
+        }
+        
         try {
             await randomizerService.createNew(req.user.uid, name, description, schema, private);
             return res.status(201).send("Created.");
         } catch (error) {
-            next(error);
+            if (error instanceof ValidationError) {
+                return res.status(error.statusCode).json(error.message);
+            } else {
+                next(error);
+            }
         }
 
     }];

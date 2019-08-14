@@ -3,6 +3,8 @@ import { withRouter } from "react-router-dom";
 import HammerImage from "../../Images/hammer.png";
 import { useInput, useCheckbox } from "../../Hooks/formInput";
 import API from "../../API/api";
+import toastr from "toastr";
+import { toastrDefault } from "../../config";
 
 import Input from "../Form/Input";
 import Button from "../Form/Button";
@@ -10,9 +12,9 @@ import Textarea from "../Form/Textarea";
 
 function CreatePage({ history }) {
 
-    const { value: name, bind: bindName } = useInput("");
-    const { value: description, bind: bindDescription } = useInput("");
-    const { value: schema, bind: bindSchema } = useInput("");
+    const [name, bindName] = useInput("");
+    const [description, bindDescription] = useInput("");
+    const [schema, bindSchema] = useInput("");
     const { value: isPrivate, bind: bindPrivate } = useCheckbox();
 
     const [errors, setErrors] = useState({});
@@ -25,7 +27,12 @@ function CreatePage({ history }) {
             history.push("/profile");
         } catch (error) {
             setLoading(false);
-            setErrors(error.error);
+            if (error.data.serverError) {
+                toastr.error(error.data.serverError, "Error", toastrDefault);
+                return;
+            }
+            setErrors(error.data);
+
         }
     }
 

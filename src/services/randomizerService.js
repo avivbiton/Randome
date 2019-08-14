@@ -16,7 +16,7 @@ const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
         return docs;
     }
     catch (error) {
-        return errorHandler.handleUnkownError(error);
+        return errorHandler.throwError(error);
     }
 };
 
@@ -27,7 +27,7 @@ const fetchByOwnerId = async (uid) => {
         const docs = await Randomizer.find({ "owner.id": uid }, "name description meta _id private createdAt updatedAt").lean().exec();
         return docs;
     } catch (error) {
-        return errorHandler.handleUnkownError(error);
+        return errorHandler.throwError(error);
     }
 };
 
@@ -38,7 +38,7 @@ const fetchManyById = async (arrayId) => {
             "name owner.name private meta description createdAt updatedAt _id").lean().exec();
 
     } catch (error) {
-        errorHandler.handleUnkownError(error);
+        errorHandler.throwError(error);
     }
 
 };
@@ -53,12 +53,16 @@ const findById = async (id, projection = null) => {
             return null;
         }
 
-        return errorHandler.handleUnkownError(error);
+        return errorHandler.throwError(error);
     }
 };
 
 const createNew = async (ownerId, name, description, schema, private) => {
     try {
+        const isTaken = await Randomizer.find({ name }, "_id");
+        if (isTaken.length !== 0) {
+            throw new ValidationError({ name: "Name is already taken." });
+        }
         const userData = await admin.auth().getUser(ownerId);
         const newRandomizer = new Randomizer({
             name,
@@ -74,14 +78,13 @@ const createNew = async (ownerId, name, description, schema, private) => {
             },
             private
         });
-
         return await newRandomizer.save();
 
     } catch (error) {
         if (error instanceof MongooseError.ValidationError) {
-            throw new ValidationError("Data sent is invalid or missing", 400);
+            throw new ValidationError({ data: "One or more of the data is invalid or missing." });
         }
-        return errorHandler.handleUnkownError(error);
+        return errorHandler.throwError(error);
     }
 };
 

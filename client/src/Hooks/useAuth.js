@@ -4,6 +4,7 @@ import "firebase/auth";
 import updateAuthState from "../Authentication/updateUserState";
 import checkForValidAccount from "../Authentication/checkForAccount";
 import fetchAccountInfo from "../Authentication/fetchAccountInfo";
+import axios from "axios";
 
 const config = {
     apiKey: "AIzaSyCFSriU_52e_TB-SK-8Z2FMuYzTCoAOeag",
@@ -25,6 +26,13 @@ export const useAuth = () => {
 
     useEffect(() => {
         const onAuthChange = firebase.auth().onAuthStateChanged(onChange);
+        axios.interceptors.request.use(async function (config) {
+            const user = firebase.auth().currentUser;
+            if (user !== null) {
+                config.headers["Authorization"] = await user.getIdToken();
+            }
+            return config;
+        });
         return () => {
             onAuthChange();
         };

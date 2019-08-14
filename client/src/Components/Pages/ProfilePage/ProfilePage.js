@@ -8,6 +8,7 @@ import PageSwitcher from "./PageSwitcher";
 import PageSection from "./PageSection";
 import MyRandomizers from "./MyRandomizers";
 import Favorites from "./Favorites";
+import SettingsPage from "./SettingsPage";
 
 export default function ProfilePage() {
     const { history, location } = useReactRouter();
@@ -38,6 +39,7 @@ export default function ProfilePage() {
                     <PageSwitcher currentPageIndex={currentPage}>
                         <PageSection index="0" component={MyRandomizers} />
                         <PageSection index="1" component={Favorites} />
+                        <PageSection index="2" component={SettingsPage} />
                     </PageSwitcher>
                 </div>
             </div>

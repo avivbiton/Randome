@@ -9,8 +9,8 @@ import useReactRouter from "use-react-router";
 
 function LoginPage({ onLogin, loggedIn }) {
 
-    const email = useInput("");
-    const password = useInput("");
+    const [email, bindEmail] = useInput("");
+    const [password, bindPassword] = useInput("");
 
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ function LoginPage({ onLogin, loggedIn }) {
     function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
-        onLogin(email.value, password.value)
+        onLogin(email, password)
             .catch(errors => {
                 setLoading(false);
                 setErrors(errors);
@@ -47,9 +47,9 @@ function LoginPage({ onLogin, loggedIn }) {
                         }
                     </div>
                     <Input type="email" className="form-control large-input" placeholder="Email"
-                        {...email.bind} error={errors.email} />
+                        {...bindEmail} error={errors.email} />
                     <Input type="password" className="form-control large-input mt-4" placeholder="Password"
-                        {...password.bind} error={errors.password} />
+                        {...bindPassword} error={errors.password} />
                     <Button type="submit" className="btn btn-outline-primary btn-lg btn-block mt-4" loading={loading}>Login</Button>
                     <div className="text-muted text-center mt-1">Do not have an account? <Link to="/register">Register here</Link></div>
                 </div>

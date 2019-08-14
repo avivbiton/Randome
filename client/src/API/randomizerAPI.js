@@ -57,11 +57,14 @@ class RandomizerAPI {
             return response.data;
         }
         catch (error) {
+            if (error.response.status === 500) {
+                throw new RequestError({ serverError: "Something went wrong, please try again" });
+            }
             if (error.response) {
                 throw new RequestError(error.response.data, "Invalid data");
             }
 
-            throw new RequestError({ form: "Something went wrong, please try again later." }, "Server error");
+            throw new RequestError({ serverError: "Something went wrong, please try again later." }, "Server error");
         }
     }
 
@@ -83,6 +86,15 @@ class RandomizerAPI {
         } catch (error) {
             if (error.response)
                 throw new RequestError(error.response.data, "Unable to favorite.");
+            throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
+        }
+    }
+
+    async deleteRandomizer(id) {
+        try {
+
+            await axios.delete(`/randomizer/${id}`)
+        } catch (error) {
             throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
         }
     }

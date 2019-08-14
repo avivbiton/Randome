@@ -47,16 +47,18 @@ function App() {
     <Provider store={reduxStore}>
       <Router>
         <Navbar />
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/randomizer/:id" component={RandomizerPage} />
-          <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/browse" component={Browse} />
-          <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
-          <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
-          <Route path="*" render={NotFound} />
-        </Switch>
+        <div style={{paddingBottom: "30px"}}>
+          <Switch>
+            <Route exact path="/" component={LandingPage} />
+            <Route exact path="/randomizer/:id" component={RandomizerPage} />
+            <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
+            <Route exact path="/register" component={RegisterPage} />
+            <Route exact path="/browse" component={Browse} />
+            <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
+            <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
+            <Route path="*" render={NotFound} />
+          </Switch>
+        </div>
         <Footer />
       </Router>
     </Provider>
