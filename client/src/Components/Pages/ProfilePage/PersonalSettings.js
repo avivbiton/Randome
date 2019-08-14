@@ -60,6 +60,7 @@ function PasswordSection() {
                 await changePassword(oldPassword, newPassword);
                 resetForm();
                 toastr.success("Your password has changed", "Success", toastrDefault);
+                setErrors({});
             } catch (error) {
                 setErrors(error);
             }
