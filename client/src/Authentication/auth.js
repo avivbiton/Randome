@@ -26,7 +26,7 @@ export function registerUser({ displayName, email, password }) {
                         updateProfileState(firebase.auth().currentUser);
                         resolve();
                     })
-                    .catch(error => { 
+                    .catch(error => {
                         reject(error);
                     });
             })
@@ -61,4 +61,16 @@ export async function logOutUser() {
     removeAuthState();
     await firebase.auth().signOut();
     window.location = "/";
+}
+
+export async function changePassword(oldPassword, newPassword) {
+    const currentUser = firebase.auth().currentUser;
+    try {
+        await currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, oldPassword));
+        await firebase.auth().currentUser.updatePassword(newPassword);
+    } catch (error) {
+        throw transformError(error, {
+            "auth/weak-password": "newPassword"
+        });
+    }
 }
