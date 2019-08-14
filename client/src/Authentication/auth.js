@@ -64,13 +64,30 @@ export async function logOutUser() {
 }
 
 export async function changePassword(oldPassword, newPassword) {
-    const currentUser = firebase.auth().currentUser;
     try {
-        await currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, oldPassword));
+        await reauthenticateUser(oldPassword);
         await firebase.auth().currentUser.updatePassword(newPassword);
+        updateProfileState(firebase.auth().currentUser)
     } catch (error) {
         throw transformError(error, {
             "auth/weak-password": "newPassword"
         });
     }
+}
+
+export async function changeEmail(password, newEmail) {
+    try {
+        await reauthenticateUser(password);
+        await firebase.auth().currentUser.updateEmail(newEmail);
+        updateProfileState(firebase.auth().currentUser)
+    } catch (error) {
+        throw transformError(error);
+    }
+}
+
+
+async function reauthenticateUser(password) {
+    const currentUser = firebase.auth().currentUser;
+    return await currentUser
+        .reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(currentUser.email, password));
 }

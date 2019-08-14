@@ -9,7 +9,7 @@ import { useInput } from "../../../Hooks/formInput";
 
 import Input from "../../Form/Input";
 import Button from "../../Form/Button";
-import { changePassword } from "../../../Authentication/auth";
+import { changePassword, changeEmail } from "../../../Authentication/auth";
 
 export default function PersonalSettings() {
     const user = useSelector(state => state.auth.user);
@@ -79,7 +79,7 @@ function PasswordSection() {
             return true;
         } else {
             if (!errors.confirmPassword) {
-                setErrors({ ...errors, confirmPassword: "Passwords do not match" });
+                setErrors({ ...errors, confirmPassword: "Passwords do not match." });
             }
             return false;
         }
@@ -122,9 +122,54 @@ function PasswordSection() {
 
 function EmailSection() {
 
-    const [password, bindPassword] = useInput();
-    const [email, bindEmail] = useInput();
-    const [confirmEmail, bindConfirmEmail] = useInput();
+    const [password, bindPassword, setPassword] = useInput();
+    const [email, bindEmail, setEmail] = useInput();
+    const [confirmEmail, bindConfirmEmail, setConfirmEmail] = useInput();
+
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+
+    const resetForm = useCallback(() => {
+        setPassword("");
+        setEmail("");
+        setConfirmEmail("");
+        setErrors({});
+    }, [setPassword, setEmail, setConfirmEmail, setErrors]);
+
+
+    const onUpdatePressed = useCallback(() => {
+        async function updateEmail() {
+            setLoading(true);
+            try {
+                await changeEmail(password, email);
+                resetForm();
+                toastr.success("Your Email address has changed", "Success", toastrDefault);
+            } catch (error) {
+                setErrors(error);
+            }
+
+            setLoading(false);
+        };
+        updateEmail();
+    }, [password, email, resetForm]);
+
+
+    const emailsMatch = useMemo(() => {
+        if (email === confirmEmail) {
+            if (errors.confirmEmail) {
+                delete errors.confirmEmail;
+                setErrors({ ...errors });
+            }
+            return true;
+        } else {
+            if (!errors.confirmEmail) {
+                setErrors({ ...errors, confirmEmail: "Emails do not match." });
+            }
+            return false;
+        }
+
+    }, [email, confirmEmail, errors, setErrors]);
 
     return (
         <div className="d-flex flex-column">
@@ -132,17 +177,23 @@ function EmailSection() {
             <div className="form-group">
                 <label htmlFor="passwordInput">Password</label>
                 <Input type="password" className="form-control" id="passwordInput" placeholder="Verify your password"
-                    {...bindPassword} />
+                    {...bindPassword}
+                    error={errors.password} />
             </div>
             <div className="form-group">
                 <label htmlFor="newEmailInput">New Email</label>
-                <Input type="email" className="form-control" id="newEmailInput" {...bindEmail} />
+                <Input type="email" className="form-control" id="newEmailInput" {...bindEmail}
+                    error={errors.email} />
             </div>
             <div className="form-group">
                 <label htmlFor="confirmEmailInput">Confirm New Email</label>
-                <Input type="email" className="form-control" id="confirmEmailInput" {...bindConfirmEmail} />
+                <Input type="email" className="form-control" id="confirmEmailInput" {...bindConfirmEmail}
+                    error={errors.confirmEmail} />
             </div>
-            <Button type="button" className="btn btn-primary mx-auto">Change Email</Button>
+            <Button type="button" className="btn btn-primary mx-auto"
+                loading={loading}
+                disabled={loading || !emailsMatch}
+                onClick={onUpdatePressed}>Change Email</Button>
         </div>
     );
 }
