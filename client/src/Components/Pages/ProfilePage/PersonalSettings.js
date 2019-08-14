@@ -51,7 +51,8 @@ function PasswordSection() {
         setOldPassword("");
         setNewPassword("");
         setConfrimPassword("");
-    }, [setOldPassword, setNewPassword, setConfrimPassword]);
+        setErrors({});
+    }, [setOldPassword, setNewPassword, setConfrimPassword, setErrors]);
 
     const onUpdatePressed = useCallback(() => {
         async function updatePassword() {
@@ -60,7 +61,6 @@ function PasswordSection() {
                 await changePassword(oldPassword, newPassword);
                 resetForm();
                 toastr.success("Your password has changed", "Success", toastrDefault);
-                setErrors({});
             } catch (error) {
                 setErrors(error);
             }
