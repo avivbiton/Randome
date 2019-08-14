@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useInput } from "../../../Hooks/formInput";
 
@@ -17,7 +17,7 @@ export default function SettingsPage() {
 
     return (
         <div className="container-fluid">
-            <div className="d-flex flex-column pb-4">
+            <div className="d-flex flex-column pb-4 pb-2">
                 <h3 className="border-bottom pb-2">Public Settings</h3>
                 <div className="form-group">
                     <label htmlFor="displayNameInput" style={labelStyle}>Display Name</label>

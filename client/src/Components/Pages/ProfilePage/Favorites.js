@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import useReactRouter from "use-react-router";
 import LoadingSpinner from "../../LoadingSpinner";
 import API from "../../../API/api";
@@ -28,9 +29,21 @@ export default function Favorites() {
     }, [history]);
 
     if (favorites === null) return <LoadingSpinner />;
+
+    if (favorites.length === 0)
+        return (
+            <div className="container-fluid d-flex justify-content-center">
+                <p className="lead">You don't have any favorites yet.
+                <br />
+                    Browse our <Link to="/browse">Collection</Link> to find some.
+                </p>
+            </div>
+        );
+
     return (
         <div className="container-fluid">
             <h1>Favorites</h1>
+            <hr />
             {
                 favorites.map((f, index) =>
                     <FavoriteItem

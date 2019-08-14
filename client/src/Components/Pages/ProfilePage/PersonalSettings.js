@@ -172,7 +172,7 @@ function EmailSection() {
     }, [email, confirmEmail, errors, setErrors]);
 
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column pb-2">
             <h3 className="border-bottom pb-2">Change Email</h3>
             <div className="form-group">
                 <label htmlFor="passwordInput">Password</label>
