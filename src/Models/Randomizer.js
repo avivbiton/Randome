@@ -7,15 +7,15 @@ const randomizerSchema = new Schema({
         required: true,
         unique: true,
         minlength: 2,
-        maxlength: 30,
-        text: true
+        maxlength: 30
+
     },
     description: {
         type: String,
         required: true,
         minlength: 1,
-        maxlength: 500,
-        text: true
+        maxlength: 500
+
     },
     jsonSchema: {
         type: String,
@@ -50,6 +50,11 @@ const randomizerSchema = new Schema({
 });
 
 
+
+randomizerSchema.index({
+    name: "text",
+    description: "text"
+});
 const Randomizer = mongoose.model("Randomizer", randomizerSchema);
 
 module.exports = Randomizer;

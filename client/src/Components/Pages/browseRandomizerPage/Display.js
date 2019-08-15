@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../../LoadingSpinner";
 
-export default function Display({ items, filter, error }) {
-
-    const [displayItems, setDisplayItems] = useState(items);
-    function onFilterChange() {
-        if (!items) return;
-        const filterResult = items.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
-        setDisplayItems(filterResult);
-    }
-
-    useEffect(onFilterChange, [items, filter]);
+export default function Display({ items, error }) {
 
     if (error)
         return (
@@ -25,7 +16,7 @@ export default function Display({ items, filter, error }) {
         );
 
 
-    if (!displayItems || !items)
+    if (!items)
         return (
             <div className="container">
                 <div className="row text-center">
@@ -40,11 +31,11 @@ export default function Display({ items, filter, error }) {
         <div className="container-fluid">
             <div className="row">
                 {
-                    displayItems.length === 0
+                    items.length === 0
                         ?
                         <NoItemsFound />
                         :
-                        displayItems.map((item) =>
+                        items.map((item) =>
                             <div key={item._id} className="col-lg-2 m-1">
                                 <ItemDisplay
                                     id={item._id}

@@ -71,39 +71,44 @@ function Browse() {
 
     return (
         <div className="container-fluid">
-            <div className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap">
+            <form className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap"
+                onSubmit={e => {
+                    e.preventDefault();
+                    setSearch();
+                }}>
                 <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
                     {...bindSearch} />
-                <button className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0" onClick={setSearch}>Search</button>
-            </div>
+                <button type="submit" className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
+            </form>
             <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
-                <tr>
-                    <td>
-                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
-                            onClick={() => setSort(SORT_TYPES.LATEST)}>
-                            Latest
+                <tbody>
+                    <tr>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.LATEST)}>
+                                Latest
                         </button>
-                    </td>
-                    <td>
-                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
-                            onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
-                            Most Liked
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
+                                Most Liked
                         </button>
-                    </td>
-                    <td>
-                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
-                            onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
-                            Most Favorites
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
+                                Most Favorites
                         </button>
-                    </td>
-                    <td>
-                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
-                            onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
-                            Recently Updated
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
+                                Recently Updated
                         </button>
-                    </td>
-                </tr>
-
+                        </td>
+                    </tr>
+                </tbody>
             </table>
 
             <Display filter={""} items={items} error={error} />
