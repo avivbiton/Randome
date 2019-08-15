@@ -12,11 +12,12 @@ class RandomizerAPI {
             throw new RequestError(error, "Could not fetch randomizer");
         }
     }
-    async fetch(page = 0, sortBy = "createdAt") {
+    async fetch(search = "", page = 0, sortBy = "createdAt") {
         try {
             const response = await axios.get("/randomizer/fetch",
                 {
                     params: {
+                        search,
                         page,
                         sortBy
                     }

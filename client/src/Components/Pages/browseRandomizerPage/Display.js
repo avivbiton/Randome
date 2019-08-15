@@ -45,7 +45,7 @@ export default function Display({ items, filter, error }) {
                         <NoItemsFound />
                         :
                         displayItems.map((item) =>
-                            <div key={item._id} className="col-md-2 m-1">
+                            <div key={item._id} className="col-lg-2 m-1">
                                 <ItemDisplay
                                     id={item._id}
                                     name={item.name}

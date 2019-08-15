@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import Display from "./Display";
 import API from "../../../API/api";
 import queryString from "query-string";
+import useReactRouter from "use-react-router";
+import { useInput } from "../../../Hooks/formInput";
 
 const SORT_TYPES = {
     LATEST: "createdAt",
@@ -11,17 +12,19 @@ const SORT_TYPES = {
     RECENTLY_UPDATED: "updatedAt"
 };
 
-function Browse({ location, history }) {
+function Browse() {
+    const { history, location } = useReactRouter();
 
     const [items, setItems] = useState(null);
-    const [filter, setFilter] = useState("");
     const [error, setError] = useState(null);
+    const [search, bindSearch] = useInput();
 
     useEffect(function setDefaultQuery() {
         const currentQuery = queryString.parse(location.search);
-        if (currentQuery.page && currentQuery.sort) return;
+        if (currentQuery.page && currentQuery.sort && currentQuery.search) return;
         history.push({
             search: queryString.stringify({
+                search: currentQuery.search || "",
                 page: currentQuery.page || 0,
                 sort: currentQuery.sort || SORT_TYPES.LATEST
             })
@@ -30,67 +33,81 @@ function Browse({ location, history }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+    const fetchItems = useCallback((search, page, sort) => {
+        async function fetch() {
+            try {
+                const itemsData = await API.randomizers.fetch(search, page, sort);
+                setItems(itemsData);
+            } catch (error) {
+                setError(error.message);
+            }
+        }
+
+        fetch();
+    }, []);
+
     useEffect(() => {
         const query = queryString.parse(location.search);
         if (!query.page || !query.sort) return;
         setItems(null);
         setError(null);
-        fetchItems(query.page, query.sort);
-    }, [location.search]);
+        fetchItems(query.search, query.page, query.sort);
+    }, [location.search, fetchItems]);
 
 
-    async function fetchItems(page, sort) {
-        try {
-            const itemsData = await API.randomizers.fetch(page, sort);
-            setItems(itemsData);
-        } catch (error) {
-            setError(error.message);
-        }
-    }
 
-
-    function setSort(sortType) {
+    const setSort = useCallback(function (sortType) {
         const currentQuery = queryString.parse(location.search);
         currentQuery.sort = sortType;
         history.push({ search: queryString.stringify(currentQuery) });
-    }
+    }, [location.search, history]);
+
+    const setSearch = useCallback(function (filter) {
+
+    }, [search]);
 
     return (
         <div className="container-fluid">
-            <div className="row mt-4">
-                <div className="col">
-                    <input type="text" className="form-control form-control-lg large-input" placeholder="filter"
-                        onChange={e => setFilter(e.target.value)} />
-                    <div className="text-muted mt-1">
-                        * filter is limited to 100 items, please use advanced search to find a specific randomizer.
-                    </div>
-                </div>
+            <div className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap">
+                <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
+                    {...bindSearch} />
+                <button className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
             </div>
-            <div className="row mt-4">
-                <div className="col">
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.LATEST)}>
-                        Latest
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
-                        Most Likes
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
-                        Most Favorites
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
-                        Recently Updated
-                    </button>
-                    <hr />
-                </div>
-            </div>
-            <Display filter={filter} items={items} error={error} />
+            <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
+                <tr>
+                    <td>
+                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                            onClick={() => setSort(SORT_TYPES.LATEST)}>
+                            Latest
+                        </button>
+                    </td>
+                    <td>
+                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                            onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
+                            Most Liked
+                        </button>
+                    </td>
+                    <td>
+                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                            onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
+                            Most Favorites
+                        </button>
+                    </td>
+                    <td>
+                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                            onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
+                            Recently Updated
+                        </button>
+                    </td>
+                </tr>
+
+            </table>
+
+            <Display filter={""} items={items} error={error} />
         </div >
     );
 }
 
 
-export default withRouter(Browse);
+export default Browse;

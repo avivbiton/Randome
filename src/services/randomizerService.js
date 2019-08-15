@@ -88,7 +88,6 @@ const createNew = async (ownerId, name, description, schema, private) => {
     }
 };
 
-
 const likeRandomizer = async (randomizerId, account) => {
 
     const hasLike = account.meta.likes.some(objId => {
