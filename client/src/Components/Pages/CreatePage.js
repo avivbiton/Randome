@@ -12,7 +12,7 @@ function CreatePage({ history }) {
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
 
-    async function onFormSubmit(name, description, schema, isPrivate) {
+    async function onFormSubmit({ name, description, schema, isPrivate }) {
         try {
             setLoading(true);
             await API.randomizers.create(name, description, schema, isPrivate);
@@ -45,7 +45,7 @@ function CreatePage({ history }) {
                 </div>
             </div>
             <div className="border p-4 shadow mb-4">
-               <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} />
+                <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} />
             </div>
         </div>
     );

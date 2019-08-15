@@ -15,11 +15,16 @@ const createNew = [
     async (req, res, next) => {
 
         const { name, description, schema, private } = req.body;
-
-        if (new ContentGenerator(schema).isValid() !== true) {
-            return res.status(400).json({ schema: "Invalid schema" });
+        try {
+            const isValid = new ContentGenerator(JSON.parse(schema)).isValid();
+            if (isValid !== true) {
+                throw isValid;
+            }
         }
-        
+        catch (error) {
+            return res.status(400).json({ schema: `Schema Error: \n${error}`});
+        }
+
         try {
             await randomizerService.createNew(req.user.uid, name, description, schema, private);
             return res.status(201).send("Created.");

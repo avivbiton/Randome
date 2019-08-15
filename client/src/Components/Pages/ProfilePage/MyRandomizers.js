@@ -32,8 +32,8 @@ export default function MyRandomizers() {
     }, [history]);
 
     const onEditClicked = useCallback(id => {
-        console.log(id);
-    }, []);
+        history.push(`/randomizer/${id}/edit`);
+    }, [history]);
 
     const onDeleteClicked = useCallback(id => {
         modalTrigger(id);
