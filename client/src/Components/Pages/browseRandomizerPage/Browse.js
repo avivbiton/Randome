@@ -63,39 +63,41 @@ function Browse() {
         history.push({ search: queryString.stringify(currentQuery) });
     }, [location.search, history]);
 
-    const setSearch = useCallback(function (filter) {
-
-    }, [search]);
+    const setSearch = useCallback(function () {
+        const currentQuery = queryString.parse(location.search);
+        currentQuery.search = search;
+        history.push({ search: queryString.stringify(currentQuery) });
+    }, [history, location.search, search]);
 
     return (
         <div className="container-fluid">
             <div className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap">
                 <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
                     {...bindSearch} />
-                <button className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
+                <button className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0" onClick={setSearch}>Search</button>
             </div>
             <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
                 <tr>
                     <td>
-                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
                             onClick={() => setSort(SORT_TYPES.LATEST)}>
                             Latest
                         </button>
                     </td>
                     <td>
-                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
                             onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                             Most Liked
                         </button>
                     </td>
                     <td>
-                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
                             onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                             Most Favorites
                         </button>
                     </td>
                     <td>
-                        <button style={{width: "12rem"}} className="btn btn-outline-info btn-lg mx-1"
+                        <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
                             onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                             Recently Updated
                         </button>
