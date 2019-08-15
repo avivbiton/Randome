@@ -10,9 +10,9 @@ const fetchMeta = require("./fetchMeta");
 const deteleEndpount = require("./delete");
 
 router.get("/fetch", fetch);
-router.get("/get/:id", fetchById);
-router.get("/own", fetchOwned);
-router.get("/meta", fetchMeta);
+router.get("/:id", fetchById);
+router.get("/fetch/own", fetchOwned);
+router.get("/fetch/meta", fetchMeta);
 
 router.post("/create", createNew);
 router.post("/like", likeEndpoint);

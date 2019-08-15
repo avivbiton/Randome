@@ -5,7 +5,7 @@ class RandomizerAPI {
 
     async fetchRandomizer(id) {
         try {
-            const response = await axios.get(`/randomizer/get/${id}`);
+            const response = await axios.get(`/randomizer/${id}`);
             return response.data;
         }
         catch (error) {
@@ -29,7 +29,7 @@ class RandomizerAPI {
 
     async fetchMyRandomizers() {
         try {
-            const response = await axios.get("/randomizer/own");
+            const response = await axios.get("/randomizer/fetch/own");
             return response.data;
         } catch (error) {
             throw new RequestError(error);
@@ -40,7 +40,7 @@ class RandomizerAPI {
     async fetchByMeta(type) {
         try {
 
-            const response = await axios.get("/randomizer/meta", {
+            const response = await axios.get("/randomizer/fetch/meta", {
                 params: {
                     type
                 }
