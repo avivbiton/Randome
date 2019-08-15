@@ -98,6 +98,21 @@ class RandomizerAPI {
             throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
         }
     }
+
+    async editRandomizer(id, name, description, isPrivate, schema) {
+        try {
+            await axios.put(`/randomizer/${id}`, { name, description, private: isPrivate, schema });
+        } catch (error) {
+            if (error.response.status === 500) {
+                throw new RequestError({ serverError: "Something went wrong, please try again" });
+            }
+            if (error.response) {
+                throw new RequestError(error.response.data, "Invalid data");
+            }
+
+            throw new RequestError({ serverError: "Something went wrong, please try again later." }, "Server error");
+        }
+    }
 }
 
 export default new RandomizerAPI();
