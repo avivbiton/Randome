@@ -28,6 +28,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 import CreatePage from "./Components/Pages/CreatePage";
 import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage";
 import Footer from "./Components/Footer";
+import EditRandomizer from "./Components/Pages/EditRandomizer";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
             <Route exact path="/browse" component={Browse} />
             <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
             <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
+            <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
             <Route path="*" render={NotFound} />
           </Switch>
         </div>
