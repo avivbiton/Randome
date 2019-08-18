@@ -15,7 +15,6 @@ export default function FeaturedItems() {
         async function fetchFeatured() {
             try {
                 const data = await API.randomizers.fetch("", 0, SORT_TYPES.MOST_LIKES);
-                data.docs.splice(6, data.docs.length - 6);
                 setFeatured(data.docs);
             } catch (error) {
                 toastr.error("There was an error receiving data from our servers. Some services may be unavailable.",
@@ -30,11 +29,11 @@ export default function FeaturedItems() {
     return (
         <section className="container-fluid mt-4 mt-lg-0">
             <div className="text-center">
-                <h1 className="bg-primary text-white py-4 rounded">Featured</h1>
+                <h1 className="border border-primary rounded py-4">Featured</h1>
                 <hr />
-                <section className="row">
+                <div className="d-flex flex-row overflow-auto scrollbar">
                     {featured.map(i =>
-                        <div key={i._id} className="col-xl-2 col-lg-4 col-md-6 col mt-4 mt-xl-0 mx-auto flex-grow-0">
+                        <div key={i._id} className="m-1">
                             <ItemDisplay
                                 name={i.name}
                                 description={i.description}
@@ -45,7 +44,8 @@ export default function FeaturedItems() {
                             />
                         </div>
                     )}
-                </section>
+
+                </div>
             </div>
         </section>
     );
