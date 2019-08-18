@@ -5,7 +5,7 @@ import queryString from "query-string";
 import useReactRouter from "use-react-router";
 import { useInput } from "../../../Hooks/formInput";
 
-const SORT_TYPES = {
+export const SORT_TYPES = {
     LATEST: "createdAt",
     MOST_LIKES: "meta.likes",
     MOST_FAVORITES: "meta.favorites",
