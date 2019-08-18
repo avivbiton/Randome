@@ -15,8 +15,8 @@ export default function FeaturedItems() {
         async function fetchFeatured() {
             try {
                 const data = await API.randomizers.fetch("", 0, SORT_TYPES.MOST_LIKES);
-                data.splice(6, data.length - 6);
-                setFeatured(data);
+                data.docs.splice(6, data.docs.length - 6);
+                setFeatured(data.docs);
             } catch (error) {
                 toastr.error("There was an error receiving data from our servers. Some services may be unavailable.",
                     "Error", toastrDefault);

@@ -9,8 +9,8 @@ const fetch = async (req, res, next) => {
 
         const filter = search === "" ? { private: false } : { $text: { $search: search }, private: false };
 
-        const docs = await randomizerService.fetch(filter, page, sortBy);
-        res.json(docs);
+        const data = await randomizerService.fetch(filter, page, sortBy);
+        res.json(data);
     } catch (error) {
         next(error);
     }

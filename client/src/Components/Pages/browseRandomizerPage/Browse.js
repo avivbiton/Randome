@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Display from "./Display";
 import API from "../../../API/api";
 import queryString from "query-string";
@@ -17,53 +17,48 @@ function Browse() {
 
     const [items, setItems] = useState(null);
     const [error, setError] = useState(null);
-    const [search, bindSearch] = useInput();
+    const [inputSearch, bindSearch] = useInput();
+
+    const searchQuery = useMemo(() => {
+        return queryString.parse(location.search);
+    }, [location.search])
 
     useEffect(function setDefaultQuery() {
-        const currentQuery = queryString.parse(location.search);
-        if (currentQuery.page && currentQuery.sort && currentQuery.search) return;
+        if (searchQuery.page && searchQuery.sort && searchQuery.search) return;
         history.push({
             search: queryString.stringify({
-                search: currentQuery.search || "",
-                page: currentQuery.page || 0,
-                sort: currentQuery.sort || SORT_TYPES.LATEST
+                search: searchQuery.search || "",
+                page: searchQuery.page || 0,
+                sort: searchQuery.sort || SORT_TYPES.LATEST
             })
         });
-    }, [location.search, history]);
+    }, [searchQuery, history]);
 
-
-    const fetchItems = useCallback((search, page, sort) => {
-        async function fetch() {
+    useEffect(() => {
+        setItems(null);
+        setError(null);
+        async function fetchItems(search, page, sort) {
             try {
                 const itemsData = await API.randomizers.fetch(search, page, sort);
-                setItems(itemsData);
+                setItems(itemsData.docs);
             } catch (error) {
                 setError(error.message);
             }
         }
 
-        fetch();
-    }, []);
-
-    useEffect(() => {
-        const query = queryString.parse(location.search);
-        setItems(null);
-        setError(null);
-        fetchItems(query.search || "", query.page || 0, query.sort || SORT_TYPES.LATEST);
-    }, [location.search, fetchItems]);
+        fetchItems(searchQuery.search || "", searchQuery.page || 0, searchQuery.sort || SORT_TYPES.LATEST);
+    }, [searchQuery]);
 
 
     const setSort = useCallback(function (sortType) {
-        const currentQuery = queryString.parse(location.search);
-        currentQuery.sort = sortType;
-        history.push({ search: queryString.stringify(currentQuery) });
-    }, [location.search, history]);
+        searchQuery.sort = sortType;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [searchQuery, history]);
 
     const setSearch = useCallback(function () {
-        const currentQuery = queryString.parse(location.search);
-        currentQuery.search = search;
-        history.push({ search: queryString.stringify(currentQuery) });
-    }, [history, location.search, search]);
+        searchQuery.search = inputSearch;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [history, searchQuery, inputSearch]);
 
     return (
         <div className="container-fluid">

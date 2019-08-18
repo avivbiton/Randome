@@ -5,15 +5,16 @@ const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
 const admin = require("firebase-admin");
 
-const maxPerFetch = 100;
+const maxPerFetch = 5;
 
 const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
+    page = Math.abs(page);
     const skip = maxPerFetch * page;
-
     try {
         const docs = await Randomizer.find(search, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
-            .sort({ [sortBy]: "desc" }).lean().exec();
-        return docs;
+            .sort({ [sortBy]: "desc" });
+        const totalPages = Math.ceil(await Randomizer.count().exec() / maxPerFetch);
+        return { totalPages, docs };
     }
     catch (error) {
         return errorHandler.throwError(error);
