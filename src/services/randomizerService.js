@@ -7,9 +7,9 @@ const admin = require("firebase-admin");
 
 const maxPerFetch = 5;
 
-const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
-    page = Math.abs(page);
-    const skip = maxPerFetch * page;
+const fetch = async (search = {}, page = 1, sortBy = "createdAt") => {
+    page = Math.max(1, page);
+    const skip = maxPerFetch * (page - 1);
     try {
         const docs = await Randomizer.find(search, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
             .sort({ [sortBy]: "desc" });

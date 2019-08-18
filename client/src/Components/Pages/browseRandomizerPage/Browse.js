@@ -5,6 +5,7 @@ import queryString from "query-string";
 import useReactRouter from "use-react-router";
 import { useInput } from "../../../Hooks/formInput";
 
+
 export const SORT_TYPES = {
     LATEST: "createdAt",
     MOST_LIKES: "meta.likes",
@@ -17,10 +18,16 @@ function Browse() {
 
     const [items, setItems] = useState(null);
     const [error, setError] = useState(null);
+    const [pages, setPages] = useState(1);
     const [inputSearch, bindSearch] = useInput();
 
     const searchQuery = useMemo(() => {
-        return queryString.parse(location.search);
+        const query = queryString.parse(location.search);
+        return {
+            search: query.search,
+            sort: query.sort,
+            page: Math.max(1, query.page)
+        }
     }, [location.search])
 
     useEffect(function setDefaultQuery() {
@@ -28,7 +35,7 @@ function Browse() {
         history.push({
             search: queryString.stringify({
                 search: searchQuery.search || "",
-                page: searchQuery.page || 0,
+                page: searchQuery.page || 1,
                 sort: searchQuery.sort || SORT_TYPES.LATEST
             })
         });
@@ -41,6 +48,7 @@ function Browse() {
             try {
                 const itemsData = await API.randomizers.fetch(search, page, sort);
                 setItems(itemsData.docs);
+                setPages(itemsData.totalPages);
             } catch (error) {
                 setError(error.message);
             }
@@ -59,6 +67,12 @@ function Browse() {
         searchQuery.search = inputSearch;
         history.push({ search: queryString.stringify(searchQuery) });
     }, [history, searchQuery, inputSearch]);
+
+
+    const setPage = useCallback(function (pageNumber) {
+        searchQuery.page = pageNumber;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [history, searchQuery]);
 
     return (
         <div className="container-fluid">
@@ -101,9 +115,55 @@ function Browse() {
                     </tr>
                 </tbody>
             </table>
-
             <Display items={items} error={error} />
+            <div className="d-flex justify-content-center mt-4">
+                <Pagination
+                    currentPage={searchQuery.page}
+                    totalPages={pages}
+                    setPage={setPage}
+                />
+            </div>
         </div >
+    );
+}
+
+
+
+function Pagination({ currentPage, totalPages, setPage }) {
+
+
+    const pageItems = useMemo(() => {
+        const offset = 5;
+        const arrayOfItems = [];
+        for (let i = Math.min(currentPage, Math.min(Math.abs(currentPage - offset), 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
+            arrayOfItems.push(
+                /* eslint-disable-next-line */
+                <li key={i} className={"page-item" + (currentPage == i ? " active" : "")}>
+                    <button type="button"
+                        className="btn page-link"
+                        onClick={() => setPage(i)}>{i}</button>
+                </li>
+            );
+        }
+        return arrayOfItems;
+    }, [currentPage, setPage, totalPages]);
+
+
+    return (
+        <nav aria-label="Page navigation example">
+            <ul className="pagination">
+                <li className="page-item"><button type="button"
+                    /* eslint-disable-next-line */
+                    disabled={currentPage == 1} className="btn page-link"
+                    onClick={() => setPage(currentPage - 1)}>Previous</button></li>
+                {pageItems}
+                <li className="page-item"><button type="button"
+                    /* eslint-disable-next-line */
+                    disabled={currentPage == totalPages}
+                    className="btn page-link"
+                    onClick={() => setPage(currentPage + 1)}>Next</button></li>
+            </ul>
+        </nav>
     );
 }
 
