@@ -6,7 +6,7 @@ export default function ItemDisplay({ name, description, likes, favorites, id, o
         <div className="card shadow-sm h-100 border-info" style={{ width: "18rem", minHeight: "300px" }}>
             <div className="card-body d-flex flex-column">
                 <h3 className="card-title">{name}</h3>
-                <p className="lead">{description}</p>
+                <p className="lead">{description.substr(0, 100)}</p>
                 <Link className="btn btn-outline-info btn-block btn-lg mt-auto" to={`/randomizer/${id}`}>View</Link>
             </div>
             <div className="card-footer d-inline-flex align-items-center text-white bg-info">
