@@ -127,9 +127,23 @@ function Browse() {
     );
 }
 
-
+const LEFT_ARROW = 37;
+const RIGH_ARROW = 39;
 
 function Pagination({ currentPage, totalPages, setPage }) {
+    useEffect(() => {
+        window.addEventListener("keydown", onKeyDown, false);
+        function onKeyDown(e) {
+            if (e.keyCode === LEFT_ARROW && currentPage !== 1) {
+                setPage(currentPage - 1);
+            } else if (e.keyCode === RIGH_ARROW && currentPage !== totalPages) {
+                setPage(currentPage + 1);
+            }
+        }
+        return () => {
+            window.removeEventListener("keydown", onKeyDown, false);
+        }
+    }, [currentPage, totalPages, setPage]);
 
 
     const pageItems = useMemo(() => {
@@ -137,8 +151,7 @@ function Pagination({ currentPage, totalPages, setPage }) {
         const arrayOfItems = [];
         for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
             arrayOfItems.push(
-                /* eslint-disable-next-line */
-                <li key={i} className={"page-item" + (currentPage == i ? " active" : "")}>
+                <li key={i} className={"page-item" + (currentPage === i ? " active" : "")}>
                     <button type="button"
                         className="btn page-link"
                         onClick={() => setPage(i)}>{i}</button>
@@ -153,13 +166,11 @@ function Pagination({ currentPage, totalPages, setPage }) {
         <nav aria-label="Page navigation example">
             <ul className="pagination">
                 <li className="page-item"><button type="button"
-                    /* eslint-disable-next-line */
-                    disabled={currentPage == 1} className="btn page-link"
+                    disabled={currentPage === 1} className="btn page-link"
                     onClick={() => setPage(currentPage - 1)}>Previous</button></li>
                 {pageItems}
                 <li className="page-item"><button type="button"
-                    /* eslint-disable-next-line */
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     className="btn page-link"
                     onClick={() => setPage(currentPage + 1)}>Next</button></li>
             </ul>
