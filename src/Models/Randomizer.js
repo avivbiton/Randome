@@ -14,7 +14,7 @@ const randomizerSchema = new Schema({
         type: String,
         required: true,
         minlength: 1,
-        maxlength: 500
+        maxlength: 5000
 
     },
     jsonSchema: {
