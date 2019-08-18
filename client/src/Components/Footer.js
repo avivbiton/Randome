@@ -12,7 +12,7 @@ export default function Footer() {
     return (
 
         <nav className="nav flex-column p-2 border-top footer mt-auto">
-            <div className="d-inline-flex flex-row pb-3">
+            <div className="d-inline-flex flex-row pb-3 justify-content-center">
                 <li>
                     <a target="_blank" href="https://github.com/avivbiton/Randome" style={itemStyle}>Source Code</a>
                 </li>
@@ -23,14 +23,14 @@ export default function Footer() {
                     <a target="_blank" href="https://avivbiton.website" style={itemStyle}>About</a>
                 </li>
             </div>
-            <div className="d-inline-flex flex-row pb-3">
+            <div className="d-inline-flex flex-row pb-3 justify-content-center">
                 <a target="_blank" href="https://github.com/avivbiton/Randome" className="fab fa-github fa-2x mx-1" />
                 <a target="_blank" href="https://www.linkedin.com/in/aviv-biton-8746b5162/" className="fab fa-linkedin fa-2x mx-1" />
                 <a target="_blank" href="https://avivbiton.website" className="far fa-envelope fa-2x mx-1" />
-                <p className="text-muted ml-auto">
-                    Copyright &copy; Randome. All Rights Reserved
-                </p>
             </div>
+            <p className="d-flex justify-content-center text-muted">
+                Copyright &copy; Randome. All Rights Reserved
+            </p>
         </nav>
 
     );

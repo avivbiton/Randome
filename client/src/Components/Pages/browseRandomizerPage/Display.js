@@ -37,7 +37,7 @@ export default function Display({ items, error }) {
                         <NoItemsFound />
                         :
                         items.map((item) =>
-                            <div key={item._id} className="col-lg-2 m-1">
+                            <div key={item._id} className="col-xl-2 col-lg-4 col-md-6 col mt-2 flex-grow-0 mx-auto mx-md-0">
                                 <ItemDisplay
                                     id={item._id}
                                     name={item.name}

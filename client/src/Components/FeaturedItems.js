@@ -34,7 +34,7 @@ export default function FeaturedItems() {
                 <hr />
                 <section className="row">
                     {featured.map(i =>
-                        <div key={i._id} className="col-xl-2 col-lg-4 col-md-6 col mt-4 mt-xl-0">
+                        <div key={i._id} className="col-xl-2 col-lg-4 col-md-6 col mt-4 mt-xl-0 mx-auto flex-grow-0">
                             <ItemDisplay
                                 name={i.name}
                                 description={i.description}
