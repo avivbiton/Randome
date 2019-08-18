@@ -5,7 +5,7 @@ const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
 const admin = require("firebase-admin");
 
-const maxPerFetch = 5;
+const maxPerFetch = 18;
 
 const fetch = async (search = {}, page = 1, sortBy = "createdAt") => {
     page = Math.max(1, page);

@@ -75,7 +75,7 @@ function Browse() {
     }, [history, searchQuery]);
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid min-vh-100 d-flex flex-column">
             <form className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap"
                 onSubmit={e => {
                     e.preventDefault();
@@ -116,7 +116,7 @@ function Browse() {
                 </tbody>
             </table>
             <Display items={items} error={error} />
-            <div className="d-flex justify-content-center mt-4">
+            <div className="align-self-center mt-auto">
                 <Pagination
                     currentPage={searchQuery.page}
                     totalPages={pages}
@@ -135,7 +135,7 @@ function Pagination({ currentPage, totalPages, setPage }) {
     const pageItems = useMemo(() => {
         const offset = 5;
         const arrayOfItems = [];
-        for (let i = Math.min(currentPage, Math.min(Math.abs(currentPage - offset), 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
+        for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
             arrayOfItems.push(
                 /* eslint-disable-next-line */
                 <li key={i} className={"page-item" + (currentPage == i ? " active" : "")}>
