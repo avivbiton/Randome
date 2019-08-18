@@ -49,10 +49,9 @@ function Browse() {
 
     useEffect(() => {
         const query = queryString.parse(location.search);
-        if (!query.page || !query.sort) return;
         setItems(null);
         setError(null);
-        fetchItems(query.search, query.page, query.sort);
+        fetchItems(query.search || "", query.page || 0, query.sort || SORT_TYPES.LATEST);
     }, [location.search, fetchItems]);
 
 
