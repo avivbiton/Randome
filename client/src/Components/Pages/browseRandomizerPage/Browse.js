@@ -29,9 +29,7 @@ function Browse() {
                 sort: currentQuery.sort || SORT_TYPES.LATEST
             })
         });
-        // should execute only once
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [location.search, history]);
 
 
     const fetchItems = useCallback((search, page, sort) => {
@@ -53,7 +51,6 @@ function Browse() {
         setError(null);
         fetchItems(query.search || "", query.page || 0, query.sort || SORT_TYPES.LATEST);
     }, [location.search, fetchItems]);
-
 
 
     const setSort = useCallback(function (sortType) {
@@ -110,7 +107,7 @@ function Browse() {
                 </tbody>
             </table>
 
-            <Display filter={""} items={items} error={error} />
+            <Display items={items} error={error} />
         </div >
     );
 }
