@@ -1,38 +1,12 @@
 const randomizerService = require("../../services/randomizerService");
 const requireBody = require("../../middleware/requireBody");
 const authenticateUser = require("../../middleware/authenticateUser");
-const Schema = require("validate");
 const ValidationError = require("../../Errors/ValidationError");
 const ContentGenerator = require("randomcontentgenerator").ContentGenerator;
 
 const validateBodyMatchSchema = require("../../middleware/validateBodyMatchSchema");
 
-const validationSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-        length: {
-            min: 2,
-            max: 30
-        }
-    },
-    description: {
-        type: String,
-        required: true,
-        length: {
-            min: 1,
-            max: 500
-        }
-    },
-    schema: {
-        type: String,
-        required: true
-    },
-    private: {
-        type: Boolean,
-        required: true
-    }
-});
+const validationSchema = require("../../Validation/randomizer");
 
 const createNew = [
     requireBody(["name", "description", "schema", "private"]),
@@ -41,11 +15,16 @@ const createNew = [
     async (req, res, next) => {
 
         const { name, description, schema, private } = req.body;
-
-        if (new ContentGenerator(schema).isValid() !== true) {
-            return res.status(400).json({ schema: "Invalid schema" });
+        try {
+            const isValid = new ContentGenerator(JSON.parse(schema)).isValid();
+            if (isValid !== true) {
+                throw isValid;
+            }
         }
-        
+        catch (error) {
+            return res.status(400).json({ schema: `Schema Error: \n${error}`});
+        }
+
         try {
             await randomizerService.createNew(req.user.uid, name, description, schema, private);
             return res.status(201).send("Created.");

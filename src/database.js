@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const connectionURL = process.env.DB_CONNECTION_STRING;
 
+const Randomizer = require("./Models/Randomizer");
+const seedSchema = require("./seedingSchema.json");
+
 const connectionOptions = {
     useNewUrlParser: true,
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
@@ -17,11 +20,50 @@ const initializeConnection = async () => {
         await mongoose.connect(connectionURL, connectionOptions);
         bindHandlers(mongoose.connection);
         console.log("Mongoose Connected.");
+        seedDatabase();
     } catch (error) {
         console.error("Mongoose initial connection failed.");
         console.error(error);
     }
 };
+
+const seedDatabase = async () => {
+    if (await Randomizer.count() < 50) {
+        let failCount = 0;
+        console.log("Seeding database");
+        console.time("seed");
+        for (let i = 0; i < 100; i++) {
+            try {
+                const newRandomizer = new Randomizer({
+                    name: makeid(25),
+                    description: "DESC GOES HERE. JUST PLACE HOLDER FOR NOW. IGNORE THIS",
+                    jsonSchema: JSON.stringify(seedSchema),
+                    owner: {
+                        name: "Randome",
+                        id: "Admin_ID"
+                    }
+                });
+                await newRandomizer.save();
+            } catch (error) {
+                failCount++;
+                console.error(error);
+            }
+        }
+        console.timeEnd("seed");
+        console.log("Fail count: " + failCount);
+    }
+};
+
+function makeid(length) {
+    var result = "";
+    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 
 const bindHandlers = (connection) => {
     connection.on("error", error => {

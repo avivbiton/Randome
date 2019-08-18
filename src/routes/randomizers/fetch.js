@@ -2,17 +2,21 @@ const randomizerService = require("../../services/randomizerService");
 
 const fetch = async (req, res, next) => {
 
+    const search = req.query.search || "";
     const page = req.query.page || 0;
     const sortBy = req.query.sortBy || "createdAt";
-
     try {
-        const docs = await randomizerService.fetch({ private: false }, page, sortBy);
-        res.json(docs);
+
+        const filter = search === "" ? { private: false } : { $text: { $search: search }, private: false };
+
+        const data = await randomizerService.fetch(filter, page, sortBy);
+        res.json(data);
     } catch (error) {
         next(error);
     }
 
 };
+
 
 module.exports = fetch;
 

@@ -5,15 +5,16 @@ const MongooseError = require("mongoose").Error;
 const ValidationError = require("../Errors/ValidationError");
 const admin = require("firebase-admin");
 
-const maxPerFetch = 100;
+const maxPerFetch = 18;
 
-const fetch = async (search = {}, page = 0, sortBy = "createdAt") => {
-    const skip = maxPerFetch * page;
-
+const fetch = async (search = {}, page = 1, sortBy = "createdAt") => {
+    page = Math.max(1, page);
+    const skip = maxPerFetch * (page - 1);
     try {
         const docs = await Randomizer.find(search, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
-            .sort({ [sortBy]: "desc" }).lean().exec();
-        return docs;
+            .sort({ [sortBy]: "desc" });
+        const totalPages = Math.ceil(await Randomizer.count().exec() / maxPerFetch);
+        return { totalPages, docs };
     }
     catch (error) {
         return errorHandler.throwError(error);
@@ -87,7 +88,6 @@ const createNew = async (ownerId, name, description, schema, private) => {
         return errorHandler.throwError(error);
     }
 };
-
 
 const likeRandomizer = async (randomizerId, account) => {
 

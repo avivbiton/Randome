@@ -62,7 +62,7 @@ function RegisterForm({ title }) {
     }
 
     return (
-        <form onSubmit={formSubmitHandler} className="card shadow my-auto" style={{ maxWidth: "365px" }}>
+        <form onSubmit={formSubmitHandler} className="card shadow" style={{ maxWidth: "325px" }}>
             <h4 className="card-header bg-primary text-white text-center">
                 {title}
             </h4>

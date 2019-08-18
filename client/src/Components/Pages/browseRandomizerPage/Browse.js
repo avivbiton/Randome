@@ -1,96 +1,171 @@
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Display from "./Display";
 import API from "../../../API/api";
 import queryString from "query-string";
+import useReactRouter from "use-react-router";
+import { useInput } from "../../../Hooks/formInput";
 
-const SORT_TYPES = {
+
+export const SORT_TYPES = {
     LATEST: "createdAt",
     MOST_LIKES: "meta.likes",
     MOST_FAVORITES: "meta.favorites",
     RECENTLY_UPDATED: "updatedAt"
 };
 
-function Browse({ location, history }) {
+function Browse() {
+    const { history, location } = useReactRouter();
 
     const [items, setItems] = useState(null);
-    const [filter, setFilter] = useState("");
     const [error, setError] = useState(null);
+    const [pages, setPages] = useState(1);
+    const [inputSearch, bindSearch] = useInput();
+
+    const searchQuery = useMemo(() => {
+        const query = queryString.parse(location.search);
+        return {
+            search: query.search,
+            sort: query.sort,
+            page: Math.max(1, query.page)
+        }
+    }, [location.search])
 
     useEffect(function setDefaultQuery() {
-        const currentQuery = queryString.parse(location.search);
-        if (currentQuery.page && currentQuery.sort) return;
+        if (searchQuery.page && searchQuery.sort && searchQuery.search) return;
         history.push({
             search: queryString.stringify({
-                page: currentQuery.page || 0,
-                sort: currentQuery.sort || SORT_TYPES.LATEST
+                search: searchQuery.search || "",
+                page: searchQuery.page || 1,
+                sort: searchQuery.sort || SORT_TYPES.LATEST
             })
         });
-        // should execute only once
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [searchQuery, history]);
 
     useEffect(() => {
-        const query = queryString.parse(location.search);
-        if (!query.page || !query.sort) return;
         setItems(null);
         setError(null);
-        fetchItems(query.page, query.sort);
-    }, [location.search]);
-
-
-    async function fetchItems(page, sort) {
-        try {
-            const itemsData = await API.randomizers.fetch(page, sort);
-            setItems(itemsData);
-        } catch (error) {
-            setError(error.message);
+        async function fetchItems(search, page, sort) {
+            try {
+                const itemsData = await API.randomizers.fetch(search, page, sort);
+                setItems(itemsData.docs);
+                setPages(itemsData.totalPages);
+            } catch (error) {
+                setError(error.message);
+            }
         }
-    }
+
+        fetchItems(searchQuery.search || "", searchQuery.page || 0, searchQuery.sort || SORT_TYPES.LATEST);
+    }, [searchQuery]);
 
 
-    function setSort(sortType) {
-        const currentQuery = queryString.parse(location.search);
-        currentQuery.sort = sortType;
-        history.push({ search: queryString.stringify(currentQuery) });
-    }
+    const setSort = useCallback(function (sortType) {
+        searchQuery.sort = sortType;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [searchQuery, history]);
+
+    const setSearch = useCallback(function () {
+        searchQuery.search = inputSearch;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [history, searchQuery, inputSearch]);
+
+
+    const setPage = useCallback(function (pageNumber) {
+        searchQuery.page = pageNumber;
+        history.push({ search: queryString.stringify(searchQuery) });
+    }, [history, searchQuery]);
 
     return (
-        <div className="container-fluid">
-            <div className="row mt-4">
-                <div className="col">
-                    <input type="text" className="form-control form-control-lg large-input" placeholder="filter"
-                        onChange={e => setFilter(e.target.value)} />
-                    <div className="text-muted mt-1">
-                        * filter is limited to 100 items, please use advanced search to find a specific randomizer.
-                    </div>
-                </div>
+        <div className="container-fluid min-vh-100 d-flex flex-column">
+            <form className="d-inline-flex mt-4 align-items-center flex-wrap flex-lg-nowrap"
+                onSubmit={e => {
+                    e.preventDefault();
+                    setSearch();
+                }}>
+                <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
+                    {...bindSearch} />
+                <button type="submit" className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
+            </form>
+            <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
+                <tbody>
+                    <tr>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.LATEST)}>
+                                Latest
+                        </button>
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
+                                Most Liked
+                        </button>
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
+                                Most Favorites
+                        </button>
+                        </td>
+                        <td>
+                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                                onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
+                                Recently Updated
+                        </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <Display items={items} error={error} />
+            <div className="align-self-center mt-auto">
+                <Pagination
+                    currentPage={searchQuery.page}
+                    totalPages={pages}
+                    setPage={setPage}
+                />
             </div>
-            <div className="row mt-4">
-                <div className="col">
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.LATEST)}>
-                        Latest
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
-                        Most Likes
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
-                        Most Favorites
-                    </button>
-                    <button className="btn btn-outline-info btn-lg mx-1"
-                        onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
-                        Recently Updated
-                    </button>
-                    <hr />
-                </div>
-            </div>
-            <Display filter={filter} items={items} error={error} />
         </div >
     );
 }
 
 
-export default withRouter(Browse);
+
+function Pagination({ currentPage, totalPages, setPage }) {
+
+
+    const pageItems = useMemo(() => {
+        const offset = 5;
+        const arrayOfItems = [];
+        for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
+            arrayOfItems.push(
+                /* eslint-disable-next-line */
+                <li key={i} className={"page-item" + (currentPage == i ? " active" : "")}>
+                    <button type="button"
+                        className="btn page-link"
+                        onClick={() => setPage(i)}>{i}</button>
+                </li>
+            );
+        }
+        return arrayOfItems;
+    }, [currentPage, setPage, totalPages]);
+
+
+    return (
+        <nav aria-label="Page navigation example">
+            <ul className="pagination">
+                <li className="page-item"><button type="button"
+                    /* eslint-disable-next-line */
+                    disabled={currentPage == 1} className="btn page-link"
+                    onClick={() => setPage(currentPage - 1)}>Previous</button></li>
+                {pageItems}
+                <li className="page-item"><button type="button"
+                    /* eslint-disable-next-line */
+                    disabled={currentPage == totalPages}
+                    className="btn page-link"
+                    onClick={() => setPage(currentPage + 1)}>Next</button></li>
+            </ul>
+        </nav>
+    );
+}
+
+
+export default Browse;

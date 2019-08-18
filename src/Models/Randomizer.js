@@ -7,13 +7,16 @@ const randomizerSchema = new Schema({
         required: true,
         unique: true,
         minlength: 2,
-        maxlength: 30
+        maxlength: 30,
+        text: true
+
     },
     description: {
         type: String,
         required: true,
         minlength: 1,
-        maxlength: 500
+        maxlength: 5000
+
     },
     jsonSchema: {
         type: String,

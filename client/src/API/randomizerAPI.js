@@ -5,18 +5,19 @@ class RandomizerAPI {
 
     async fetchRandomizer(id) {
         try {
-            const response = await axios.get(`/randomizer/get/${id}`);
+            const response = await axios.get(`/randomizer/${id}`);
             return response.data;
         }
         catch (error) {
             throw new RequestError(error, "Could not fetch randomizer");
         }
     }
-    async fetch(page = 0, sortBy = "createdAt") {
+    async fetch(search = "", page = 0, sortBy = "createdAt") {
         try {
             const response = await axios.get("/randomizer/fetch",
                 {
                     params: {
+                        search,
                         page,
                         sortBy
                     }
@@ -29,7 +30,7 @@ class RandomizerAPI {
 
     async fetchMyRandomizers() {
         try {
-            const response = await axios.get("/randomizer/own");
+            const response = await axios.get("/randomizer/fetch/own");
             return response.data;
         } catch (error) {
             throw new RequestError(error);
@@ -40,7 +41,7 @@ class RandomizerAPI {
     async fetchByMeta(type) {
         try {
 
-            const response = await axios.get("/randomizer/meta", {
+            const response = await axios.get("/randomizer/fetch/meta", {
                 params: {
                     type
                 }
@@ -96,6 +97,21 @@ class RandomizerAPI {
             await axios.delete(`/randomizer/${id}`)
         } catch (error) {
             throw new RequestError({ error: "There was an error, please try again later." }, "Server Error");
+        }
+    }
+
+    async editRandomizer(id, name, description, isPrivate, schema) {
+        try {
+            await axios.put(`/randomizer/${id}`, { name, description, private: isPrivate, schema });
+        } catch (error) {
+            if (error.response.status === 500) {
+                throw new RequestError({ serverError: "Something went wrong, please try again" });
+            }
+            if (error.response) {
+                throw new RequestError(error.response.data, "Invalid data");
+            }
+
+            throw new RequestError({ serverError: "Something went wrong, please try again later." }, "Server error");
         }
     }
 }
