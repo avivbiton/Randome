@@ -13,7 +13,7 @@ const fetch = async (search = {}, page = 1, sortBy = "createdAt") => {
     try {
         const docs = await Randomizer.find(search, "name description meta _id owner.name").skip(skip).limit(maxPerFetch)
             .sort({ [sortBy]: "desc" });
-        const totalPages = Math.ceil(await Randomizer.count().exec() / maxPerFetch);
+        const totalPages = Math.ceil(await Randomizer.estimatedDocumentCount() / maxPerFetch);
         return { totalPages, docs };
     }
     catch (error) {
