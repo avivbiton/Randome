@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useMemo } from "react";
 
-export default function DragScroll({ className, children }) {
+export default function DragScroll({ className, children, mobileDisabled = true }) {
 
     const [dragging, setDragging] = useState(false);
     const [lastPosition, setPosition] = useState({ x: 0, y: 0 });
@@ -30,10 +30,10 @@ export default function DragScroll({ className, children }) {
         }
     }, [container, dragging, lastPosition]);
 
-    if(isMobile){
+    if (mobileDisabled && isMobile) {
         return <div className={className}>{children}</div>
     }
-    
+
     return (
         <div className={className}
             onMouseUp={mouseUp}
