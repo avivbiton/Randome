@@ -85,29 +85,39 @@ function Browse() {
                     {...bindSearch} />
                 <button type="submit" className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
             </form>
+            <p className="lead d-none d-xl-block m-0 pl-2">
+                You may navigate using the arrow keys.
+            </p>
             <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
                 <tbody>
                     <tr>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.LATEST)}>
                                 Latest
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.MOST_LIKES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                                 Most Liked
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.MOST_FAVORITES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                                 Most Favorites
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.RECENTLY_UPDATED ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                                 Recently Updated
                         </button>
