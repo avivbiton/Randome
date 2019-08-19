@@ -81,7 +81,7 @@ function Browse() {
                     e.preventDefault();
                     setSearch();
                 }}>
-                <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
+                <input type="text" className="form-control form-control-lg large-input" placeholder="Search by Name"
                     {...bindSearch} />
                 <button type="submit" className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
             </form>
