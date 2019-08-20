@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import ItemDisplay from "./ItemDisplay";
-import LoadingSpinner from "./LoadingSpinner";
 import API from "../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../config";
 import DragScroll from "./DragScroll";
+import { useSpring, animated } from "react-spring";
 
 import { SORT_TYPES } from "./Pages/browseRandomizerPage/Browse";
 
 export default function FeaturedItems() {
 
     const [featured, setFeatured] = useState(null);
+    const fadeProps = useSpring({
+        from: { opacity: 0 },
+        opacity: featured === null ? 0 : 1
+    });
 
     useEffect(() => {
         async function fetchFeatured() {
@@ -25,10 +29,10 @@ export default function FeaturedItems() {
         fetchFeatured();
     }, []);
 
-    if (featured === null) return <div className="d-flex justify-content-center"><LoadingSpinner size="lg" /></div>
+    if (featured === null) return <div></div>
 
     return (
-        <section className="container-fluid mt-4 mt-lg-0 dragscroll">
+        <animated.section style={fadeProps} className="container-fluid mt-4 mt-lg-0 dragscroll">
             <div className="text-center">
                 <h1 className="border border-primary rounded py-4">Featured</h1>
                 <hr />
@@ -48,6 +52,6 @@ export default function FeaturedItems() {
 
                 </DragScroll>
             </div>
-        </section>
+        </animated.section>
     );
 }
