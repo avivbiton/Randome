@@ -1,9 +1,24 @@
 {
 	"fields": {
-		"CreatureName": [
-			"@g{0} Dragon",
-			"@g{0} Troll"
-		],
+		"CreatureName": {
+			"text": [
+				"@{0} @g{0} Dragon",
+				"@{0} @g{0} Troll"
+			],
+			"properties": [{
+				"options": [
+					[
+						"Strong ",
+						"Weak ",
+						"Fearless "
+					],
+					[
+						" and large",
+						" and restless"
+					]
+				]
+			}]
+		},
 		"Attack": {
 			"min": 5,
 			"max": 11
