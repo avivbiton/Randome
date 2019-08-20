@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from "react";
 import ItemDisplay from "./ItemDisplay";
-import LoadingSpinner from "./LoadingSpinner";
 import API from "../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../config";
+import DragScroll from "./DragScroll";
+import { useSpring, animated } from "react-spring";
 
 import { SORT_TYPES } from "./Pages/browseRandomizerPage/Browse";
 
 export default function FeaturedItems() {
 
     const [featured, setFeatured] = useState(null);
+    const fadeProps = useSpring({
+        from: { opacity: 0 },
+        opacity: featured === null ? 0 : 1
+    });
 
     useEffect(() => {
         async function fetchFeatured() {
             try {
                 const data = await API.randomizers.fetch("", 0, SORT_TYPES.MOST_LIKES);
-                data.docs.splice(6, data.docs.length - 6);
                 setFeatured(data.docs);
             } catch (error) {
                 toastr.error("There was an error receiving data from our servers. Some services may be unavailable.",
@@ -25,16 +29,16 @@ export default function FeaturedItems() {
         fetchFeatured();
     }, []);
 
-    if (featured === null) return <div className="d-flex justify-content-center"><LoadingSpinner size="lg" /></div>
+    if (featured === null) return <div></div>
 
     return (
-        <section className="container-fluid mt-4 mt-lg-0">
+        <animated.section style={fadeProps} className="container-fluid mt-4 mt-lg-0 dragscroll">
             <div className="text-center">
-                <h1 className="bg-primary text-white py-4 rounded">Featured</h1>
+                <h1 className="border border-primary rounded py-4">Featured</h1>
                 <hr />
-                <section className="row">
+                <DragScroll className="d-flex flex-row overflow-auto scrollbar dragscroll">
                     {featured.map(i =>
-                        <div key={i._id} className="col-xl-2 col-lg-4 col-md-6 col mt-4 mt-xl-0 mx-auto flex-grow-0">
+                        <div key={i._id} className="m-1">
                             <ItemDisplay
                                 name={i.name}
                                 description={i.description}
@@ -45,8 +49,9 @@ export default function FeaturedItems() {
                             />
                         </div>
                     )}
-                </section>
+
+                </DragScroll>
             </div>
-        </section>
+        </animated.section>
     );
 }

@@ -1,9 +1,18 @@
 import React from "react";
 import LoadingSpinner from "../../LoadingSpinner";
 import ItemDisplay from "../../ItemDisplay";
+import { useSpring, animated } from "react-spring";
 
 
 export default function Display({ items, error }) {
+
+    const fadeProps = useSpring({
+        from: { opacity: 0 },
+        opacity: !items ? 0 : 1,
+        config: {
+            duration: 250
+        }
+    });
 
     if (error)
         return (
@@ -29,7 +38,7 @@ export default function Display({ items, error }) {
         );
 
     return (
-        <div className="container-fluid">
+        <animated.div style={fadeProps} className="container-fluid">
             <div className="row">
                 {
                     items.length === 0
@@ -49,7 +58,7 @@ export default function Display({ items, error }) {
                         )
                 }
             </div>
-        </div>
+        </animated.div>
     );
 }
 

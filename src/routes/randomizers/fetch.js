@@ -7,7 +7,11 @@ const fetch = async (req, res, next) => {
     const sortBy = req.query.sortBy || "createdAt";
     try {
 
-        const filter = search === "" ? { private: false } : { $text: { $search: search }, private: false };
+        const filter = search === "" ? { private: false }
+            : {
+                name: { $regex: `.*${search}.*`, $options: "i" },
+                private: false
+            };
 
         const data = await randomizerService.fetch(filter, page, sortBy);
         res.json(data);

@@ -81,33 +81,43 @@ function Browse() {
                     e.preventDefault();
                     setSearch();
                 }}>
-                <input type="text" className="form-control form-control-lg large-input" placeholder="Name or description"
+                <input type="text" className="form-control form-control-lg large-input" placeholder="Search by Name"
                     {...bindSearch} />
                 <button type="submit" className="btn btn-outline-primary btn-lg  ml-lg-2 mt-2 mt-lg-0">Search</button>
             </form>
+            <p className="lead d-none d-xl-block m-0 pl-2">
+                You may navigate using the arrow keys.
+            </p>
             <table className="table table-borderless table-responsive mt-4 pb-2 border-bottom">
                 <tbody>
                     <tr>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.LATEST)}>
                                 Latest
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.MOST_LIKES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                                 Most Liked
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.MOST_FAVORITES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                                 Most Favorites
                         </button>
                         </td>
                         <td>
-                            <button style={{ width: "12rem" }} className="btn btn-outline-info btn-lg mx-1"
+                            <button style={{ width: "12rem" }}
+                                className={"btn btn-outline-info btn-lg mx-1" +
+                                    (searchQuery.sort === SORT_TYPES.RECENTLY_UPDATED ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                                 Recently Updated
                         </button>
@@ -127,9 +137,23 @@ function Browse() {
     );
 }
 
-
+const LEFT_ARROW = 37;
+const RIGH_ARROW = 39;
 
 function Pagination({ currentPage, totalPages, setPage }) {
+    useEffect(() => {
+        window.addEventListener("keydown", onKeyDown, false);
+        function onKeyDown(e) {
+            if (e.keyCode === LEFT_ARROW && currentPage !== 1) {
+                setPage(currentPage - 1);
+            } else if (e.keyCode === RIGH_ARROW && currentPage !== totalPages) {
+                setPage(currentPage + 1);
+            }
+        }
+        return () => {
+            window.removeEventListener("keydown", onKeyDown, false);
+        }
+    }, [currentPage, totalPages, setPage]);
 
 
     const pageItems = useMemo(() => {
@@ -137,8 +161,7 @@ function Pagination({ currentPage, totalPages, setPage }) {
         const arrayOfItems = [];
         for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
             arrayOfItems.push(
-                /* eslint-disable-next-line */
-                <li key={i} className={"page-item" + (currentPage == i ? " active" : "")}>
+                <li key={i} className={"page-item" + (currentPage === i ? " active" : "")}>
                     <button type="button"
                         className="btn page-link"
                         onClick={() => setPage(i)}>{i}</button>
@@ -153,13 +176,11 @@ function Pagination({ currentPage, totalPages, setPage }) {
         <nav aria-label="Page navigation example">
             <ul className="pagination">
                 <li className="page-item"><button type="button"
-                    /* eslint-disable-next-line */
-                    disabled={currentPage == 1} className="btn page-link"
+                    disabled={currentPage === 1} className="btn page-link"
                     onClick={() => setPage(currentPage - 1)}>Previous</button></li>
                 {pageItems}
                 <li className="page-item"><button type="button"
-                    /* eslint-disable-next-line */
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     className="btn page-link"
                     onClick={() => setPage(currentPage + 1)}>Next</button></li>
             </ul>

@@ -42,3 +42,7 @@ h1,h2,h3,h4,h5 {
 .footer a:hover {
     color: #6b6b6b;
 }
+
+.scrollbar::-webkit-scrollbar { 
+    display: none; 
+} 

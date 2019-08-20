@@ -7,8 +7,7 @@ const randomizerSchema = new Schema({
         required: true,
         unique: true,
         minlength: 2,
-        maxlength: 30,
-        text: true
+        maxlength: 30
 
     },
     description: {

@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useEffect, useState, useCallback } from "react";
 import { ContentGenerator } from "randomcontentgenerator";
 import randomizerAPI from "../../../API/randomizerAPI";
 import ResultDisplayer from "./ResultDisplayer";
 import LikeAndFavoriteCounter from "./LikeAndFavoriteCounter";
+import { useSpring, animated } from "react-spring";
+import useReactRouter from "use-react-router";
+import { useCheckbox } from "../../../Hooks/formInput";
 
-function RandomizerPage({ match, history }) {
+function RandomizerPage() {
 
+    const { match, history } = useReactRouter();
     const [currentRandomizer, setRandomizer] = useState(null);
     const [currentResult, setResult] = useState(null);
+    const { value: skipAnimation, bind: bindSkipAnimation } = useCheckbox(false);
+    const [fading, setFading] = useState(true);
+    const fadeAnimation = useSpring({
+        from: { opacity: fading ? 1 : 0 },
+        opacity: fading ? 0 : 1,
+        onRest: () => {
+            if (fading && currentResult !== null) {
+                setFading(false);
+                onAnimationFinished();
+            }
+        }
+    });
 
     useEffect(() => {
         async function fetchRandomizerData() {
@@ -24,9 +39,18 @@ function RandomizerPage({ match, history }) {
         fetchRandomizerData();
     }, [match.params.id, history]);
 
-    function onRollClicked() {
+    const onAnimationFinished = useCallback(() => {
         setResult(generateSchemaResult(currentRandomizer.jsonSchema));
-    }
+    }, [currentRandomizer]);
+
+    const onRollClicked = useCallback(() => {
+        if (currentResult === null || skipAnimation) {
+            return onAnimationFinished();
+        }
+        if (fading) return;
+        setFading(!fading);
+    }, [currentResult, fading, onAnimationFinished, skipAnimation]);
+
 
     if (currentRandomizer === null) return <Loading />;
     return (
@@ -39,6 +63,12 @@ function RandomizerPage({ match, history }) {
                         likeCount={currentRandomizer.meta.likes}
                         favoriteCount={currentRandomizer.meta.favorites} />
                     <p className="lead text-break">{currentRandomizer.description}</p>
+                    <div className="form-check">
+                        <input className="form-check-input" type="checkbox" value="" id="animationCheckbox" {...bindSkipAnimation} />
+                        <label className="form-check-label" for="animationCheckbox">
+                            Skip Animation
+                        </label>
+                    </div>
                     <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>
                         Roll the Dice<i className="fas fa-dice ml-2" />
                     </button>
@@ -47,7 +77,9 @@ function RandomizerPage({ match, history }) {
             </div>
             <div className="row mt-3">
                 <div className="col">
-                    <ResultDisplayer result={currentResult} />
+                    <animated.div style={fadeAnimation}>
+                        <ResultDisplayer result={currentResult} />
+                    </animated.div>
                 </div>
             </div>
         </div >
@@ -72,4 +104,4 @@ function Loading() {
 
 
 
-export default withRouter(RandomizerPage);
+export default RandomizerPage;
