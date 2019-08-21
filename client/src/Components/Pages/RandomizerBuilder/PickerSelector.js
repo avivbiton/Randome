@@ -1,17 +1,37 @@
-import React, { useEffect, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 import { useInput } from "../../../Hooks/formInput";
 import { BasicParserCreator } from "./BasicParserCreator";
+import { ContentGenerator } from "randomcontentgenerator";
 
+function convertTypeToName(field) {
+    const name = new ContentGenerator().findParser(field).constructor.name;
+    switch (name) {
+        case "BasicParser":
+            return "Basic Picker";
+        case "MinMaxParser":
+            return "Min-Max Picker";
+        case "MultiPickerParser":
+            return "Multi Picker";
+        default: throw new Error("Invalid parser");
+    }
+}
 
+export default function PickerSelector({ initialValues, onChange }) {
 
-export default function PickerSelector({ onChange }) {
+    const [selected, bindSelected, setSelected] = useInput("Min-Max Picker");
+
+    // on edit mode, set the correct picker
+    useEffect(() => {
+        if (initialValues.fieldObject == null) return;
+        setSelected(convertTypeToName(initialValues.fieldObject));
+    }, [initialValues, setSelected]);
 
     const MapNameToComponent = useMemo(() => ({
         "Basic Picker": BasicParserCreator,
         "Min-Max Picker": MinMaxParserCreator,
         "Multi Picker": MultiParserCreator
     }), []);
-    const [selected, bindSelected] = useInput("Basic Picker");
+
     const CreatorComponent = useMemo(() => MapNameToComponent[selected], [MapNameToComponent, selected]);
 
     const onPickerUpdate = useCallback(parser => {
@@ -26,6 +46,7 @@ export default function PickerSelector({ onChange }) {
                 <option>Multi Picker</option>
             </select>
             <CreatorComponent
+                populateFieldObject={initialValues.fieldObject}
                 onUpdate={onPickerUpdate} />
         </div>
     );

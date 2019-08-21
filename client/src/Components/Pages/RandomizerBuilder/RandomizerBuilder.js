@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useMemo } from "react";
 import Button from "../../Form/Button";
-import { MinMaxPicker } from "../../../SchemaBuilder/minMaxPicker";
 import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
-import AddFieldModal from "./AddFieldModal";
-import AddGlobalModal from "./AddGlobalModal";
+import FieldModal from "./FieldModal";
+import GlobalModal from "./GlobalModal";
+import { Builder } from "../../../config";
 
 export default function RandomizerBuilder() {
 
@@ -13,16 +13,33 @@ export default function RandomizerBuilder() {
     const [historyIndex, setIndex] = useState(0);
     const currentSnapshot = useMemo(() => snapshotHistory[historyIndex], [snapshotHistory, historyIndex]);
 
-    const [fieldModalShow, toggleFieldModal] = useModal();
-    const [globalModalShow, toggleGlobalModal] = useModal();
+    const [toggleFieldModal, bindFieldModal] = useModal();
+    const [toggleGlobalModal, bindGlobalModal] = useModal();
 
 
     const onAddFieldClicked = useCallback(() => {
-        toggleFieldModal(true);
+        toggleFieldModal(true, { mode: Builder.ModalMode.ADD });
     }, [toggleFieldModal]);
 
     const onAddGlobalClicked = useCallback(() => {
-        toggleGlobalModal(true);
+        toggleGlobalModal(true, {
+            mode: Builder.ModalMode.ADD
+        });
+    }, [toggleGlobalModal]);
+
+    const onEditFieldClicked = useCallback((name, fieldObject) => {
+        toggleFieldModal(true, {
+            mode: Builder.ModalMode.EDIT,
+            fieldObject,
+            oldName: name
+        });
+    }, [toggleFieldModal]);
+
+    const onEditGlobalClicked = useCallback(fieldObject => {
+        toggleGlobalModal(true, {
+            mode: Builder.ModalMode.EDIT,
+            fieldObject
+        });
     }, [toggleGlobalModal]);
 
     const updateSnapshotHistory = useCallback(snapshot => {
@@ -31,6 +48,8 @@ export default function RandomizerBuilder() {
         setIndex(historyIndex + 1);
     }, [snapshotHistory, historyIndex]);
 
+    // with Confrim in the end - Called when the user press the confirm button on the modal
+
     const onFieldModalConfirm = useCallback((name, parser) => {
         const snapshot = currentSnapshot
             .addField(name, parser);
@@ -38,9 +57,23 @@ export default function RandomizerBuilder() {
 
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const onGlobalModalConfirm = useCallback(() => {
+    const onGlobalModalConfirm = useCallback(parser => {
         const snapshot = currentSnapshot
-            .addGlobal(new MinMaxPicker(0, 5));
+            .addGlobal(parser);
+        updateSnapshotHistory(snapshot);
+    }, [updateSnapshotHistory, currentSnapshot]);
+
+    const onEditFieldConfirmed = useCallback((oldName, name, parser) => {
+       
+        const snapshot = currentSnapshot
+            .editField(oldName, name, parser);
+      
+        updateSnapshotHistory(snapshot);
+    }, [updateSnapshotHistory, currentSnapshot]);
+
+    const onEditGlobalConfirmed = useCallback((index, parser) => {
+        const snapshot = currentSnapshot
+            .editGlobal(index, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
@@ -86,6 +119,8 @@ export default function RandomizerBuilder() {
                         snapshot={currentSnapshot}
                         onFieldDelete={onFieldDelete}
                         onGlobalDelete={onGlobalDelete}
+                        onEditField={onEditFieldClicked}
+                        onEditGlboal={onEditGlobalClicked}
                     />
                     <hr />
                 </div>
@@ -94,14 +129,15 @@ export default function RandomizerBuilder() {
                     <Button className="btn btn-secondary">Reset</Button>
                 </div>
             </div>
-            <AddFieldModal
-                showing={fieldModalShow}
-                toggle={toggleFieldModal}
-                onConfirm={onFieldModalConfirm} />
-            <AddGlobalModal
-                showing={globalModalShow}
-                toggle={toggleGlobalModal}
+            <FieldModal
+                {...bindFieldModal}
+                onConfirm={onFieldModalConfirm}
+                onEdit={onEditFieldConfirmed}
+            />
+            <GlobalModal
+                {...bindGlobalModal}
                 onConfirm={onGlobalModalConfirm}
+                onEdit={onEditGlobalConfirmed}
             />
         </>
     );

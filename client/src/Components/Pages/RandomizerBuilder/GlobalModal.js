@@ -1,11 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Modal } from "react-bootstrap";
-import { useInput } from "../../../Hooks/formInput";
 import PickerSelector from "./PickerSelector";
+import { Builder } from "../../../config";
 
-export default function AddFieldModal({ showing, toggle, onConfirm }) {
+export default function GlobalModal({ showing, toggle, data, onConfirm, onEdit }) {
 
-    const [name, bindName] = useInput();
     const [parser, setParser] = useState(null);
 
     const onPickerDataChange = useCallback(parserObject => {
@@ -14,17 +13,22 @@ export default function AddFieldModal({ showing, toggle, onConfirm }) {
 
     const onConfirmClicked = useCallback(() => {
         toggle(false);
-        onConfirm(name, parser);
-    }, [onConfirm, toggle, parser, name]);
+        if (data.mode === Builder.ModalMode.ADD) {
+            onConfirm(parser);
+        }
+        else if (data.mode === Builder.ModalMode.EDIT) {
+            onEdit(parser);
+        }
+
+    }, [onConfirm, toggle, parser, data, onEdit]);
 
     return (
         <Modal show={showing} onHide={toggle}>
             <Modal.Header>
-                <h1>Add New Field</h1>
+                <h1>Add Global Property</h1>
             </Modal.Header>
             <Modal.Body>
-                <input type="text" className="form-control" placeholder="Field Name" {...bindName} />
-                 <PickerSelector
+                <PickerSelector
                     onChange={onPickerDataChange} />
             </Modal.Body>
             <Modal.Footer>

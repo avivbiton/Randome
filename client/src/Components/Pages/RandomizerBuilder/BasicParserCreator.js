@@ -1,13 +1,26 @@
-import React, { useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Picker } from "../../../SchemaBuilder/basicPicker";
 
 
-export function BasicParserCreator({ onUpdate }) {
+export function BasicParserCreator({ onUpdate, populateFieldObject }) {
 
     const [optionsArray, setOptionsArray] = useState([""]);
 
+    useEffect(() => {
+        if (typeof populateFieldObject != "undefined") {
+            setOptionsArray([...populateFieldObject.text]);
+        }
+    }, [populateFieldObject]);
+
     const onTextChange = useCallback((text, index) => {
         optionsArray[index] = text;
+        setOptionsArray([...optionsArray]);
+        onUpdate(new Picker(optionsArray));
+    }, [optionsArray, onUpdate]);
+
+
+    const onDeletePressed = useCallback((index) => {
+        optionsArray.splice(index, 1);
         setOptionsArray([...optionsArray]);
         onUpdate(new Picker(optionsArray));
     }, [optionsArray, onUpdate]);
@@ -26,7 +39,7 @@ export function BasicParserCreator({ onUpdate }) {
             index={key}
             text={i}
             onTextChange={onTextChange}
-            onDelete={() => { }}
+            onDelete={onDeletePressed}
         />)}
         <div className="row">
             <div className="col-10"></div>
@@ -37,13 +50,13 @@ export function BasicParserCreator({ onUpdate }) {
     </div>);
 }
 
-function OptionRow({ index, onTextChange, onDelete }) {
+function OptionRow({ index, onTextChange, onDelete, text }) {
     return (<div className="form-group row">
         <div className="col-10">
-            <input type="text" className="form-control" onChange={e => onTextChange(e.target.value, index)} />
+            <input type="text" className="form-control" value={text} onChange={e => onTextChange(e.target.value, index)} />
         </div>
         <div className="col-2">
-            <button title="Delete" onClick={onDelete} className="btn far fa-trash-alt icon-button" />
+            <button title="Delete" onClick={() => onDelete(index)} className="btn far fa-trash-alt icon-button" />
         </div>
     </div>
     );

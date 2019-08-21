@@ -9,6 +9,7 @@ export class SchemaSnapshot {
     }
 
     getSchema() {
+        console.log(this.schema);
         return this.schema.toJS();
     }
 
@@ -20,12 +21,17 @@ export class SchemaSnapshot {
 
     removeField(fieldName) {
         const newSnapshot = this.schema.removeIn(["fields", fieldName]);
-        console.log(newSnapshot);
         return new SchemaSnapshot(newSnapshot);
     }
 
-    addGlobal(parserObject, properties = []) {
-        parserObject["properties"] = properties;
+    editField(oldName, newName, parserObject) {
+        const newSnapshot = this
+            .removeField(oldName)
+            .addField(newName, parserObject);
+        return newSnapshot;
+    }
+
+    addGlobal(parserObject) {
         const newSnapshot = this.schema.updateIn(["globalProperties"], list => list.push(parserObject.transformObject()));
         return new SchemaSnapshot(newSnapshot);
     }
@@ -33,6 +39,13 @@ export class SchemaSnapshot {
     removeGlobal(index) {
         const newSnapshot = this.schema.updateIn(["globalProperties"], list => list.remove(index));
         return new SchemaSnapshot(newSnapshot);
+    }
+
+    editGlobal(index, parserObject) {
+        const newSnapshot = this
+            .removeGlobal(index)
+            .addGlobal(parserObject);
+        return newSnapshot;
     }
 
     extractString() {
