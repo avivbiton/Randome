@@ -7,7 +7,9 @@ export class MultiPicker extends Parser {
     }
 
     transformObject() {
-        return this.options;
+        return {
+            options: this.options
+        }
     }
 
 }

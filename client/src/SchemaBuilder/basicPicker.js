@@ -3,11 +3,13 @@ import { Parser } from "./parser";
 export class Picker extends Parser {
     constructor(options) {
         super();
-        this.options = options;
+        this.text = options;
     }
 
     transformObject() {
-        return this.options;
+        return {
+            text: this.text
+        }
     }
 
 }

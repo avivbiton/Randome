@@ -19,7 +19,8 @@ export class SchemaSnapshot {
     }
 
     removeField(fieldName) {
-        const newSnapshot = this.schema.removeIn(["fields"], fieldName);
+        const newSnapshot = this.schema.removeIn(["fields", fieldName]);
+        console.log(newSnapshot);
         return new SchemaSnapshot(newSnapshot);
     }
 
