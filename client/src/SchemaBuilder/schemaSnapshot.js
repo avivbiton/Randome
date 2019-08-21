@@ -19,20 +19,19 @@ export class SchemaSnapshot {
     }
 
     removeField(fieldName) {
-        if (typeof this.schema.fields[fieldName] != "undefined") {
-            delete this.schema.fields[fieldName];
-        }
-        return new SchemaSnapshot(this.schema);
+        const newSnapshot = this.schema.removeIn(["fields"], fieldName);
+        return new SchemaSnapshot(newSnapshot);
     }
 
-    addGlobal(object) {
-        this.schema.globalProperties.push(object);
-        return new SchemaSnapshot(this.schema);
+    addGlobal(parserObject, properties = []) {
+        parserObject["properties"] = properties;
+        const newSnapshot = this.schema.updateIn(["globalProperties"], list => list.push(parserObject.transformObject()));
+        return new SchemaSnapshot(newSnapshot);
     }
 
     removeGlobal(index) {
-        this.schema.globalProperties.splice(index, 1);
-        return new SchemaSnapshot(this.schema);
+        const newSnapshot = this.schema.updateIn(["globalProperties"], list => list.remove(index));
+        return new SchemaSnapshot(newSnapshot);
     }
 
     extractString() {
