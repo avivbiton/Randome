@@ -64,10 +64,8 @@ export default function RandomizerBuilder() {
     }, [updateSnapshotHistory, currentSnapshot]);
 
     const onEditFieldConfirmed = useCallback((oldName, name, parser) => {
-       
         const snapshot = currentSnapshot
             .editField(oldName, name, parser);
-      
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 

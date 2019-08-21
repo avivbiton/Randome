@@ -7,7 +7,7 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
     const [optionsArray, setOptionsArray] = useState([""]);
 
     useEffect(() => {
-        if (typeof populateFieldObject != "undefined") {
+        if (populateFieldObject) {
             setOptionsArray([...populateFieldObject.text]);
         }
     }, [populateFieldObject]);

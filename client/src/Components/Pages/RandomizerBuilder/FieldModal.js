@@ -38,16 +38,18 @@ export default function FieldModal({ showing, toggle, data, onConfirm, onEdit })
         }
     }, [onConfirm, toggle, parser, name, onEdit, data]);
 
+    if(!data) return <div></div>
+
     return (
         <Modal show={showing} onHide={toggle}>
             <Modal.Header>
-                <h1>Add New Field</h1>
+                <h1>{data.mode === Builder.ModalMode.ADD ? "Add New" : "Edit" } Field</h1>
             </Modal.Header>
             <Modal.Body>
                 <Input type="text" className="form-control" placeholder="Field Name" {...bindName}
                     error={errors.name} />
                 <PickerSelector
-                    initialValues={data}
+                    defaultParser={data.fieldObject}
                     onChange={onPickerDataChange} />
             </Modal.Body>
             <Modal.Footer>

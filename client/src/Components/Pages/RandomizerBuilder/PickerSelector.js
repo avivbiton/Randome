@@ -16,15 +16,15 @@ function convertTypeToName(field) {
     }
 }
 
-export default function PickerSelector({ initialValues, onChange }) {
+export default function PickerSelector({ defaultParser = null, onChange }) {
 
     const [selected, bindSelected, setSelected] = useInput("Min-Max Picker");
 
     // on edit mode, set the correct picker
     useEffect(() => {
-        if (initialValues.fieldObject == null) return;
-        setSelected(convertTypeToName(initialValues.fieldObject));
-    }, [initialValues, setSelected]);
+        if (defaultParser == null) return;
+        setSelected(convertTypeToName(defaultParser));
+    }, [defaultParser, setSelected]);
 
     const MapNameToComponent = useMemo(() => ({
         "Basic Picker": BasicParserCreator,
@@ -46,7 +46,7 @@ export default function PickerSelector({ initialValues, onChange }) {
                 <option>Multi Picker</option>
             </select>
             <CreatorComponent
-                populateFieldObject={initialValues.fieldObject}
+                populateFieldObject={defaultParser}
                 onUpdate={onPickerUpdate} />
         </div>
     );

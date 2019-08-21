@@ -29,6 +29,7 @@ export default function GlobalModal({ showing, toggle, data, onConfirm, onEdit }
             </Modal.Header>
             <Modal.Body>
                 <PickerSelector
+                    initialValues={data}
                     onChange={onPickerDataChange} />
             </Modal.Body>
             <Modal.Footer>
