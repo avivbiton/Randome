@@ -24,8 +24,8 @@ export function BasicParserCreator({ onUpdate }) {
         {optionsArray.map((i, key) => <OptionRow
             key={key}
             index={key}
-            text={i} o
-            nTextChange={onTextChange}
+            text={i}
+            onTextChange={onTextChange}
             onDelete={() => { }}
         />)}
         <div className="row">
@@ -43,7 +43,8 @@ function OptionRow({ index, onTextChange, onDelete }) {
             <input type="text" className="form-control" onChange={e => onTextChange(e.target.value, index)} />
         </div>
         <div className="col-2">
-            <button title="Delete" onClick={onDele]} className="btn far fa-trash-alt icon-button" />
+            <button title="Delete" onClick={onDelete} className="btn far fa-trash-alt icon-button" />
         </div>
-    </div>);
+    </div>
+    );
 }
