@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Modal } from "react-bootstrap";
 import api from "../../../API/api";
 import toastr from "toastr";
