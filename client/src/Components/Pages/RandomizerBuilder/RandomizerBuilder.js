@@ -4,7 +4,7 @@ import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
-import PropertyModal from "./GlobalModal";
+import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
 
 export default function RandomizerBuilder() {
@@ -14,42 +14,23 @@ export default function RandomizerBuilder() {
     const currentSnapshot = useMemo(() => snapshotHistory[historyIndex], [snapshotHistory, historyIndex]);
 
     const [toggleFieldModal, bindFieldModal] = useModal();
-    const [toggleGlobalModal, bindGlobalModal] = useModal();
+    const [togglePropertyModal, bindGlobalModal] = useModal();
 
 
     const onAddFieldClicked = useCallback(() => {
-        toggleFieldModal(true, { mode: Builder.ModalMode.ADD });
+        toggleFieldModal(true, {
+            mode: Builder.ModalMode.ADD,
+            title: "Add New Field"
+        });
     }, [toggleFieldModal]);
 
     const onAddGlobalClicked = useCallback(() => {
-        toggleGlobalModal(true, {
-            mode: Builder.ModalMode.ADD
-        });
-    }, [toggleGlobalModal]);
-
-    const onEditFieldClicked = useCallback((name, fieldObject) => {
-        toggleFieldModal(true, {
-            mode: Builder.ModalMode.EDIT,
-            fieldObject,
-            oldName: name
-        });
-    }, [toggleFieldModal]);
-
-    const onEditGlobalClicked = useCallback((index, fieldObject) => {
-        toggleGlobalModal(true, {
-            mode: Builder.ModalMode.EDIT,
-            index,
-            fieldObject
-        });
-    }, [toggleGlobalModal]);
-
-    const onAddPropertyClicked = useCallback((fieldName) => {
-        toggleGlobalModal(true, {
+        togglePropertyModal(true, {
             mode: Builder.ModalMode.ADD,
-            fieldName
+            title: "Add Global Property"
         });
+    }, [togglePropertyModal]);
 
-    }, [toggleGlobalModal]);
 
     const updateSnapshotHistory = useCallback(snapshot => {
         snapshotHistory.splice(historyIndex + 1);
@@ -108,6 +89,28 @@ export default function RandomizerBuilder() {
         console.log(jsonString);
     }, [currentSnapshot]);
 
+    const onFieldModalResolved = useCallback((name, parser, data) => {
+        const mode = data.mode;
+        switch (mode) {
+            case Builder.ModalMode.ADD:
+                return addField(name, parser);
+            case Builder.ModalMode.EDIT:
+                return editField(data.oldName, name, parser);
+            default: return
+        }
+    }, [addField, editField]);
+
+    const onPropertyModalResolved = useCallback((parser, data) => {
+        const mode = data.mode;
+        switch (mode) {
+            case Builder.ModalMode.ADD:
+                return addGlobal(parser);
+            case Builder.ModalMode.EDIT:
+                return editGlobal(data.index, parser);
+            default: return;
+        }
+    }, [addGlobal, editGlobal]);
+
     return (
         <>
             <div className="card">
@@ -125,9 +128,8 @@ export default function RandomizerBuilder() {
                         snapshot={currentSnapshot}
                         onFieldDelete={deleteField}
                         onGlobalDelete={deleteGlobal}
-                        onEditField={onEditFieldClicked}
-                        onEditGlboal={onEditGlobalClicked}
-                        onAddProperty={onAddPropertyClicked}
+                        fieldModal={toggleFieldModal}
+                        propertyModal={togglePropertyModal}
                     />
                     <hr />
                 </div>
@@ -138,13 +140,11 @@ export default function RandomizerBuilder() {
             </div>
             <FieldModal
                 {...bindFieldModal}
-                onConfirm={addField}
-                onEdit={editField}
+                onConfirm={onFieldModalResolved}
             />
             <PropertyModal
                 {...bindGlobalModal}
-                onConfirm={addGlobal}
-                onEdit={editGlobal}
+                onConfirm={onPropertyModalResolved}
             />
         </>
     );

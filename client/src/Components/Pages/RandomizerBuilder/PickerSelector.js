@@ -18,7 +18,7 @@ function convertTypeToName(field) {
 
 export default function PickerSelector({ defaultParser = null, onChange }) {
 
-    const [selected, bindSelected, setSelected] = useInput("Min-Max Picker");
+    const [selected, bindSelected, setSelected] = useInput("Basic Picker");
 
     // on edit mode, set the correct picker
     useEffect(() => {

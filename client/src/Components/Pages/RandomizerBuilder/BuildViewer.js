@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { ContentGenerator } from "randomcontentgenerator";
+import { Builder } from "../../../config";
 
-export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onEditField, onEditGlboal, onAddProperty }) {
+export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, fieldModal, propertyModal }) {
+
+    const onEditFieldClicked = useCallback((name, fieldObject) => {
+        fieldModal(true, {
+            mode: Builder.ModalMode.EDIT,
+            title: "Edit Field",
+            fieldObject,
+            oldName: name
+        });
+    }, [fieldModal]);
+
+    const onEditGlobalClicked = useCallback((index, fieldObject) => {
+        propertyModal(true, {
+            mode: Builder.ModalMode.EDIT,
+            title: "Edit Global Property",
+            index,
+            fieldObject
+        });
+    }, [propertyModal]);
+
+    const onAddPropertyClicked = useCallback(fieldName => {
+        propertyModal(true, {
+            mode: Builder.ModalMode.ADD,
+            title: "Add Property",
+            fieldName
+        });
+    }, [propertyModal]);
 
     return (
         <div>
@@ -11,8 +38,8 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
                 name={name}
                 field={field}
                 onDelete={() => onFieldDelete(name)}
-                onEdit={field => onEditField(name, field)}
-                onAddProperty={() => onAddProperty(name)}
+                onEdit={() => onEditFieldClicked(name, field)}
+                onAddProperty={() => onAddPropertyClicked(name)}
             />)}
             <hr />
             <h2>Global Properties</h2>
@@ -20,7 +47,7 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
                 key={key}
                 field={i}
                 onDelete={() => onGlobalDelete(key)}
-                onEdit={() => onEditGlboal(key, i)}
+                onEdit={() => onEditGlobalClicked(key, i)}
             />)}
         </div>
     );
@@ -32,7 +59,7 @@ function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
     return (
         <div className="border border-primary p-2">
             {new ContentGenerator().findParser(field).constructor.name}
-            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={() => onEdit(field)} />
+            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
         </div>
     );
@@ -43,7 +70,7 @@ function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
     return (
         <div className="border border-primary p-2">
             <span className="pr-4">{name}</span>
-            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={() => onEdit(field)} />
+            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
             <button title="Add Property"
                 className="btn fas fa-plus icon-button" onClick={onAddProperty} style={{ fontWeight: "900" }} />
