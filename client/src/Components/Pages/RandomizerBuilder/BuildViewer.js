@@ -67,7 +67,6 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
 
 
 function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
-
     return (
         <div className="border border-primary p-2">
             {new ContentGenerator().findParser(field).constructor.name}

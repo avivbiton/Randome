@@ -7,10 +7,14 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
     const [optionsArray, setOptionsArray] = useState([""]);
 
     useEffect(() => {
-        if (populateFieldObject) {
+        if (populateFieldObject && populateFieldObject.text) {
             setOptionsArray([...populateFieldObject.text]);
         }
     }, [populateFieldObject]);
+
+    useEffect(() => {
+        onUpdate(new Picker([]));
+    },[onUpdate]);
 
     const onTextChange = useCallback((text, index) => {
         optionsArray[index] = text;
@@ -29,25 +33,27 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
         setOptionsArray([...optionsArray, ""]);
     }, [optionsArray]);
 
-    return (<div className="mt-4">
-        <h5>Basic Picker</h5>
-        <p className="text-muted">
-            Randomly picks one of the text fields below. You can add as many text fields as you would like.
+    return (
+        <div className="mt-4">
+            <h5>Basic Picker</h5>
+            <p className="text-muted">
+                Randomly picks one of the text fields below. You can add as many text fields as you would like.
             </p>
-        {optionsArray.map((i, key) => <OptionRow
-            key={key}
-            index={key}
-            text={i}
-            onTextChange={onTextChange}
-            onDelete={onDeletePressed}
-        />)}
-        <div className="row">
-            <div className="col-10"></div>
-            <div className="col-2">
-                <button className="btn fas fa-plus icon-button" onClick={onPlusButtonClicked} style={{ fontWeight: "900" }} />
+            {optionsArray.map((i, key) => <OptionRow
+                key={key}
+                index={key}
+                text={i}
+                onTextChange={onTextChange}
+                onDelete={onDeletePressed}
+            />)}
+            <div className="row">
+                <div className="col-10"></div>
+                <div className="col-2">
+                    <button className="btn fas fa-plus icon-button" onClick={onPlusButtonClicked} style={{ fontWeight: "900" }} />
+                </div>
             </div>
         </div>
-    </div>);
+    );
 }
 
 function OptionRow({ index, onTextChange, onDelete, text }) {

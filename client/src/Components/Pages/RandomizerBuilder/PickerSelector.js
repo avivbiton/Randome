@@ -2,19 +2,7 @@ import React, { useCallback, useMemo, useEffect } from "react";
 import { useInput } from "../../../Hooks/formInput";
 import { BasicParserCreator } from "./BasicParserCreator";
 import { ContentGenerator } from "randomcontentgenerator";
-
-function convertTypeToName(field) {
-    const name = new ContentGenerator().findParser(field).constructor.name;
-    switch (name) {
-        case "BasicParser":
-            return "Basic Picker";
-        case "MinMaxParser":
-            return "Min-Max Picker";
-        case "MultiPickerParser":
-            return "Multi Picker";
-        default: throw new Error("Invalid parser");
-    }
-}
+import MinMaxParserCreator from "./MinMaxParserCreator";
 
 export default function PickerSelector({ defaultParser = null, onChange }) {
 
@@ -52,15 +40,6 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
 }
 
 
-
-function MinMaxParserCreator({ onUpdate }) {
-    return (
-        <div>
-            <h1>MinMax Parser</h1>
-        </div>
-    );
-}
-
 function MultiParserCreator({ onUpdate }) {
     return (
         <div>
@@ -69,3 +48,15 @@ function MultiParserCreator({ onUpdate }) {
     );
 }
 
+function convertTypeToName(field) {
+    const name = new ContentGenerator().findParser(field).constructor.name;
+    switch (name) {
+        case "BasicParser":
+            return "Basic Picker";
+        case "MinMaxParser":
+            return "Min-Max Picker";
+        case "MultiPickerParser":
+            return "Multi Picker";
+        default: throw new Error("Invalid parser");
+    }
+}

@@ -34,3 +34,26 @@ export const useCheckbox = (initialValue = false, onChangeEvent = null) => {
     }
   };
 };
+
+
+export const useNumericInput = (initialValue = 0, regex = /[0-9]|\./) => {
+
+  const [value, setValue] = useState(initialValue);
+
+  const bind = {
+    value,
+    onChange: e => {
+      const value = e.target.value;
+      if (regex.test(value)) {
+        setValue(value);
+      }
+    }
+  }
+
+  return [
+    value,
+    bind,
+    setValue
+  ];
+
+};

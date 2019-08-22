@@ -16,8 +16,10 @@ export default function FieldModal({ showing, toggle, data, onConfirm }) {
         } else {
             setName("");
         }
-
     }, [showing, setName, data]);
+
+    useEffect(() => setErrors({}), [showing]);
+
 
     const onPickerDataChange = useCallback(parserObject => {
         setParser(parserObject);
@@ -26,10 +28,11 @@ export default function FieldModal({ showing, toggle, data, onConfirm }) {
     const onConfirmClicked = useCallback(() => {
         if (name === "") {
             setErrors({ name: "Field Name can not be empty" })
-            return;
+
+        } else {
+            toggle(false);
+            onConfirm(name, parser, data);
         }
-        toggle(false);
-        onConfirm(name, parser, data);
     }, [onConfirm, toggle, parser, name, data]);
 
     if (!data) return <div></div>
