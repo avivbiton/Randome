@@ -24,7 +24,7 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, f
 
     const onAddPropertyClicked = useCallback(fieldName => {
         propertyModal(true, {
-            mode: Builder.ModalMode.ADD,
+            mode: Builder.ModalMode.ADD_PROPERTY,
             title: "Add Property",
             fieldName
         });
@@ -67,6 +67,7 @@ function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
 
 
 function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
+
     return (
         <div className="border border-primary p-2">
             <span className="pr-4">{name}</span>
@@ -74,6 +75,24 @@ function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
             <button title="Add Property"
                 className="btn fas fa-plus icon-button" onClick={onAddProperty} style={{ fontWeight: "900" }} />
+            <PropertyDisplay properties={field.properties} />
+        </div>
+    );
+}
+
+function PropertyDisplay({ properties }) {
+    return (
+        <div>
+            <h5>Properties</h5>
+            {
+                properties.map((item, key) => {
+                    return (
+                        <div key={key}>
+                            index: {key}. Type: {new ContentGenerator().findParser(item).constructor.name}
+                        </div>
+                    );
+                })
+            }
         </div>
     );
 }

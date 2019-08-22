@@ -13,8 +13,9 @@ export class SchemaSnapshot {
     }
 
     addField(fieldName, parserObject, properties = []) {
-        parserObject["properties"] = properties;
-        const newObject = this.schema.setIn(["fields", fieldName], parserObject.transformObject());
+        const transformedObject = parserObject.transformObject();
+        transformedObject["properties"] = fromJS(properties);
+        const newObject = this.schema.setIn(["fields", fieldName], transformedObject);
         return new SchemaSnapshot(newObject);
     }
 
@@ -31,7 +32,8 @@ export class SchemaSnapshot {
     }
 
     appendPropertyToField(fieldName, parserObject) {
-        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"], list => list.push(parserObject));
+        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+            list => list.push(parserObject));
         return new SchemaSnapshot(newSnapshot);
     }
 
@@ -48,7 +50,9 @@ export class SchemaSnapshot {
     }
 
     addGlobal(parserObject) {
-        const newSnapshot = this.schema.updateIn(["globalProperties"], list => list.push(parserObject.transformObject()));
+        const newSnapshot = this.schema.updateIn(["globalProperties"], list => {
+            return list.push(parserObject.transformObject())
+        });
         return new SchemaSnapshot(newSnapshot);
     }
 

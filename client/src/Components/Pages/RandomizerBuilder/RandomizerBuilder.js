@@ -64,6 +64,12 @@ export default function RandomizerBuilder() {
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
+    const addProperty = useCallback((fieldName, parser) => {
+        const snapshot = currentSnapshot
+            .appendPropertyToField(fieldName, parser);
+        updateSnapshotHistory(snapshot);
+    }, [updateSnapshotHistory, currentSnapshot]);
+
     const undoLastAction = useCallback(() => {
         if (historyIndex === 0) return;
         setIndex(historyIndex - 1);
@@ -107,9 +113,11 @@ export default function RandomizerBuilder() {
                 return addGlobal(parser);
             case Builder.ModalMode.EDIT:
                 return editGlobal(data.index, parser);
+            case Builder.ModalMode.ADD_PROPERTY:
+                return addProperty(data.fieldName, parser);
             default: return;
         }
-    }, [addGlobal, editGlobal]);
+    }, [addGlobal, editGlobal, addProperty]);
 
     return (
         <>

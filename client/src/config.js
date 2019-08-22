@@ -9,6 +9,8 @@ export const toastrDefault = {
 export const Builder = {
     ModalMode: {
         ADD: "ADD",
-        EDIT: "EDIT"
+        EDIT: "EDIT",
+        ADD_PROPERTY: "ADD_PROPERTY",
+        EDIT_PROPERTY: "EDIT_PROPERTY"
     }
 }
