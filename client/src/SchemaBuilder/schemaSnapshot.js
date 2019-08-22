@@ -9,7 +9,6 @@ export class SchemaSnapshot {
     }
 
     getSchema() {
-        console.log(this.schema);
         return this.schema.toJS();
     }
 
@@ -29,6 +28,23 @@ export class SchemaSnapshot {
             .removeField(oldName)
             .addField(newName, parserObject);
         return newSnapshot;
+    }
+
+    appendPropertyToField(fieldName, parserObject) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"], list => list.push(parserObject));
+        return new SchemaSnapshot(newSnapshot);
+    }
+
+    editPropertyField(fieldName, propertyIndex, updatedProperty) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+            list => list.set(propertyIndex, updatedProperty));
+        return new SchemaSnapshot(newSnapshot);
+    }
+
+    removePropertyFromField(fieldName, propertyIndex) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+            list => list.remove(propertyIndex));
+        return new SchemaSnapshot(newSnapshot);
     }
 
     addGlobal(parserObject) {

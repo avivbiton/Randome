@@ -4,7 +4,7 @@ import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
-import GlobalModal from "./GlobalModal";
+import PropertyModal from "./GlobalModal";
 import { Builder } from "../../../config";
 
 export default function RandomizerBuilder() {
@@ -35,11 +35,20 @@ export default function RandomizerBuilder() {
         });
     }, [toggleFieldModal]);
 
-    const onEditGlobalClicked = useCallback(fieldObject => {
+    const onEditGlobalClicked = useCallback((index, fieldObject) => {
         toggleGlobalModal(true, {
             mode: Builder.ModalMode.EDIT,
+            index,
             fieldObject
         });
+    }, [toggleGlobalModal]);
+
+    const onAddPropertyClicked = useCallback((fieldName) => {
+        toggleGlobalModal(true, {
+            mode: Builder.ModalMode.ADD,
+            fieldName
+        });
+
     }, [toggleGlobalModal]);
 
     const updateSnapshotHistory = useCallback(snapshot => {
@@ -48,49 +57,48 @@ export default function RandomizerBuilder() {
         setIndex(historyIndex + 1);
     }, [snapshotHistory, historyIndex]);
 
-    // with Confrim in the end - Called when the user press the confirm button on the modal
 
-    const onFieldModalConfirm = useCallback((name, parser) => {
+    const addField = useCallback((name, parser) => {
         const snapshot = currentSnapshot
             .addField(name, parser);
         updateSnapshotHistory(snapshot);
 
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const onGlobalModalConfirm = useCallback(parser => {
+    const addGlobal = useCallback(parser => {
         const snapshot = currentSnapshot
             .addGlobal(parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const onEditFieldConfirmed = useCallback((oldName, name, parser) => {
+    const editField = useCallback((oldName, name, parser) => {
         const snapshot = currentSnapshot
             .editField(oldName, name, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const onEditGlobalConfirmed = useCallback((index, parser) => {
+    const editGlobal = useCallback((index, parser) => {
         const snapshot = currentSnapshot
             .editGlobal(index, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const onUndoClicked = useCallback(() => {
+    const undoLastAction = useCallback(() => {
         if (historyIndex === 0) return;
         setIndex(historyIndex - 1);
     }, [historyIndex]);
 
-    const onRedoClicked = useCallback(() => {
+    const redoAction = useCallback(() => {
         if (historyIndex === snapshotHistory.length - 1) return;
         setIndex(historyIndex + 1);
     }, [historyIndex, snapshotHistory]);
 
-    const onFieldDelete = useCallback(name => {
+    const deleteField = useCallback(name => {
         const snapshot = currentSnapshot.removeField(name);
         updateSnapshotHistory(snapshot);
     }, [currentSnapshot, updateSnapshotHistory]);
 
-    const onGlobalDelete = useCallback(index => {
+    const deleteGlobal = useCallback(index => {
         const snapshot = currentSnapshot.removeGlobal(index);
         updateSnapshotHistory(snapshot);
     }, [currentSnapshot, updateSnapshotHistory]);
@@ -108,17 +116,18 @@ export default function RandomizerBuilder() {
                     <div className="d-flex">
                         <button className="btn btn-outline-info mr-2" onClick={onAddFieldClicked}>Add Field</button>
                         <button className="btn btn-outline-info mr-2" onClick={onAddGlobalClicked}>Add Global Property</button>
-                        <button className="btn btn-outline-info mr-1" onClick={onRedoClicked}><i className="fas fa-redo mx-1"></i></button>
-                        <button className="btn btn-outline-info mr-1" onClick={onUndoClicked}><i className="fas fa-undo mx-1"></i></button>
+                        <button className="btn btn-outline-info mr-1" onClick={redoAction}><i className="fas fa-redo mx-1"></i></button>
+                        <button className="btn btn-outline-info mr-1" onClick={undoLastAction}><i className="fas fa-undo mx-1"></i></button>
 
                     </div>
                     <hr />
                     <BuildViewer
                         snapshot={currentSnapshot}
-                        onFieldDelete={onFieldDelete}
-                        onGlobalDelete={onGlobalDelete}
+                        onFieldDelete={deleteField}
+                        onGlobalDelete={deleteGlobal}
                         onEditField={onEditFieldClicked}
                         onEditGlboal={onEditGlobalClicked}
+                        onAddProperty={onAddPropertyClicked}
                     />
                     <hr />
                 </div>
@@ -129,13 +138,13 @@ export default function RandomizerBuilder() {
             </div>
             <FieldModal
                 {...bindFieldModal}
-                onConfirm={onFieldModalConfirm}
-                onEdit={onEditFieldConfirmed}
+                onConfirm={addField}
+                onEdit={editField}
             />
-            <GlobalModal
+            <PropertyModal
                 {...bindGlobalModal}
-                onConfirm={onGlobalModalConfirm}
-                onEdit={onEditGlobalConfirmed}
+                onConfirm={addGlobal}
+                onEdit={editGlobal}
             />
         </>
     );

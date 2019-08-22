@@ -1,7 +1,7 @@
 import React from "react";
 import { ContentGenerator } from "randomcontentgenerator";
 
-export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onEditField, onEditGlboal }) {
+export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onEditField, onEditGlboal, onAddProperty }) {
 
     return (
         <div>
@@ -12,6 +12,7 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
                 field={field}
                 onDelete={() => onFieldDelete(name)}
                 onEdit={field => onEditField(name, field)}
+                onAddProperty={() => onAddProperty(name)}
             />)}
             <hr />
             <h2>Global Properties</h2>
@@ -19,7 +20,7 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
                 key={key}
                 field={i}
                 onDelete={() => onGlobalDelete(key)}
-                onEdit={() => onEditGlboal(key)}
+                onEdit={() => onEditGlboal(key, i)}
             />)}
         </div>
     );
@@ -38,13 +39,14 @@ function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
 }
 
 
-function FieldDisplay({ name, field, onDelete, onEdit }) {
+function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
     return (
         <div className="border border-primary p-2">
             <span className="pr-4">{name}</span>
             <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={() => onEdit(field)} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
-
+            <button title="Add Property"
+                className="btn fas fa-plus icon-button" onClick={onAddProperty} style={{ fontWeight: "900" }} />
         </div>
     );
 }

@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import PickerSelector from "./PickerSelector";
 import { Builder } from "../../../config";
 
-export default function GlobalModal({ showing, toggle, data, onConfirm, onEdit }) {
+export default function PropertyModal({ showing, toggle, data, onConfirm, onEdit }) {
 
     const [parser, setParser] = useState(null);
 
@@ -17,10 +17,12 @@ export default function GlobalModal({ showing, toggle, data, onConfirm, onEdit }
             onConfirm(parser);
         }
         else if (data.mode === Builder.ModalMode.EDIT) {
-            onEdit(parser);
+            onEdit(data.index, parser);
         }
 
     }, [onConfirm, toggle, parser, data, onEdit]);
+
+    if (!data) return <div></div>
 
     return (
         <Modal show={showing} onHide={toggle}>
@@ -29,7 +31,7 @@ export default function GlobalModal({ showing, toggle, data, onConfirm, onEdit }
             </Modal.Header>
             <Modal.Body>
                 <PickerSelector
-                    initialValues={data}
+                    defaultParser={data.fieldObject}
                     onChange={onPickerDataChange} />
             </Modal.Body>
             <Modal.Footer>
