@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { ContentGenerator } from "randomcontentgenerator";
 import { Builder } from "../../../config";
 
-export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, fieldModal, propertyModal }) {
+export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onPropertyDelete, fieldModal, propertyModal }) {
 
     const onEditFieldClicked = useCallback((name, fieldObject) => {
         fieldModal(true, {
@@ -30,6 +30,16 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, f
         });
     }, [propertyModal]);
 
+    const onEditPropertyClicked = useCallback((fieldName, index, fieldObject) => {
+        propertyModal(true, {
+            mode: Builder.ModalMode.EDIT_PROPERTY,
+            title: "Edit Property",
+            fieldName,
+            index,
+            fieldObject
+        })
+    }, [propertyModal]);
+
     return (
         <div>
             <h2>Fields</h2>
@@ -40,6 +50,8 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, f
                 onDelete={() => onFieldDelete(name)}
                 onEdit={() => onEditFieldClicked(name, field)}
                 onAddProperty={() => onAddPropertyClicked(name)}
+                onEditProperty={(index, propertyObject) => onEditPropertyClicked(name, index, propertyObject)}
+                onDeleteProperty={index => onPropertyDelete(name, index)}
             />)}
             <hr />
             <h2>Global Properties</h2>
@@ -66,7 +78,7 @@ function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
 }
 
 
-function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
+function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty, onEditProperty, onDeleteProperty }) {
 
     return (
         <div className="border border-primary p-2">
@@ -75,12 +87,16 @@ function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty }) {
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
             <button title="Add Property"
                 className="btn fas fa-plus icon-button" onClick={onAddProperty} style={{ fontWeight: "900" }} />
-            <PropertyDisplay properties={field.properties} />
+            <PropertyDisplay
+                properties={field.properties}
+                onEdit={onEditProperty}
+                onDelete={onDeleteProperty}
+            />
         </div>
     );
 }
 
-function PropertyDisplay({ properties }) {
+function PropertyDisplay({ properties, onEdit, onDelete }) {
     return (
         <div>
             <h5>Properties</h5>
@@ -89,6 +105,10 @@ function PropertyDisplay({ properties }) {
                     return (
                         <div key={key}>
                             index: {key}. Type: {new ContentGenerator().findParser(item).constructor.name}
+                            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
+                                onClick={() => onEdit(key, item)} />
+                            <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
+                                onClick={() => onDelete(key)} />
                         </div>
                     );
                 })

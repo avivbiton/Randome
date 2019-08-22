@@ -70,6 +70,12 @@ export default function RandomizerBuilder() {
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
+    const editProperty = useCallback((fieldName, index, parser) => {
+        const snapshot = currentSnapshot
+            .editPropertyField(fieldName, index, parser);
+        updateSnapshotHistory(snapshot);
+    }, [updateSnapshotHistory, currentSnapshot]);
+
     const undoLastAction = useCallback(() => {
         if (historyIndex === 0) return;
         setIndex(historyIndex - 1);
@@ -87,6 +93,12 @@ export default function RandomizerBuilder() {
 
     const deleteGlobal = useCallback(index => {
         const snapshot = currentSnapshot.removeGlobal(index);
+        updateSnapshotHistory(snapshot);
+    }, [currentSnapshot, updateSnapshotHistory]);
+
+    const deleteProperty = useCallback((fieldName, index) => {
+        const snapshot = currentSnapshot
+            .removePropertyFromField(fieldName, index);
         updateSnapshotHistory(snapshot);
     }, [currentSnapshot, updateSnapshotHistory]);
 
@@ -115,9 +127,11 @@ export default function RandomizerBuilder() {
                 return editGlobal(data.index, parser);
             case Builder.ModalMode.ADD_PROPERTY:
                 return addProperty(data.fieldName, parser);
+            case Builder.ModalMode.EDIT_PROPERTY:
+                return editProperty(data.fieldName, data.index, parser);
             default: return;
         }
-    }, [addGlobal, editGlobal, addProperty]);
+    }, [addGlobal, editGlobal, addProperty, editProperty]);
 
     return (
         <>
@@ -136,6 +150,7 @@ export default function RandomizerBuilder() {
                         snapshot={currentSnapshot}
                         onFieldDelete={deleteField}
                         onGlobalDelete={deleteGlobal}
+                        onPropertyDelete={deleteProperty}
                         fieldModal={toggleFieldModal}
                         propertyModal={togglePropertyModal}
                     />
