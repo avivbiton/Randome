@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { MultiPicker } from "../../../SchemaBuilder/multiPicker";
+import useFocus from "../../../Hooks/useFocus";
 
 export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
 
     const [field, setField] = useState([[""]]);
     const latestInput = useRef();
+    const focusLatest = useFocus(latestInput);
 
     useEffect(() => {
         if (populateFieldObject) {
@@ -29,23 +31,19 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
     const onAdd = useCallback(index => {
         field[index] = [...field[index], ""];
         setField([...field]);
-    }, [field]);
+        focusLatest();
+    }, [field, focusLatest]);
 
     const onAddPicker = useCallback(() => {
         setField([...field, [""]]);
-    }, [field]);
+        focusLatest();
+    }, [field, focusLatest]);
 
     const onRemovePicker = useCallback(index => {
         field.splice(index, 1);
         setField([...field]);
     }, [field]);
 
-
-    useEffect(() => {
-        if (latestInput.current !== null) {
-            latestInput.current.focus();
-        }
-    }, [field]);
 
     return (
         <div className="mt-4">

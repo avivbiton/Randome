@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Picker } from "../../../SchemaBuilder/basicPicker";
+import useFocus from "../../../Hooks/useFocus";
 
 
 export function BasicParserCreator({ onUpdate, populateFieldObject }) {
 
     const [optionsArray, setOptionsArray] = useState([""]);
     const latestInput = useRef();
+    const focusLatest = useFocus(latestInput);
 
     useEffect(() => {
         if (populateFieldObject && populateFieldObject.text) {
@@ -32,13 +34,9 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
 
     const onPlusButtonClicked = useCallback(() => {
         setOptionsArray([...optionsArray, ""]);
-    }, [optionsArray]);
+        focusLatest();
+    }, [optionsArray, focusLatest]);
 
-    useEffect(() => {
-        if (latestInput.current !== null) {
-            latestInput.current.focus();
-        }
-    }, [optionsArray]);
 
     return (
         <div className="mt-4">
@@ -71,13 +69,14 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
 }
 
 const OptionRow = React.forwardRef(({ index, onTextChange, onDelete, text }, ref) => {
-    return (<div className="form-group row">
-        <div className="col-10">
-            <input type="text" ref={ref} className="form-control" value={text} onChange={e => onTextChange(e.target.value, index)} />
+    return (
+        <div className="form-group row">
+            <div className="col-10">
+                <input type="text" ref={ref} className="form-control" value={text} onChange={e => onTextChange(e.target.value, index)} />
+            </div>
+            <div className="col-2">
+                <button type="button" title="Delete" onClick={() => onDelete(index)} className="btn far fa-trash-alt icon-button" />
+            </div>
         </div>
-        <div className="col-2">
-            <button type="button" title="Delete" onClick={() => onDelete(index)} className="btn far fa-trash-alt icon-button" />
-        </div>
-    </div>
     );
 });
