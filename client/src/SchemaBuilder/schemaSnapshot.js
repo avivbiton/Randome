@@ -26,7 +26,9 @@ export class SchemaSnapshot {
 
     editField(oldName, newName, parserObject) {
         const properties = this.schema.getIn(["fields", oldName, "properties"]);
-        parserObject["properties"] = properties.toJS();
+        if (properties) {
+            parserObject["properties"] = properties.toJS();
+        }
         const newSnapshot = this.removeField(oldName)
             .addField(newName, parserObject);
         return newSnapshot;
