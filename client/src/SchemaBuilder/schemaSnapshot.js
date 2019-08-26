@@ -68,10 +68,8 @@ export class SchemaSnapshot {
     }
 
     editGlobal(index, parserObject) {
-        const newSnapshot = this
-            .removeGlobal(index)
-            .addGlobal(parserObject);
-        return newSnapshot;
+        const newSnapshot = this.schema.update("globalProperties", list => list.set(index, parserObject));
+        return new SchemaSnapshot(newSnapshot);
     }
 
     extractString() {

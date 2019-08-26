@@ -77,9 +77,10 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     {...bindDescription}
                     error={errors.description} />
 
-                <p className="lead mt-4">
+                <p className="mt-4">
                     Below you can use our Editor to create your own randomizer. If you already know what you are doing, you can just paste your schema in json format.
-            </p>
+                    There are some limitation to the Editor (For truly deeply nested schemas) but for the most part, it should be enough.
+                </p>
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
                         <button type="button" className={"btn btn-link nav-link" + (editorActive ? " active" : "")}
