@@ -22,9 +22,11 @@ export function BasicParserCreator({ onUpdate, populateFieldObject }) {
     const onTextChange = useCallback((text, index) => {
         optionsArray[index] = text;
         setOptionsArray([...optionsArray]);
-        onUpdate(new Picker(optionsArray));
-    }, [optionsArray, onUpdate]);
+    }, [optionsArray]);
 
+    useEffect(() => {
+        onUpdate(new Picker(optionsArray));
+    }, [onUpdate, optionsArray]);
 
     const onDeletePressed = useCallback((index) => {
         optionsArray.splice(index, 1);
