@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
-import Button from "../../Form/Button";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
@@ -7,7 +6,7 @@ import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
 
-export default function RandomizerBuilder() {
+export default function RandomizerBuilder({ onSnapshot }) {
 
     const [snapshotHistory, setSnapshotHistory] = useState([new SchemaSnapshot()]);
     const [historyIndex, setIndex] = useState(0);
@@ -16,6 +15,10 @@ export default function RandomizerBuilder() {
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
 
+
+    useEffect(() => {
+        onSnapshot(currentSnapshot);
+    }, [currentSnapshot, onSnapshot]);
 
     const onAddFieldClicked = useCallback(() => {
         toggleFieldModal(true, {
@@ -102,11 +105,6 @@ export default function RandomizerBuilder() {
         updateSnapshotHistory(snapshot);
     }, [currentSnapshot, updateSnapshotHistory]);
 
-    const onSaveButtonPressed = useCallback(() => {
-        const jsonString = currentSnapshot.extractString();
-        console.log(jsonString);
-    }, [currentSnapshot]);
-
     const onFieldModalResolved = useCallback((name, parser, data) => {
         const mode = data.mode;
         switch (mode) {
@@ -136,13 +134,16 @@ export default function RandomizerBuilder() {
     return (
         <>
             <div className="card">
-                <h1 className="card-header">Builder</h1>
                 <div className="card-body">
                     <div className="d-flex">
-                        <button className="btn btn-outline-info mr-2" onClick={onAddFieldClicked}>Add Field</button>
-                        <button className="btn btn-outline-info mr-2" onClick={onAddGlobalClicked}>Add Global Property</button>
-                        <button className="btn btn-outline-info mr-1" onClick={redoAction}>Redo<i className="fas fa-redo mx-1"></i></button>
-                        <button className="btn btn-outline-info mr-1" onClick={undoLastAction}>Undo<i className="fas fa-undo mx-1"></i></button>
+                        <button type="button"
+                            className="btn btn-outline-info mr-2" onClick={onAddFieldClicked}>Add Field</button>
+                        <button type="button"
+                            className="btn btn-outline-info mr-2" onClick={onAddGlobalClicked}>Add Global Property</button>
+                        <button type="button"
+                            className="btn btn-outline-info mr-1" onClick={redoAction}>Redo<i className="fas fa-redo mx-1"></i></button>
+                        <button type="button"
+                            className="btn btn-outline-info mr-1" onClick={undoLastAction}>Undo<i className="fas fa-undo mx-1"></i></button>
 
                     </div>
                     <hr />
@@ -155,10 +156,6 @@ export default function RandomizerBuilder() {
                         propertyModal={togglePropertyModal}
                     />
                     <hr />
-                </div>
-                <div className="card-footer">
-                    <Button className="btn btn-primary mx-2" onClick={onSaveButtonPressed}>Save</Button>
-                    <Button className="btn btn-secondary">Reset</Button>
                 </div>
             </div>
             <FieldModal

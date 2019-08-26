@@ -69,7 +69,7 @@ export class SchemaSnapshot {
     }
 
     extractString() {
-        return JSON.stringify(this.getSchema());
+        return JSON.stringify(this.getSchema(), null, 2);
     }
 
     iterateFields() {

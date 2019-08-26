@@ -6,7 +6,6 @@ import toastr from "toastr";
 import { toastrDefault } from "../../config";
 
 import RandomizerForm from "../RandomizerForm";
-import RandomizerBuilder from "./RandomizerBuilder/RandomizerBuilder";
 
 function CreatePage({ history }) {
 
@@ -48,7 +47,6 @@ function CreatePage({ history }) {
             <div className="border p-4 shadow mb-4">
                 <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} />
             </div>
-            <RandomizerBuilder />
         </div>
     );
 }
