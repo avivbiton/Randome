@@ -41,7 +41,8 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
 }
 
 function convertTypeToName(field) {
-    const name = new ContentGenerator().findParser(field).constructor.name;
+    
+    const name = ContentGenerator.findParser(field).constructor.name;
     switch (name) {
         case "BasicParser":
             return "Basic Picker";

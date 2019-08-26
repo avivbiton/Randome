@@ -61,9 +61,9 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const editField = useCallback((oldName, name, parser) => {
+    const editField = useCallback((index, name, parser) => {
         const snapshot = currentSnapshot
-            .editField(oldName, name, parser);
+            .editField(index, name, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
@@ -73,15 +73,15 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const addProperty = useCallback((fieldName, parser) => {
+    const addProperty = useCallback((fieldIndex, parser) => {
         const snapshot = currentSnapshot
-            .appendPropertyToField(fieldName, parser);
+            .appendPropertyToField(fieldIndex, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
-    const editProperty = useCallback((fieldName, index, parser) => {
+    const editProperty = useCallback((fieldIndex, index, parser) => {
         const snapshot = currentSnapshot
-            .editPropertyField(fieldName, index, parser);
+            .editPropertyField(fieldIndex, index, parser);
         updateSnapshotHistory(snapshot);
     }, [updateSnapshotHistory, currentSnapshot]);
 
@@ -95,8 +95,8 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         setIndex(historyIndex + 1);
     }, [historyIndex, snapshotHistory]);
 
-    const deleteField = useCallback(name => {
-        const snapshot = currentSnapshot.removeField(name);
+    const deleteField = useCallback(index => {
+        const snapshot = currentSnapshot.removeField(index);
         updateSnapshotHistory(snapshot);
     }, [currentSnapshot, updateSnapshotHistory]);
 
@@ -117,7 +117,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
             case Builder.ModalMode.ADD:
                 return addField(name, parser);
             case Builder.ModalMode.EDIT:
-                return editField(data.oldName, name, parser);
+                return editField(data.fieldIndex, name, parser);
             default: return
         }
     }, [addField, editField]);
@@ -130,9 +130,9 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
             case Builder.ModalMode.EDIT:
                 return editGlobal(data.index, parser);
             case Builder.ModalMode.ADD_PROPERTY:
-                return addProperty(data.fieldName, parser);
+                return addProperty(data.fieldIndex, parser);
             case Builder.ModalMode.EDIT_PROPERTY:
-                return editProperty(data.fieldName, data.index, parser);
+                return editProperty(data.fieldIndex, data.index, parser);
             default: return;
         }
     }, [addGlobal, editGlobal, addProperty, editProperty]);

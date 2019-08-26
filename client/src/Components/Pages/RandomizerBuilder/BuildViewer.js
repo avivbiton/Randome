@@ -4,12 +4,13 @@ import { Builder } from "../../../config";
 
 export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onPropertyDelete, fieldModal, propertyModal }) {
 
-    const onEditFieldClicked = useCallback((name, fieldObject) => {
+    const onEditFieldClicked = useCallback((fieldIndex, oldName, fieldObject) => {
         fieldModal(true, {
             mode: Builder.ModalMode.EDIT,
             title: "Edit Field",
             fieldObject,
-            oldName: name
+            fieldIndex,
+            oldName
         });
     }, [fieldModal]);
 
@@ -22,19 +23,19 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
         });
     }, [propertyModal]);
 
-    const onAddPropertyClicked = useCallback(fieldName => {
+    const onAddPropertyClicked = useCallback(fieldIndex => {
         propertyModal(true, {
             mode: Builder.ModalMode.ADD_PROPERTY,
             title: "Add Property",
-            fieldName
+            fieldIndex
         });
     }, [propertyModal]);
 
-    const onEditPropertyClicked = useCallback((fieldName, index, fieldObject) => {
+    const onEditPropertyClicked = useCallback((fieldIndex, index, fieldObject) => {
         propertyModal(true, {
             mode: Builder.ModalMode.EDIT_PROPERTY,
             title: "Edit Property",
-            fieldName,
+            fieldIndex,
             index,
             fieldObject
         })
@@ -43,15 +44,15 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
     return (
         <div>
             <h2>Fields</h2>
-            {snapshot.iterateFields().map(({ name, field }, key) => <FieldDisplay
+            {snapshot.iterateFields().map(({ name, data }, key) => <FieldDisplay
                 key={key}
                 name={name}
-                field={field}
-                onDelete={() => onFieldDelete(name)}
-                onEdit={() => onEditFieldClicked(name, field)}
-                onAddProperty={() => onAddPropertyClicked(name)}
-                onEditProperty={(index, propertyObject) => onEditPropertyClicked(name, index, propertyObject)}
-                onDeleteProperty={index => onPropertyDelete(name, index)}
+                field={data}
+                onDelete={() => onFieldDelete(key)}
+                onEdit={() => onEditFieldClicked(key, name, data)}
+                onAddProperty={() => onAddPropertyClicked(key)}
+                onEditProperty={(index, propertyObject) => onEditPropertyClicked(key, index, propertyObject)}
+                onDeleteProperty={index => onPropertyDelete(key, index)}
             />)}
             <hr />
             <h2>Global Properties</h2>
@@ -69,7 +70,7 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
 function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
     return (
         <div className="border border-primary p-2">
-            {new ContentGenerator().findParser(field).constructor.name}
+            {ContentGenerator.findParser(field).constructor.name}
             <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
         </div>
@@ -104,7 +105,7 @@ function PropertyDisplay({ properties, onEdit, onDelete }) {
                     properties.map((item, key) => {
                         return (
                             <div key={key}>
-                                index: {key}. Type: {new ContentGenerator().findParser(item).constructor.name}
+                                index: {key}. Type: {ContentGenerator.findParser(item).constructor.name}
                                 <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
                                     onClick={() => onEdit(key, item)} />
                                 <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}

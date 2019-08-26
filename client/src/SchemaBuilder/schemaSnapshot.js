@@ -2,7 +2,7 @@ import { fromJS } from "immutable";
 
 export class SchemaSnapshot {
     constructor(schema = fromJS({
-        fields: {},
+        fields: [],
         globalProperties: []
     })) {
         this.schema = schema;
@@ -15,39 +15,42 @@ export class SchemaSnapshot {
     addField(fieldName, parserObject) {
         const transformedObject = parserObject.transformObject();
         transformedObject["properties"] = parserObject["properties"] ? fromJS(parserObject["properties"]) : fromJS([]);
-        const newObject = this.schema.setIn(["fields", fieldName], transformedObject);
+        const newObject = this.schema.update("fields", list => list.push({ name: fieldName, data: transformedObject }));
         return new SchemaSnapshot(newObject);
     }
 
-    removeField(fieldName) {
-        const newSnapshot = this.schema.removeIn(["fields", fieldName]);
+    removeField(fieldIndex) {
+        const newSnapshot = this.schema.update("fields", list => list.remove(fieldIndex));
         return new SchemaSnapshot(newSnapshot);
     }
 
-    editField(oldName, newName, parserObject) {
-        const properties = this.schema.getIn(["fields", oldName, "properties"]);
+    editField(index, newName, parserObject) {
+        const properties = this.schema.getIn(["fields", index, "data", "properties"]);
+        parserObject = parserObject.transformObject();
         if (properties) {
-            parserObject["properties"] = properties.toJS();
+            parserObject["properties"] = properties;
+        } else {
+            parserObject["properties"] = fromJS([]);
         }
-        const newSnapshot = this.removeField(oldName)
-            .addField(newName, parserObject);
-        return newSnapshot;
+
+        const newSnapshot = this.schema.update("fields", list => list.set(index, { name: newName, data: parserObject }))
+        return new SchemaSnapshot(newSnapshot);
     }
 
-    appendPropertyToField(fieldName, parserObject) {
-        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+    appendPropertyToField(fieldIndex, parserObject) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldIndex, "data", "properties"],
             list => list.push(parserObject.transformObject()));
         return new SchemaSnapshot(newSnapshot);
     }
 
-    editPropertyField(fieldName, propertyIndex, updatedProperty) {
-        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+    editPropertyField(fieldIndex, propertyIndex, updatedProperty) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldIndex, "data", "properties"],
             list => list.set(propertyIndex, updatedProperty.transformObject()));
         return new SchemaSnapshot(newSnapshot);
     }
 
-    removePropertyFromField(fieldName, propertyIndex) {
-        const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
+    removePropertyFromField(fieldIndex, propertyIndex) {
+        const newSnapshot = this.schema.updateIn(["fields", fieldIndex, "data", "properties"],
             list => list.remove(propertyIndex));
         return new SchemaSnapshot(newSnapshot);
     }
@@ -72,11 +75,11 @@ export class SchemaSnapshot {
     }
 
     extractString() {
-        return JSON.stringify(this.getSchema(), null, 2);
+        return JSON.stringify(this.getSchema(), null, 4);
     }
 
     iterateFields() {
         const schema = this.getSchema();
-        return Object.keys(schema.fields).map(name => ({ name, field: schema.fields[name] }));
+        return schema.fields;
     }
 }
