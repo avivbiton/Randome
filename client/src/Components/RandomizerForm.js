@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-
+import React, { useState, useCallback, useEffect } from "react";
+import { Prompt } from "react-router-dom";
 import { useInput, useCheckbox } from "../Hooks/formInput";
 
 import Input from "./Form/Input";
@@ -9,8 +9,9 @@ import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
 import ResultDisplayer from "./Pages/RandomizerPage/ResultDisplayer";
 import { ContentGenerator } from "randomcontentgenerator";
 
+
 export default function RandomizerForm({ inital = { name: "", description: "", jsonSchema: "", isPrivate: false },
-    errors, onSubmit, submitText, loading }) {
+    errors, onSubmit, submitText, loading, blockLeave = true }) {
 
     const [name, bindName] = useInput(inital.name);
     const [description, bindDescription] = useInput(inital.description);
@@ -19,6 +20,16 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
 
     const [editorActive, setEditorActive] = useState(true);
     const [editorSnapshot, setSnapshot] = useState(null);
+
+    useEffect(() => {
+        function askBeforeLeaving() {
+            return "Are you sure you want to leave? Your data will be lost.";
+        }
+
+        window.onbeforeunload = askBeforeLeaving;
+
+        return () => window.onbeforeunload = undefined;
+    }, []);
 
     const onSnapshot = useCallback(snapshot => {
         setSnapshot(snapshot);
@@ -43,68 +54,74 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
     }, [editorActive, editorSnapshot, name, description, schema, isPrivate, onSubmit]);
 
     return (
-        <form onSubmit={e => e.preventDefault()}>
-            <Input type="text" className="form-control form-control-lg" placeholder="Choose a name"
-                {...bindName} error={errors.name} />
-            <Textarea rows="5" placeholder="Short description, explaining what your randomizers does." className="form-control form-control-lg mt-2"
-                {...bindDescription}
-                error={errors.description} />
+        <React.Fragment>
+            <Prompt
+                when={blockLeave}
+                message="Are you sure you want to leave? you data will be lost."
+            />
+            <form onSubmit={e => e.preventDefault()}>
+                <Input type="text" className="form-control form-control-lg" placeholder="Choose a name"
+                    {...bindName} error={errors.name} />
+                <Textarea rows="5" placeholder="Short description, explaining what your randomizers does." className="form-control form-control-lg mt-2"
+                    {...bindDescription}
+                    error={errors.description} />
 
-            <p className="lead mt-4">
-                Below you can use our Editor to create your own randomizer. If you already know what you are doing, you can just paste your schema in json format.
+                <p className="lead mt-4">
+                    Below you can use our Editor to create your own randomizer. If you already know what you are doing, you can just paste your schema in json format.
             </p>
-            <ul className="nav nav-tabs">
-                <li className="nav-item">
-                    <button type="button" className={"btn btn-link nav-link" + (editorActive ? " active" : "")}
-                        onClick={() => setEditorActive(true)}>
-                        Editor (Recommended)
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <button type="button" className={"btn btn-link nav-link" + (editorActive ? " active" : "")}
+                            onClick={() => setEditorActive(true)}>
+                            Editor (Recommended)
                     </button>
-                </li>
-                <li className="nav-item">
-                    <button type="button" className={"btn btn-link nav-link" + (editorActive ? " " : " active")}
-                        onClick={() => setEditorActive(false)}>
-                        Raw JSON
+                    </li>
+                    <li className="nav-item">
+                        <button type="button" className={"btn btn-link nav-link" + (editorActive ? " " : " active")}
+                            onClick={() => setEditorActive(false)}>
+                            Raw JSON
                     </button>
-                </li>
-            </ul>
+                    </li>
+                </ul>
 
-            <div className={(editorActive ? "d-block" : "d-none")}>
-                <RandomizerBuilder onSnapshot={onSnapshot} />
-                {
-                    errors.schema
-                        ?
-                        <div className="invalid-feedback">
-                            {errors.schema}
-                        </div>
-                        : null
-                }
-            </div>
-            <div className={(editorActive ? "d-none" : "d-block")}>
-                <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
-                    {...bindSchema}
-                    error={errors.schema} />
-                <button type="button" className="btn btn-outline-primary" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
-            </div>
+                <div className={(editorActive ? "d-block" : "d-none")}>
+                    <RandomizerBuilder onSnapshot={onSnapshot} />
+                    {
+                        errors.schema
+                            ?
+                            <div className="invalid-feedback">
+                                {errors.schema}
+                            </div>
+                            : null
+                    }
+                </div>
+                <div className={(editorActive ? "d-none" : "d-block")}>
+                    <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
+                        {...bindSchema}
+                        error={errors.schema} />
+                    <button type="button" className="btn btn-outline-primary" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
+                </div>
 
-            <div className="form-check">
-                <input type="checkbox" className="form-check-input mt-2" id="checkboxIsPrivate"
-                    {...bindPrivate} />
-                <label htmlFor="checkboxIsPrivate" className="form-check-label text-danger">
-                    Private
+                <div className="form-check">
+                    <input type="checkbox" className="form-check-input mt-2" id="checkboxIsPrivate"
+                        {...bindPrivate} />
+                    <label htmlFor="checkboxIsPrivate" className="form-check-label text-danger">
+                        Private
         </label>
-                <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
-            </div>
+                    <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
+                </div>
 
-            <button className="btn btn-primary mt-4" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
-                Show / Hide Preview
+                <button className="btn btn-primary mt-4" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
+                    Show / Hide Preview
             </button>
-            <div id="previewCollapse" className="collapse">
-                <Preview jsonString={getJsonString()} />
-            </div>
+                <div id="previewCollapse" className="collapse">
+                    <Preview jsonString={getJsonString()} />
+                </div>
 
-            <Button type="submit" onClick={onFormSubmit} className="btn btn-success btn-lg btn-block mt-4"
-                loading={loading}>{submitText}</Button>
-        </form >
+                <Button type="submit" onClick={onFormSubmit} className="btn btn-success btn-lg btn-block mt-4"
+                    loading={loading}>{submitText}</Button>
+            </form>
+        </React.Fragment>
     );
 }
 
