@@ -13,7 +13,7 @@ import useModal from "../../../Hooks/useModal";
 export default function MyRandomizers() {
 
     const [randomizers, setRandomizers] = useState(null);
-    const [showing, displayModal, modalData, setModalData] = useModal();
+    const [displayModal, bindModal] = useModal();
     const { history } = useReactRouter();
 
     useEffect(() => {
@@ -37,9 +37,8 @@ export default function MyRandomizers() {
     }, [history]);
 
     const onDeleteClicked = useCallback((id, name) => {
-        setModalData({ id, name });
-        displayModal(true);
-    }, [displayModal, setModalData]);
+        displayModal(true, { id, name });
+    }, [displayModal]);
 
 
     const onDeleteEvent = useCallback(id => {
@@ -63,10 +62,8 @@ export default function MyRandomizers() {
         <div className="container-fluid">
             <h1>My Randomizers</h1>
             <DeleteModal
-                showing={showing}
-                toggle={displayModal}
+                {...bindModal}
                 onDelete={onDeleteEvent}
-                modalData={modalData}
             />
             <table className="table table-responsive">
                 <thead>

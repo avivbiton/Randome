@@ -4,26 +4,26 @@ import api from "../../../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../../../config";
 
-export default function DeleteModal({ showing, toggle, onDelete, modalData }) {
+export default function DeleteModal({ showing, toggle, onDelete, data }) {
 
 
     const deleteRandomizer = useCallback(() => {
         async function remove() {
             try {
-                onDelete(modalData.id);
+                onDelete(data.id);
                 toggle(false);
-                await api.randomizers.deleteRandomizer(modalData.id);
+                await api.randomizers.deleteRandomizer(data.id);
             } catch (error) {
                 toastr.error("Could not delete. Please try again later.", "Error", toastrDefault);
             }
         }
         remove();
-    }, [modalData, onDelete, toggle]);
+    }, [data, onDelete, toggle]);
 
     return (
         <Modal show={showing} onHide={toggle}>
             <Modal.Body style={{ fontSize: "150%" }}>
-                Delete <span className="font-weight-bold">{modalData ? modalData.name : ""}?</span>
+                Delete <span className="font-weight-bold">{data ? data.name : ""}?</span>
                 <br />This can not be un-done in anyway!
             </Modal.Body>
             <Modal.Footer>
