@@ -3,6 +3,7 @@ import { useInput } from "../../../Hooks/formInput";
 import { BasicParserCreator } from "./BasicParserCreator";
 import { ContentGenerator } from "randomcontentgenerator";
 import MinMaxParserCreator from "./MinMaxParserCreator";
+import MultiPickerCreator from "./MultiPickerCreator";
 
 export default function PickerSelector({ defaultParser = null, onChange }) {
 
@@ -16,7 +17,7 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
     const MapNameToComponent = useMemo(() => ({
         "Basic Picker": BasicParserCreator,
         "Min-Max Picker": MinMaxParserCreator,
-        "Multi Picker": MultiParserCreator
+        "Multi Picker": MultiPickerCreator
     }), []);
 
     const CreatorComponent = useMemo(() => MapNameToComponent[selected], [MapNameToComponent, selected]);
@@ -35,15 +36,6 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
             <CreatorComponent
                 populateFieldObject={defaultParser}
                 onUpdate={onPickerUpdate} />
-        </div>
-    );
-}
-
-
-function MultiParserCreator({ onUpdate }) {
-    return (
-        <div>
-            <h1>Multi Parser</h1>
         </div>
     );
 }

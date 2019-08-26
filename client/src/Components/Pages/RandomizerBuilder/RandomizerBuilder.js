@@ -141,8 +141,8 @@ export default function RandomizerBuilder() {
                     <div className="d-flex">
                         <button className="btn btn-outline-info mr-2" onClick={onAddFieldClicked}>Add Field</button>
                         <button className="btn btn-outline-info mr-2" onClick={onAddGlobalClicked}>Add Global Property</button>
-                        <button className="btn btn-outline-info mr-1" onClick={redoAction}><i className="fas fa-redo mx-1"></i></button>
-                        <button className="btn btn-outline-info mr-1" onClick={undoLastAction}><i className="fas fa-undo mx-1"></i></button>
+                        <button className="btn btn-outline-info mr-1" onClick={redoAction}>Redo<i className="fas fa-redo mx-1"></i></button>
+                        <button className="btn btn-outline-info mr-1" onClick={undoLastAction}>Undo<i className="fas fa-undo mx-1"></i></button>
 
                     </div>
                     <hr />
