@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { MultiPicker } from "../../../SchemaBuilder/multiPicker";
 
 export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
 
     const [field, setField] = useState([[""]]);
+    const latestInput = useRef();
 
     useEffect(() => {
         if (populateFieldObject) {
@@ -39,6 +40,13 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
         setField([...field]);
     }, [field]);
 
+
+    useEffect(() => {
+        if (latestInput.current !== null) {
+            latestInput.current.focus();
+        }
+    }, [field]);
+
     return (
         <div className="mt-4">
             <h5>Multi Picker</h5>
@@ -55,6 +63,7 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
                     onDeleteEvent={onDelete}
                     onAddEvent={onAdd}
                     onPickerDeleteEvent={onRemovePicker}
+                    inputRef={latestInput}
                 />)}
 
             </div>
@@ -63,7 +72,7 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
                 <div className="col-4">
                     <button className="btn btn-outline-success"
                         onClick={onAddPicker}>
-                            Add Picker <i className="fas fa-plus fa-lg" />
+                        Add Picker <i className="fas fa-plus fa-lg" />
                     </button>
 
                 </div>
@@ -73,7 +82,7 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
     );
 }
 
-function SubArrayMap({ index, array, onChangeEvent, onDeleteEvent, onAddEvent, onPickerDeleteEvent }) {
+function SubArrayMap({ index, array, onChangeEvent, onDeleteEvent, onAddEvent, onPickerDeleteEvent, inputRef }) {
     return (
         <div className="card">
             <div className="card-header">
@@ -90,7 +99,8 @@ function SubArrayMap({ index, array, onChangeEvent, onDeleteEvent, onAddEvent, o
                 </h2>
             </div>
 
-            <div className="collapse show" id={`collapseId${index}`} data-parent="#pickerAccordion">
+            <form className="collapse show" id={`collapseId${index}`} data-parent="#pickerAccordion"
+                onSubmit={e => e.preventDefault()}>
                 <div className="card-body">
                     {
                         array.map((i, key) => <OptionRow
@@ -99,29 +109,30 @@ function SubArrayMap({ index, array, onChangeEvent, onDeleteEvent, onAddEvent, o
                             text={i}
                             onTextChange={(text, secondIndex) => onChangeEvent(index, secondIndex, text)}
                             onDelete={secondIndex => onDeleteEvent(index, secondIndex)}
+                            ref={inputRef}
                         />)
                     }
                     <div className="row">
                         <div className="col-10"></div>
                         <div className="col-2">
-                            <button className="btn fas fa-plus icon-button"
+                            <button type="submit" className="btn fas fa-plus icon-button"
                                 onClick={() => onAddEvent(index)} style={{ fontWeight: "900" }} />
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }
 
-function OptionRow({ index, onTextChange, onDelete, text }) {
+const OptionRow = React.forwardRef(({ index, onTextChange, onDelete, text }, ref) => {
     return (<div className="form-group row">
         <div className="col-10">
-            <input type="text" className="form-control" value={text} onChange={e => onTextChange(e.target.value, index)} />
+            <input type="text" ref={ref} className="form-control" value={text} onChange={e => onTextChange(e.target.value, index)} />
         </div>
         <div className="col-2">
-            <button title="Delete" onClick={() => onDelete(index)} className="btn far fa-trash-alt icon-button" />
+            <button type="button" title="Delete" onClick={() => onDelete(index)} className="btn far fa-trash-alt icon-button" />
         </div>
     </div>
     );
-}
+});
