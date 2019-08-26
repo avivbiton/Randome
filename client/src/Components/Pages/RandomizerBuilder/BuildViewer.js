@@ -100,17 +100,19 @@ function PropertyDisplay({ properties, onEdit, onDelete }) {
         <div>
             <h5>Properties</h5>
             {
-                properties.map((item, key) => {
-                    return (
-                        <div key={key}>
-                            index: {key}. Type: {new ContentGenerator().findParser(item).constructor.name}
-                            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
-                                onClick={() => onEdit(key, item)} />
-                            <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
-                                onClick={() => onDelete(key)} />
-                        </div>
-                    );
-                })
+                properties ?
+                    properties.map((item, key) => {
+                        return (
+                            <div key={key}>
+                                index: {key}. Type: {new ContentGenerator().findParser(item).constructor.name}
+                                <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
+                                    onClick={() => onEdit(key, item)} />
+                                <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
+                                    onClick={() => onDelete(key)} />
+                            </div>
+                        );
+                    })
+                    : null
             }
         </div>
     );

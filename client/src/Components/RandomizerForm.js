@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { Prompt } from "react-router-dom";
 import { useInput, useCheckbox } from "../Hooks/formInput";
 
@@ -8,6 +8,8 @@ import Button from "./Form/Button";
 import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
 import ResultDisplayer from "./Pages/RandomizerPage/ResultDisplayer";
 import { ContentGenerator } from "randomcontentgenerator";
+import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
+import { fromJS } from "immutable";
 
 
 export default function RandomizerForm({ inital = { name: "", description: "", jsonSchema: "", isPrivate: false },
@@ -17,6 +19,15 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
     const [description, bindDescription] = useInput(inital.description);
     const [schema, bindSchema, setSchema] = useInput(inital.jsonSchema);
     const { value: isPrivate, bind: bindPrivate } = useCheckbox(inital.private);
+
+    const defaultSnapshot = useMemo(() => {
+        try {
+            
+            return new SchemaSnapshot(fromJS((JSON.parse(inital.jsonSchema))));
+        } catch (error) {
+            return null;
+        }
+    }, [inital.jsonSchema]);
 
     const [editorActive, setEditorActive] = useState(true);
     const [editorSnapshot, setSnapshot] = useState(null);
@@ -85,7 +96,10 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                 </ul>
 
                 <div className={(editorActive ? "d-block" : "d-none")}>
-                    <RandomizerBuilder onSnapshot={onSnapshot} />
+                    <RandomizerBuilder
+                        onSnapshot={onSnapshot}
+                        defaultSnapshot={defaultSnapshot}
+                    />
                     {
                         errors.schema
                             ?

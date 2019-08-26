@@ -12,9 +12,9 @@ export class SchemaSnapshot {
         return this.schema.toJS();
     }
 
-    addField(fieldName, parserObject, properties = []) {
+    addField(fieldName, parserObject) {
         const transformedObject = parserObject.transformObject();
-        transformedObject["properties"] = fromJS(properties);
+        transformedObject["properties"] = parserObject["properties"] ? fromJS(parserObject["properties"]) : fromJS([]);
         const newObject = this.schema.setIn(["fields", fieldName], transformedObject);
         return new SchemaSnapshot(newObject);
     }
@@ -25,21 +25,22 @@ export class SchemaSnapshot {
     }
 
     editField(oldName, newName, parserObject) {
-        const newSnapshot = this
-            .removeField(oldName)
+        const properties = this.schema.getIn(["fields", oldName, "properties"]);
+        parserObject["properties"] = properties.toJS();
+        const newSnapshot = this.removeField(oldName)
             .addField(newName, parserObject);
         return newSnapshot;
     }
 
     appendPropertyToField(fieldName, parserObject) {
         const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
-            list => list.push(parserObject));
+            list => list.push(parserObject.transformObject()));
         return new SchemaSnapshot(newSnapshot);
     }
 
     editPropertyField(fieldName, propertyIndex, updatedProperty) {
         const newSnapshot = this.schema.updateIn(["fields", fieldName, "properties"],
-            list => list.set(propertyIndex, updatedProperty));
+            list => list.set(propertyIndex, updatedProperty.transformObject()));
         return new SchemaSnapshot(newSnapshot);
     }
 

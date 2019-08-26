@@ -6,7 +6,7 @@ import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
 
-export default function RandomizerBuilder({ onSnapshot }) {
+export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
 
     const [snapshotHistory, setSnapshotHistory] = useState([new SchemaSnapshot()]);
     const [historyIndex, setIndex] = useState(0);
@@ -15,6 +15,12 @@ export default function RandomizerBuilder({ onSnapshot }) {
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
 
+    useEffect(() => {
+        if (defaultSnapshot) {
+            setSnapshotHistory([defaultSnapshot]);
+            setIndex(0);
+        }
+    }, [defaultSnapshot]);
 
     useEffect(() => {
         onSnapshot(currentSnapshot);
