@@ -11,11 +11,13 @@ function CreatePage({ history }) {
 
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
+    const [blockLeave, setBlockLeave] = useState(true);
 
     async function onFormSubmit({ name, description, schema, isPrivate }) {
         try {
             setLoading(true);
             await API.randomizers.create(name, description, schema, isPrivate);
+            setBlockLeave(false);
             history.push("/profile");
         } catch (error) {
             setLoading(false);
@@ -35,9 +37,9 @@ function CreatePage({ history }) {
             <div className="row">
                 <div className="col-md-6">
                     <h3 className="">Creation Screen</h3>
-                    <p className="lead">Welcome to the creation process. We're currently working on a visual creator but for now you will have to use a format called JSON to create your very own randomizer.
-                    Please read over the <a href="https://github.com/avivbiton/RandomContentGenerator/wiki" target="_blank" rel="noopener noreferrer">docs</a> or visit our FAQ section.
-                    If you still have a question, please feel free to contact us.</p>
+                    <p className="lead">Welcome to the creation process. You can use our built-in Editor to create your own Randomizer!
+                    If it is your first time, it is recommended that you will go over our short tutorial.
+                    C.</p>
                     <button type="button" className="btn btn-outline-primary mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
                 </div>
                 <div className="col-md-6">
@@ -45,7 +47,7 @@ function CreatePage({ history }) {
                 </div>
             </div>
             <div className="border p-4 shadow mb-4">
-                <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} />
+                <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} blockLeave={blockLeave} />
             </div>
         </div>
     );

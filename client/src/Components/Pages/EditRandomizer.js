@@ -12,6 +12,7 @@ export default function EditRandomizer() {
     const [randomizer, setRandomizer] = useState(null);
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [blockLeave, setBlockLeave] = useState(true);
 
     const fetchRandomizerData = useCallback(() => {
         async function fetchRandomizer() {
@@ -54,7 +55,7 @@ export default function EditRandomizer() {
                 await api.randomizers.editRandomizer(match.params.id, name, description, isPrivate, schema);
                 toastr.success("Your randomizer has been updated.", "Success", toastrDefault);
                 setErrors({});
-
+                setBlockLeave(false);
             } catch (error) {
                 setErrors(error.data);
             }
@@ -79,7 +80,8 @@ export default function EditRandomizer() {
                         onSubmit={onEditSubmit}
                         errors={errors}
                         submitText="Update"
-                        loading={loading} />
+                        loading={loading}
+                        blockLeave={blockLeave} />
                 </div>
             </div>
         </div>

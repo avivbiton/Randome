@@ -7,12 +7,13 @@ import LoadingSpinner from "../../LoadingSpinner";
 import useReactRouter from "use-react-router";
 import Moment from "react-moment";
 import DeleteModal from "./DeleteModal";
+import useModal from "../../../Hooks/useModal";
 
 
 export default function MyRandomizers() {
 
     const [randomizers, setRandomizers] = useState(null);
-    const [modalTrigger, setModalTrigger] = useState(null);
+    const [displayModal, bindModal] = useModal();
     const { history } = useReactRouter();
 
     useEffect(() => {
@@ -35,11 +36,11 @@ export default function MyRandomizers() {
         history.push(`/randomizer/${id}/edit`);
     }, [history]);
 
-    const onDeleteClicked = useCallback(id => {
-        modalTrigger(id);
-    }, [modalTrigger]);
+    const onDeleteClicked = useCallback((id, name) => {
+        displayModal(true, { id, name });
+    }, [displayModal]);
 
-    
+
     const onDeleteEvent = useCallback(id => {
         setRandomizers(randomizers.filter(r => r._id !== id));
     }, [randomizers]);
@@ -61,7 +62,7 @@ export default function MyRandomizers() {
         <div className="container-fluid">
             <h1>My Randomizers</h1>
             <DeleteModal
-                setTrigger={trigger => setModalTrigger(trigger)}
+                {...bindModal}
                 onDelete={onDeleteEvent}
             />
             <table className="table table-responsive">
@@ -86,7 +87,7 @@ export default function MyRandomizers() {
                                 isPrivate={r.private}
                                 onView={() => onViewClicked(r._id)}
                                 onEdit={() => onEditClicked(r._id)}
-                                onDelete={() => onDeleteClicked(r._id)}
+                                onDelete={() => onDeleteClicked(r._id, r.name)}
                             />
                         )
                     }

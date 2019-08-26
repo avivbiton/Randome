@@ -5,3 +5,12 @@ export const toastrDefault = {
     preventDuplicates: true,
     progressBar: true
 };
+
+export const Builder = {
+    ModalMode: {
+        ADD: "ADD",
+        EDIT: "EDIT",
+        ADD_PROPERTY: "ADD_PROPERTY",
+        EDIT_PROPERTY: "EDIT_PROPERTY"
+    }
+}

@@ -65,7 +65,7 @@ function RandomizerPage() {
                     <p className="lead text-break">{currentRandomizer.description}</p>
                     <div className="form-check">
                         <input className="form-check-input" type="checkbox" value="" id="animationCheckbox" {...bindSkipAnimation} />
-                        <label className="form-check-label" for="animationCheckbox">
+                        <label className="form-check-label" htmlFor="animationCheckbox">
                             Skip Animation
                         </label>
                     </div>
