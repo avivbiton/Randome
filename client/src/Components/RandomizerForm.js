@@ -6,6 +6,7 @@ import Input from "./Form/Input";
 import Textarea from "./Form/Textarea";
 import Button from "./Form/Button";
 import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
+import ErrorDisplay from "./ErrorDisplay";
 import ResultDisplayer from "./Pages/RandomizerPage/ResultDisplayer";
 import { ContentGenerator } from "randomcontentgenerator";
 import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
@@ -19,15 +20,16 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
     const [description, bindDescription] = useInput(inital.description);
     const [schema, bindSchema, setSchema] = useInput(inital.jsonSchema);
     const { value: isPrivate, bind: bindPrivate } = useCheckbox(inital.private);
+    const [defaultSchema, setDefaultSchema] = useState(inital.jsonSchema)
 
     const defaultSnapshot = useMemo(() => {
         try {
-            
-            return new SchemaSnapshot(fromJS((JSON.parse(inital.jsonSchema))));
+
+            return new SchemaSnapshot(fromJS((JSON.parse(defaultSchema))));
         } catch (error) {
             return null;
         }
-    }, [inital.jsonSchema]);
+    }, [defaultSchema]);
 
     const [editorActive, setEditorActive] = useState(true);
     const [editorSnapshot, setSnapshot] = useState(null);
@@ -49,6 +51,10 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
     const convertFromEditorClicked = useCallback(() => {
         setSchema(editorSnapshot.extractString());
     }, [setSchema, editorSnapshot]);
+
+    const populateEditorFromRawJson = useCallback(() => {
+        setDefaultSchema(schema);
+    }, [schema]);
 
     const getJsonString = useCallback(() => {
         if (editorActive) {
@@ -101,20 +107,16 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                         onSnapshot={onSnapshot}
                         defaultSnapshot={defaultSnapshot}
                     />
-                    {
-                        errors.schema
-                            ?
-                            <div className="invalid-feedback">
-                                {errors.schema}
-                            </div>
-                            : null
-                    }
+                    <ErrorDisplay error={errors.schema} />
+                    <button type="button" className="btn btn-outline-primary mt-2" onClick={populateEditorFromRawJson}>
+                        Populate Editor from Raw JSON
+                    </button>
                 </div>
                 <div className={(editorActive ? "d-none" : "d-block")}>
                     <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
                         {...bindSchema}
                         error={errors.schema} />
-                    <button type="button" className="btn btn-outline-primary" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
+                    <button type="button" className="btn btn-outline-primary mt-2" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
                 </div>
 
                 <div className="form-check">
@@ -122,17 +124,17 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                         {...bindPrivate} />
                     <label htmlFor="checkboxIsPrivate" className="form-check-label text-danger">
                         Private
-        </label>
+                    </label>
                     <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
                 </div>
-
-                <button className="btn btn-primary mt-4" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
-                    Show / Hide Preview
-            </button>
-                <div id="previewCollapse" className="collapse">
-                    <Preview jsonString={getJsonString()} />
+                <div className="d-flex flex-column">
+                    <button className="btn btn-info mt-4 mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
+                        Show / Hide Preview
+                    </button>
+                    <div id="previewCollapse" className="collapse mx-auto">
+                        <Preview jsonString={getJsonString()} />
+                    </div>
                 </div>
-
                 <Button type="submit" onClick={onFormSubmit} className="btn btn-success btn-lg btn-block mt-4"
                     loading={loading}>{submitText}</Button>
             </form>

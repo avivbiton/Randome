@@ -1,30 +1,30 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useCallback, useMemo, useEffect, useReducer } from "react";
 import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
+import { snapshotReducer, UPDATE_SNAPSHOT_HISTORY, INCREASE_INDEX, DECREASE_INDEX } from "./snapshotReducer";
 
 export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
 
-    const [snapshotHistory, setSnapshotHistory] = useState([new SchemaSnapshot()]);
-    const [historyIndex, setIndex] = useState(0);
-    const currentSnapshot = useMemo(() => snapshotHistory[historyIndex], [snapshotHistory, historyIndex]);
+    const [snapshot, dispatchSnapshot] = useReducer(snapshotReducer,
+        {
+            history: [new SchemaSnapshot()],
+            index: 0
+        });
+
+    const currentSnapshot = useMemo(() => snapshot.history[snapshot.index], [snapshot]);
 
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
 
-    useEffect(() => {
-        if (defaultSnapshot) {
-            setSnapshotHistory([defaultSnapshot]);
-            setIndex(0);
-        }
-    }, [defaultSnapshot]);
 
     useEffect(() => {
         onSnapshot(currentSnapshot);
     }, [currentSnapshot, onSnapshot]);
+
 
     const onAddFieldClicked = useCallback(() => {
         toggleFieldModal(true, {
@@ -40,13 +40,18 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         });
     }, [togglePropertyModal]);
 
-
     const updateSnapshotHistory = useCallback(snapshot => {
-        snapshotHistory.splice(historyIndex + 1);
-        setSnapshotHistory([...snapshotHistory, snapshot]);
-        setIndex(historyIndex + 1);
-    }, [snapshotHistory, historyIndex]);
+        dispatchSnapshot({
+            type: UPDATE_SNAPSHOT_HISTORY,
+            payload: snapshot
+        })
+    }, []);
 
+    useEffect(() => {
+        if (defaultSnapshot) {
+            updateSnapshotHistory(defaultSnapshot);
+        }
+    }, [defaultSnapshot, updateSnapshotHistory]);
 
     const addField = useCallback((name, parser) => {
         const snapshot = currentSnapshot
@@ -86,14 +91,14 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
     }, [updateSnapshotHistory, currentSnapshot]);
 
     const undoLastAction = useCallback(() => {
-        if (historyIndex === 0) return;
-        setIndex(historyIndex - 1);
-    }, [historyIndex]);
+        if (snapshot.index === 0) return;
+        dispatchSnapshot({ type: DECREASE_INDEX });
+    }, [snapshot]);
 
     const redoAction = useCallback(() => {
-        if (historyIndex === snapshotHistory.length - 1) return;
-        setIndex(historyIndex + 1);
-    }, [historyIndex, snapshotHistory]);
+        if (snapshot.index === snapshot.index.length - 1) return;
+        dispatchSnapshot({ type: INCREASE_INDEX });
+    }, [snapshot]);
 
     const deleteField = useCallback(index => {
         const snapshot = currentSnapshot.removeField(index);
@@ -175,5 +180,4 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         </>
     );
 }
-
 
