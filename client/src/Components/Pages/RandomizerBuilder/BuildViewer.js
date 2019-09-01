@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
-import { ContentGenerator } from "randomcontentgenerator";
 import { Builder } from "../../../config";
+import { convertTypeToName } from "../../../utils";
+
+
+
 
 export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onPropertyDelete, fieldModal, propertyModal }) {
 
@@ -56,21 +59,27 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
             />)}
             <hr />
             <h2>Global Properties</h2>
-            {snapshot.getSchema().globalProperties.map((i, key) => <GlobalPropertyDisplay
-                key={key}
-                field={i}
-                onDelete={() => onGlobalDelete(key)}
-                onEdit={() => onEditGlobalClicked(key, i)}
-            />)}
+            <div className="row">
+                {snapshot.getSchema().globalProperties.map((i, key) => <GlobalPropertyDisplay
+                    key={key}
+                    index={key}
+                    field={i}
+                    onDelete={() => onGlobalDelete(key)}
+                    onEdit={() => onEditGlobalClicked(key, i)}
+                />)}
+            </div>
         </div>
     );
 }
 
 
-function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
+function GlobalPropertyDisplay({ index, field, onDelete, onEdit }) {
     return (
-        <div className="border border-primary p-2">
-            {ContentGenerator.findParser(field).constructor.name}
+        <div className="col-5 col-lg-2 border border-primary mx-2 mb-2 text-center">
+            <h6 className="d-inline-block">Type:</h6> {convertTypeToName(field)}
+            <br />
+            <h6 className="d-inline-block">Index:</h6> {index}
+            <br />
             <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
         </div>
@@ -81,12 +90,14 @@ function GlobalPropertyDisplay({ field, onDelete, onEdit }) {
 function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty, onEditProperty, onDeleteProperty }) {
 
     return (
-        <div className="border border-primary p-2">
-            <span className="pr-4">{name}</span>
+        <div className="container text-center border border-primary mb-2">
+            <h1 className="pr-2 font-weight-bold">{name}</h1>
+            <button title="Add Property"
+                className="btn far fa-plus-square icon-button" onClick={onAddProperty} style={noPadding} />
             <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
             <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
-            <button title="Add Property"
-                className="btn fas fa-plus icon-button" onClick={onAddProperty} style={{ fontWeight: "900" }} />
+            <br />
+            {convertTypeToName(field)}
             <PropertyDisplay
                 properties={field.properties}
                 onEdit={onEditProperty}
@@ -99,26 +110,32 @@ function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty, onEditProp
 function PropertyDisplay({ properties, onEdit, onDelete }) {
     return (
         <div>
-            <h5>Properties</h5>
-            {
-                properties ?
-                    properties.map((item, key) => {
-                        return (
-                            <div key={key}>
-                                index: {key}. Type: {ContentGenerator.findParser(item).constructor.name}
-                                <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
-                                    onClick={() => onEdit(key, item)} />
-                                <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
-                                    onClick={() => onDelete(key)} />
-                            </div>
-                        );
-                    })
-                    : null
-            }
+            <h4>Properties</h4>
+            <div className="row">
+                {
+                    properties ?
+                        properties.map((item, key) => {
+                            return (
+                                <div key={key} className="col-5 col-lg-2 border border-secondary mx-2 mb-2">
+                                    <h6 className="d-inline-block">Type:</h6> {convertTypeToName(item)}
+                                    <br />
+                                    <h6 className="d-inline-block">Index:</h6> {key}
+                                    <br />
+                                    <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
+                                        onClick={() => onEdit(key, item)} />
+                                    <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
+                                        onClick={() => onDelete(key)} />
+                                </div>
+                            );
+                        })
+                        : null
+                }
+            </div>
         </div>
     );
 }
 
 const noPadding = {
-    padding: "0"
+    padding: "0",
+    paddingRight: "0.5rem"
 }
