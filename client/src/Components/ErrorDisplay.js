@@ -6,7 +6,7 @@ export default function ErrorDisplay({ error }) {
             {
                 error
                     ?
-                    <div className="invalid-feedback">
+                    <div className="invalid-feedback" style={{ display: "block" }}>
                         {error}
                     </div>
                     : null
