@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 import { Builder } from "../../../config";
 import { convertTypeToName } from "../../../utils";
+import { DELETE_FIELD, DELETE_FIELD_FROM_PROPERTY, DELETE_GLBOAL_PROPERTY } from "./snapshotReducer";
 
 
 
 
-export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, onPropertyDelete, fieldModal, propertyModal }) {
+export default function BuildViewer({ snapshot, dispatch, fieldModal, propertyModal }) {
 
     const onEditFieldClicked = useCallback((fieldIndex, oldName, fieldObject) => {
         fieldModal(true, {
@@ -43,6 +44,29 @@ export default function BuildViewer({ snapshot, onFieldDelete, onGlobalDelete, o
             fieldObject
         })
     }, [propertyModal]);
+
+
+    const onFieldDelete = useCallback(index => {
+        dispatch({
+            type: DELETE_FIELD,
+            index
+        });
+    }, [dispatch]);
+
+    const onPropertyDelete = useCallback((fieldIndex, propertyIndex) => {
+        dispatch({
+            type: DELETE_FIELD_FROM_PROPERTY,
+            fieldIndex,
+            propertyIndex
+        });
+    }, [dispatch]);
+
+    const onGlobalDelete = useCallback(index => {
+        dispatch({
+            type: DELETE_GLBOAL_PROPERTY,
+            index
+        });
+    }, [dispatch]);
 
     return (
         <div>

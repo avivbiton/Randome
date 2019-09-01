@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
@@ -15,7 +15,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
             index: 0
         });
 
-    const currentSnapshot = useMemo(() => snapshot.history[snapshot.index], [snapshot]);
+    const currentSnapshot = snapshot.history[snapshot.index];
 
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
@@ -100,22 +100,6 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         dispatchSnapshot({ type: INCREASE_INDEX });
     }, [snapshot]);
 
-    const deleteField = useCallback(index => {
-        const snapshot = currentSnapshot.removeField(index);
-        updateSnapshotHistory(snapshot);
-    }, [currentSnapshot, updateSnapshotHistory]);
-
-    const deleteGlobal = useCallback(index => {
-        const snapshot = currentSnapshot.removeGlobal(index);
-        updateSnapshotHistory(snapshot);
-    }, [currentSnapshot, updateSnapshotHistory]);
-
-    const deleteProperty = useCallback((fieldName, index) => {
-        const snapshot = currentSnapshot
-            .removePropertyFromField(fieldName, index);
-        updateSnapshotHistory(snapshot);
-    }, [currentSnapshot, updateSnapshotHistory]);
-
     const onFieldModalResolved = useCallback((name, parser, data) => {
         const mode = data.mode;
         switch (mode) {
@@ -160,9 +144,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                     <hr />
                     <BuildViewer
                         snapshot={currentSnapshot}
-                        onFieldDelete={deleteField}
-                        onGlobalDelete={deleteGlobal}
-                        onPropertyDelete={deleteProperty}
+                        dispatch={dispatchSnapshot}
                         fieldModal={toggleFieldModal}
                         propertyModal={togglePropertyModal}
                     />
