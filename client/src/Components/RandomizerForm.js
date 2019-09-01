@@ -19,7 +19,6 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
     const [schema, setSchema] = useState(null);
     const { value: isPrivate, bind: bindPrivate } = useCheckbox(inital.private);
 
-
     const onSchemaChange = useCallback(newSchema => {
         setSchema(newSchema);
     }, []);

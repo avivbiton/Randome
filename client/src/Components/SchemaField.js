@@ -11,6 +11,12 @@ export default function SchemaField({ error, initial, onChange }) {
     const [schema, bindSchema, setSchema] = useInput(initial);
     const [defaultSchema, setDefaultSchema] = useState(initial)
 
+
+    useEffect(function onInitialChanged() {
+        setDefaultSchema(initial);
+        setSchema(initial);
+    }, [initial, setSchema]);
+
     const defaultSnapshot = useMemo(() => {
         try {
             return new SchemaSnapshot(fromJS((JSON.parse(defaultSchema))));
@@ -44,10 +50,10 @@ export default function SchemaField({ error, initial, onChange }) {
     }, [editorActive, editorSnapshot, schema]);
 
     useEffect(() => {
-        if(onChange) {
+        if (onChange) {
             onChange(getJsonString());
         }
-    },[editorSnapshot, schema, onChange, getJsonString]);
+    }, [editorSnapshot, schema, onChange, getJsonString]);
 
     return (
         <>

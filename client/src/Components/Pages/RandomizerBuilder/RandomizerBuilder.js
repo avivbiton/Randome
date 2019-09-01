@@ -96,7 +96,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
     }, [snapshot]);
 
     const redoAction = useCallback(() => {
-        if (snapshot.index === snapshot.index.length - 1) return;
+        if (snapshot.index === snapshot.history.length - 1) return;
         dispatchSnapshot({ type: INCREASE_INDEX });
     }, [snapshot]);
 

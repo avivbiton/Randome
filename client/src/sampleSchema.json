@@ -2,10 +2,12 @@
 	"fields": [
 		{
 			"name": "Creature Name",
-			"data": [
-				"@g{0} Dragon",
-				"@g{0} Troll"
-			]
+			"data": {
+				"text": [
+					"@g{0} Dragon",
+					"@g{0} Troll"
+				]
+			}
 		},
 		{
 			"name": "Attack",
@@ -41,10 +43,12 @@
 		}
 	],
 	"globalProperties": [
-		[
-			"Fire",
-			"Frost",
-			"Earth"
-		]
+		{
+			"text": [
+				"Fire",
+				"Frost",
+				"Earth"
+			]
+		}
 	]
 }
