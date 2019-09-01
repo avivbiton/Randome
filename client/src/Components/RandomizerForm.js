@@ -24,7 +24,6 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
 
     const defaultSnapshot = useMemo(() => {
         try {
-
             return new SchemaSnapshot(fromJS((JSON.parse(defaultSchema))));
         } catch (error) {
             return null;
@@ -83,9 +82,13 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     {...bindDescription}
                     error={errors.description} />
 
-                <p className="mt-4">
-                    Below you can use our Editor to create your own randomizer. If you already know what you are doing, you can just paste your schema in json format.
-                    There are some limitation to the Editor (For truly deeply nested schemas) but for the most part, it should be enough.
+                <p className="alert alert-info mt-4">
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    Our Editor is in <span className="font-weight-bold">Beta</span>. You may encounter bugs or other issues.
+                    However, it is still recommended that you will use the Editor instead of the "Raw JSON" option.
+                    If you want to save your changes and continue later, you can publish in private mode and edit it later.
                 </p>
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
@@ -127,8 +130,10 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     </label>
                     <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
                 </div>
-                <div className="d-flex flex-column">
-                    <button className="btn btn-info mt-4 mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
+                <div className="d-flex flex-column mt-4">
+                    <i className="far fa-hand-point-down fa-3x mx-auto"></i>
+                    <br />
+                    <button className="btn btn-info mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
                         Show / Hide Preview
                     </button>
                     <div id="previewCollapse" className="collapse mx-auto">
