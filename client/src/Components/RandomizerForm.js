@@ -41,7 +41,7 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     {...bindDescription}
                     error={errors.description} />
 
-                <p className="alert alert-info mt-4">
+                <div className="alert alert-info mt-4">
                     <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -49,9 +49,9 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     However, it is still recommended that you will use the Editor instead of the "Raw JSON" option.
                     If you want to save your changes and continue later, you can publish in private mode and edit it later.
                     <div style={{ fontSize: "120%" }}>
-                        <Link className="text-reset" to="/guide">Don't know what you are doing? Read this 2-minute tutorial.</Link>
+                        <Link className="text-reset" to="/guide" target="_blank">Don't know what you are doing? Read this 2-minute tutorial.</Link>
                     </div>
-                </p>
+                </div>
                 <SchemaField
                     onChange={onSchemaChange}
                     initial={inital.jsonSchema} />

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import API from "../../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../../config";
@@ -40,9 +41,11 @@ function CreatePage() {
             <div className="text-center">
                 <h1>Creation Page</h1>
                 <p className="alert alert-primary" style={{ fontSize: "125%" }}>Welcome to the creation process. You can use our built-in Editor to create your own Randomizer!
-                If it is your first time, it is recommended that you will go over our short tutorial.
-                    You can also use the button below to pre-fill the editor with sample data to give you a feeling on how the editor work. Remember that you can also view your progress at the bottom of the page.</p>
+                If it is your first time, it is recommended that you will go over our <Link to="/guide" target="_blank">short tutorial.</Link> You can also use the button below to pre-fill the editor with sample data to give you a feeling on how the editor work. Remember that you can also view your progress at the bottom of the page.</p>
                 <button type="button" className="btn btn-outline-success mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
+                <button className="btn btn-outline-info  ml-2 mb-2">
+                    <Link className="text-reset" target="_blank" to="/guide">View Guide</Link>
+                </button>
             </div>
             <div className="border p-4 shadow mb-4">
                 <RandomizerForm
