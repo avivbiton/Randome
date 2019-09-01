@@ -4,6 +4,7 @@ export const DECREASE_INDEX = "DECREASE_INDEX";
 export const DELETE_FIELD = "DELETE_FIELD";
 export const DELETE_FIELD_FROM_PROPERTY = "DELETE_FIELD_FROM_PROPERTY";
 export const DELETE_GLBOAL_PROPERTY = "DELETE_GLOBAL_PROPERTY";
+export const SWAP_FIELDS = "SWAP_FIELDS";
 
 export function snapshotReducer(state, action) {
     switch (action.type) {
@@ -33,6 +34,12 @@ export function snapshotReducer(state, action) {
         case DELETE_GLBOAL_PROPERTY: {
             const currentSnapshot = state.history[state.index];
             const newSnapshot = currentSnapshot.removeGlobal(action.index);
+            return updateHistory(state, newSnapshot);
+        }
+        case SWAP_FIELDS: {
+            const currentSnapshot = state.history[state.index];
+            if (action.secondIndex >= currentSnapshot.getSchema().fields.length || action.secondIndex < 0) return state;
+            const newSnapshot = currentSnapshot.swapFields(action.index, action.secondIndex);
             return updateHistory(state, newSnapshot);
         }
         default:

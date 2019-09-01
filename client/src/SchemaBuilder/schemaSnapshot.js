@@ -72,6 +72,16 @@ export class SchemaSnapshot {
         return new SchemaSnapshot(newSnapshot);
     }
 
+    swapFields(index, secondIndex) {
+        const newSnapshot = this.schema.update("fields", list => {
+            const firstValue = list.get(index);
+            const secondvalue = list.get(secondIndex);
+            return list.set(index, secondvalue).set(secondIndex, firstValue);
+        });
+
+        return new SchemaSnapshot(newSnapshot);
+    }
+
     extractString() {
         return JSON.stringify(this.getSchema(), null, 4);
     }

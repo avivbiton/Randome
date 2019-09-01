@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Builder } from "../../../config";
 import { convertTypeToName } from "../../../utils";
-import { DELETE_FIELD, DELETE_FIELD_FROM_PROPERTY, DELETE_GLBOAL_PROPERTY } from "./snapshotReducer";
+import { DELETE_FIELD, DELETE_FIELD_FROM_PROPERTY, DELETE_GLBOAL_PROPERTY, SWAP_FIELDS } from "./snapshotReducer";
 
 
 
@@ -68,6 +68,14 @@ export default function BuildViewer({ snapshot, dispatch, fieldModal, propertyMo
         });
     }, [dispatch]);
 
+    const changeOrder = useCallback((index, secondIndex) => {
+        dispatch({
+            type: SWAP_FIELDS,
+            index,
+            secondIndex
+        });
+    }, [dispatch]);
+
     return (
         <div>
             <h2>Fields</h2>
@@ -80,6 +88,8 @@ export default function BuildViewer({ snapshot, dispatch, fieldModal, propertyMo
                 onAddProperty={() => onAddPropertyClicked(key)}
                 onEditProperty={(index, propertyObject) => onEditPropertyClicked(key, index, propertyObject)}
                 onDeleteProperty={index => onPropertyDelete(key, index)}
+                orderUp={() => changeOrder(key, key - 1)}
+                orderDown={() => changeOrder(key, key + 1)}
             />)}
             <hr />
             <h2>Global Properties</h2>
@@ -104,22 +114,24 @@ function GlobalPropertyDisplay({ index, field, onDelete, onEdit }) {
             <br />
             <h6 className="d-inline-block">Index:</h6> {index}
             <br />
-            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
-            <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
+            <button title="Edit" className="btn fas fa-edit icon-button" style={customPadding} onClick={onEdit} />
+            <button title="Delete" className="btn far fa-trash-alt icon-button" style={customPadding} onClick={onDelete} />
         </div>
     );
 }
 
 
-function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty, onEditProperty, onDeleteProperty }) {
+function FieldDisplay({ name, field, onDelete, onEdit, onAddProperty, onEditProperty, onDeleteProperty, orderUp, orderDown }) {
 
     return (
         <div className="container text-center border border-primary mb-2">
             <h1 className="pr-2 font-weight-bold">{name}</h1>
             <button title="Add Property"
-                className="btn far fa-plus-square icon-button" onClick={onAddProperty} style={noPadding} />
-            <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding} onClick={onEdit} />
-            <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding} onClick={onDelete} />
+                className="btn far fa-plus-square icon-button" onClick={onAddProperty} style={customPadding} />
+            <button title="Edit" className="btn fas fa-edit icon-button" style={customPadding} onClick={onEdit} />
+            <button title="Delete" className="btn far fa-trash-alt icon-button" style={customPadding} onClick={onDelete} />
+            <button title="Order Up" className="btn fas fa-arrow-up icon-button" style={customPadding} onClick={orderUp} />
+            <button title="Order Up" className="btn fas fa-arrow-down icon-button" style={customPadding} onClick={orderDown} />
             <br />
             {convertTypeToName(field)}
             <PropertyDisplay
@@ -145,9 +157,9 @@ function PropertyDisplay({ properties, onEdit, onDelete }) {
                                     <br />
                                     <h6 className="d-inline-block">Index:</h6> {key}
                                     <br />
-                                    <button title="Edit" className="btn fas fa-edit icon-button" style={noPadding}
+                                    <button title="Edit" className="btn fas fa-edit icon-button" style={customPadding}
                                         onClick={() => onEdit(key, item)} />
-                                    <button title="Delete" className="btn far fa-trash-alt icon-button" style={noPadding}
+                                    <button title="Delete" className="btn far fa-trash-alt icon-button" style={customPadding}
                                         onClick={() => onDelete(key)} />
                                 </div>
                             );
@@ -159,7 +171,7 @@ function PropertyDisplay({ properties, onEdit, onDelete }) {
     );
 }
 
-const noPadding = {
+const customPadding = {
     padding: "0",
     paddingRight: "0.5rem"
 }

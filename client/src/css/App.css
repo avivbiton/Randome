@@ -46,3 +46,7 @@ h1,h2,h3,h4,h5 {
 .scrollbar::-webkit-scrollbar { 
     display: none; 
 } 
+
+.btn.fas {
+    font-weight: 900;
+}
