@@ -33,6 +33,13 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
                 <option>Min-Max Picker</option>
                 <option>Multi Picker</option>
             </select>
+            <div className="alert alert-info mt-2">
+                To reference a property: <br />
+                <strong>{"@{index}"}</strong> - For Properties<br />
+                <strong>{"@g{index}"}</strong> - For Global Properties
+                <br />
+                (replace INDEX with the index number of the property)
+            </div>
             <CreatorComponent
                 populateFieldObject={defaultParser}
                 onUpdate={onPickerUpdate} />

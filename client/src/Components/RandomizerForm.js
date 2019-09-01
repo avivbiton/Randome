@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useInput, useCheckbox } from "../Hooks/formInput";
+import { Link } from "react-router-dom";
 
 import Input from "./Form/Input";
 import Textarea from "./Form/Textarea";
@@ -47,6 +48,9 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     Our Editor is in <span className="font-weight-bold">Beta</span>. You may encounter bugs or other issues.
                     However, it is still recommended that you will use the Editor instead of the "Raw JSON" option.
                     If you want to save your changes and continue later, you can publish in private mode and edit it later.
+                    <div style={{ fontSize: "120%" }}>
+                        <Link className="text-reset" to="/guide">Don't know what you are doing? Read this 2-minute tutorial.</Link>
+                    </div>
                 </p>
                 <SchemaField
                     onChange={onSchemaChange}

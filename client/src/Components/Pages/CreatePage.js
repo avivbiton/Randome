@@ -42,7 +42,7 @@ function CreatePage() {
                 <p className="alert alert-primary" style={{ fontSize: "125%" }}>Welcome to the creation process. You can use our built-in Editor to create your own Randomizer!
                 If it is your first time, it is recommended that you will go over our short tutorial.
                     You can also use the button below to pre-fill the editor with sample data to give you a feeling on how the editor work. Remember that you can also view your progress at the bottom of the page.</p>
-                <button type="button" className="btn btn-outline-primary mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
+                <button type="button" className="btn btn-outline-success mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
             </div>
             <div className="border p-4 shadow mb-4">
                 <RandomizerForm
