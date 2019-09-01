@@ -8,7 +8,7 @@ export default function MinMaxParserCreator({ onUpdate, populateFieldObject }) {
     const [max, bindMax, setMax] = useNumericInput();
 
     useEffect(() => {
-        if (populateFieldObject) {
+        if (populateFieldObject && populateFieldObject.min && populateFieldObject.max) {
             setMin(populateFieldObject.min);
             setMax(populateFieldObject.max);
         }
