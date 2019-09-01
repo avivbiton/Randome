@@ -53,6 +53,7 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     </div>
                 </div>
                 <SchemaField
+                    error={errors.schema}
                     onChange={onSchemaChange}
                     initial={inital.jsonSchema} />
 

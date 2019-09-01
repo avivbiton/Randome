@@ -15,14 +15,21 @@ const createNew = [
     async (req, res, next) => {
 
         const { name, description, schema, private } = req.body;
+
         try {
-            const isValid = new ContentGenerator(JSON.parse(schema)).isValid();
+            const parsedSchema = JSON.parse(schema);
+            const isValid = new ContentGenerator(parsedSchema).isValid();
             if (isValid !== true) {
                 throw isValid;
             }
+            
+            if (parsedSchema.fields.length === 0) {
+                return res.status(400).json({ schema: "Must have at least one field." });
+            }
+
         }
         catch (error) {
-            return res.status(400).json({ schema: `Schema Error: \n${error}`});
+            return res.status(400).json({ schema: `Schema Error: \n${error}` });
         }
 
         try {
