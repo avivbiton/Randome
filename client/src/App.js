@@ -29,6 +29,7 @@ import CreatePage from "./Components/Pages/CreatePage";
 import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage";
 import Footer from "./Components/Footer";
 import EditRandomizer from "./Components/Pages/EditRandomizer";
+import Guide from "./Components/Pages/Guide";
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
             <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
             <Route exact path="/register" component={RegisterPage} />
             <Route exact path="/browse" component={Browse} />
+            <Route exact path="/guide" component={Guide} />
             <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
             <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
             <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />

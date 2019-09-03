@@ -1,7 +1,7 @@
 const authenticateUser = require("../../middleware/authenticateUser");
 
 const getAccount = [
-    authenticateUser,
+    authenticateUser(),
     (req, res, next) => {
         return res.json({
             adminLevel: req.account.adminLevel,

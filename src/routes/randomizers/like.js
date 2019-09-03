@@ -3,7 +3,7 @@ const requireBody = require("../../middleware/requireBody");
 const service = require("../../services/randomizerService");
 
 const likeRandomizer = [
-    authenticateUser,
+    authenticateUser(),
     requireBody(["id"]),
     async (req, res, next) => {
         try {

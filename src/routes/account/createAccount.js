@@ -1,7 +1,7 @@
 const authenticateUser = require("../../middleware/authenticateUser");
 const accountService = require("../../services/accountService");
 
-const createAccount = [authenticateUser,
+const createAccount = [authenticateUser(),
     async (req, res, next) => {
         try {
             const data = await accountService.createAccount(req.user.uid);

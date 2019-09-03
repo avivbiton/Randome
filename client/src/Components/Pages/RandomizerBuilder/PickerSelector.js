@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useEffect } from "react";
 import { useInput } from "../../../Hooks/formInput";
 import { BasicParserCreator } from "./BasicParserCreator";
-import { ContentGenerator } from "randomcontentgenerator";
 import MinMaxParserCreator from "./MinMaxParserCreator";
 import MultiPickerCreator from "./MultiPickerCreator";
+import { convertTypeToName } from "../../../utils";
 
 export default function PickerSelector({ defaultParser = null, onChange }) {
 
@@ -33,23 +33,16 @@ export default function PickerSelector({ defaultParser = null, onChange }) {
                 <option>Min-Max Picker</option>
                 <option>Multi Picker</option>
             </select>
+            <div className="alert alert-info mt-2">
+                To reference a property: <br />
+                <strong>{"@{index}"}</strong> - For Properties<br />
+                <strong>{"@g{index}"}</strong> - For Global Properties
+                <br />
+                (replace INDEX with the index number of the property)
+            </div>
             <CreatorComponent
                 populateFieldObject={defaultParser}
                 onUpdate={onPickerUpdate} />
         </div>
     );
-}
-
-function convertTypeToName(field) {
-    
-    const name = ContentGenerator.findParser(field).constructor.name;
-    switch (name) {
-        case "BasicParser":
-            return "Basic Picker";
-        case "MinMaxParser":
-            return "Min-Max Picker";
-        case "MultiPickerParser":
-            return "Multi Picker";
-        default: throw new Error("Invalid parser");
-    }
 }

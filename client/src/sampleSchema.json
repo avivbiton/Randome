@@ -1,0 +1,54 @@
+{
+	"fields": [
+		{
+			"name": "Creature Name",
+			"data": {
+				"text": [
+					"@g{0} Dragon",
+					"@g{0} Troll"
+				]
+			}
+		},
+		{
+			"name": "Attack",
+			"data": {
+				"min": 5,
+				"max": 11
+			}
+		},
+		{
+			"name": "Description",
+			"data": {
+				"options": [
+					[
+						"Increased @{0}% move speed while hidden. ",
+						"Deal bonus @{1} @g{0} damage while attacking. "
+					],
+					[
+						"While moving has increased resistance.",
+						"Immune to @g{0} damage."
+					]
+				],
+				"properties": [
+					{
+						"min": 5,
+						"max": 11
+					},
+					{
+						"min": 100,
+						"max": 251
+					}
+				]
+			}
+		}
+	],
+	"globalProperties": [
+		{
+			"text": [
+				"Fire",
+				"Frost",
+				"Earth"
+			]
+		}
+	]
+}

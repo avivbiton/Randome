@@ -6,6 +6,7 @@ import LikeAndFavoriteCounter from "./LikeAndFavoriteCounter";
 import { useSpring, animated } from "react-spring";
 import useReactRouter from "use-react-router";
 import { useCheckbox } from "../../../Hooks/formInput";
+import RandomizerIsPrivate from "./RandomizerIsPrivate";
 
 function RandomizerPage() {
 
@@ -17,6 +18,7 @@ function RandomizerPage() {
     const fadeAnimation = useSpring({
         from: { opacity: fading ? 1 : 0 },
         opacity: fading ? 0 : 1,
+        config: { duration: 500 },
         onRest: () => {
             if (fading && currentResult !== null) {
                 setFading(false);
@@ -25,6 +27,8 @@ function RandomizerPage() {
         }
     });
 
+    const [error, setError] = useState({});
+
     useEffect(() => {
         async function fetchRandomizerData() {
             const id = match.params.id;
@@ -32,7 +36,13 @@ function RandomizerPage() {
                 const randomizer = await randomizerAPI.fetchRandomizer(id);
                 if (!randomizer) return history.push("/not-found");
                 setRandomizer(randomizer);
-            } catch (error) {
+            } catch (requestError) {
+                const privateError = requestError.data.private;
+                if (privateError) {
+                    setError({ private: privateError })
+                    return;
+                }
+
                 history.push("/not-found");
             }
         }
@@ -52,6 +62,8 @@ function RandomizerPage() {
     }, [currentResult, fading, onAnimationFinished, skipAnimation]);
 
 
+    if (error.private) return <RandomizerIsPrivate />
+
     if (currentRandomizer === null) return <Loading />;
     return (
         <div className="container">
@@ -63,6 +75,10 @@ function RandomizerPage() {
                         likeCount={currentRandomizer.meta.likes}
                         favoriteCount={currentRandomizer.meta.favorites} />
                     <p className="lead text-break">{currentRandomizer.description}</p>
+                    {currentRandomizer.private === true ?
+                        <p className="text-danger">You've set this to be private. Only you can view this page.</p>
+                        : null
+                    }
                     <div className="form-check">
                         <input className="form-check-input" type="checkbox" value="" id="animationCheckbox" {...bindSkipAnimation} />
                         <label className="form-check-label" htmlFor="animationCheckbox">

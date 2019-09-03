@@ -9,7 +9,7 @@ export default function MultiPickerCreator({ onUpdate, populateFieldObject }) {
     const focusLatest = useFocus(latestInput);
 
     useEffect(() => {
-        if (populateFieldObject) {
+        if (populateFieldObject && populateFieldObject.options) {
             setField(populateFieldObject.options);
         }
     }, [populateFieldObject]);

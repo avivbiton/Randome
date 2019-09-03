@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 middleware.useMiddleware(app);
 
 if (process.env.NODE_ENV === "production")
-    production.initializeProductionBuild();
+    production.initializeProductionBuild(app);
 
 LoadRoutes(app);
 

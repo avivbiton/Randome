@@ -1,19 +1,22 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import HammerImage from "../../Images/hammer.png";
+import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import API from "../../API/api";
 import toastr from "toastr";
 import { toastrDefault } from "../../config";
-
+import sampleSchema from "../../sampleSchema.json";
+import useReactRouter from "use-react-router";
 import RandomizerForm from "../RandomizerForm";
 
-function CreatePage({ history }) {
+function CreatePage() {
+
+    const { history } = useReactRouter();
 
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [blockLeave, setBlockLeave] = useState(true);
+    const [schemaFeed, setSchemaFeed] = useState("");
 
-    async function onFormSubmit({ name, description, schema, isPrivate }) {
+    const onFormSubmit = useCallback(async function ({ name, description, schema, isPrivate }) {
         try {
             setLoading(true);
             await API.randomizers.create(name, description, schema, isPrivate);
@@ -27,31 +30,37 @@ function CreatePage({ history }) {
             }
             setErrors(error.data);
         }
-    }
+    }, [history]);
 
-    function feedSampleData() {
-        // TODO: Add sample json data
-    }
+    const feedSampleData = useCallback(function () {
+        setSchemaFeed(JSON.stringify(sampleSchema));
+    }, []);
+
     return (
         <div className="container">
-            <div className="row">
-                <div className="col-md-6">
-                    <h3 className="">Creation Screen</h3>
-                    <p className="lead">Welcome to the creation process. You can use our built-in Editor to create your own Randomizer!
-                    If it is your first time, it is recommended that you will go over our short tutorial.
-                    C.</p>
-                    <button type="button" className="btn btn-outline-primary mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
-                </div>
-                <div className="col-md-6">
-                    <img src={HammerImage} alt="hammer" className="d-none d-md-block h-75 w-75" />
-                </div>
+            <div className="text-center">
+                <h1>Creation Page</h1>
+                <p className="alert alert-primary" style={{ fontSize: "125%" }}>Welcome to the creation process. You can use our built-in Editor to create your own Randomizer!
+                If it is your first time, it is recommended that you will go over our <Link to="/guide" target="_blank">short tutorial.</Link> You can also use the button below to pre-fill the editor with sample data to give you a feeling on how the editor work. Remember that you can also view your progress at the bottom of the page.</p>
+                <button type="button" className="btn btn-outline-success mb-2" onClick={() => feedSampleData()}>Feed sample data</button>
+                <button className="btn btn-outline-info  ml-2 mb-2">
+                    <Link className="text-reset" target="_blank" to="/guide">View Guide</Link>
+                </button>
             </div>
             <div className="border p-4 shadow mb-4">
-                <RandomizerForm onSubmit={onFormSubmit} errors={errors} submitText="Create" loading={isLoading} blockLeave={blockLeave} />
+                <RandomizerForm
+                    onSubmit={onFormSubmit}
+                    inital={{ name: "", description: "", isPrivate: false, jsonSchema: schemaFeed }}
+                    errors={errors}
+                    submitText="Create"
+                    loading={isLoading}
+                    blockLeave={blockLeave}
+
+                />
             </div>
         </div>
     );
 }
 
 
-export default withRouter(CreatePage);
+export default CreatePage;

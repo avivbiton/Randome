@@ -2,7 +2,7 @@ const admin = require("firebase-admin");
 const AuthenticationError = require("../Errors/AuthenticationError");
 const Account = require("../Models/Account");
 
-module.exports = async (req, res, next) => {
+module.exports = (required = true) => async (req, res, next) => {
     const authToken = req.get("Authorization");
     try {
         const decoded = await admin.auth().verifyIdToken(authToken);
@@ -15,6 +15,12 @@ module.exports = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        next(new AuthenticationError());
+        if (required)
+            next(new AuthenticationError());
+        else {
+            req.account = null;
+            req.user = null;
+            next();
+        }
     }
 };
