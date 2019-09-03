@@ -12,7 +12,7 @@ const fetchById = [
             }
             if (data.private) {
                 if (!req.user || data.owner.id != req.user.uid) {
-                    return res.status(404).json({ Private: "This randomizer is private. only the owner can view it." });
+                    return res.status(401).json({ private: "This randomizer is private. only the owner can view it." });
                 }
             }
             return res.status(200).json(data);

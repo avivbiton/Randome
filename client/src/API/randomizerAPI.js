@@ -9,7 +9,7 @@ class RandomizerAPI {
             return response.data;
         }
         catch (error) {
-            throw new RequestError(error, "Could not fetch randomizer");
+            throw new RequestError(error.response.data, "Could not fetch randomizer");
         }
     }
     async fetch(search = "", page = 0, sortBy = "createdAt") {
