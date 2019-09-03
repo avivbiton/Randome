@@ -19,6 +19,7 @@ module.exports = (required = true) => async (req, res, next) => {
             next(new AuthenticationError());
         else {
             req.account = null;
+            req.user = null;
             next();
         }
     }
