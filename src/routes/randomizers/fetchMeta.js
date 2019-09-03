@@ -4,7 +4,7 @@ const authenticateUser = require("../../middleware/authenticateUser");
 const randomizerService = require("../../services/randomizerService");
 
 const fetchMeta = [
-    authenticateUser,
+    authenticateUser(),
     async (req, res, next) => {
         const type = req.query.type || "favorites";
         let array = null;

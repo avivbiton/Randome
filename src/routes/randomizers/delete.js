@@ -3,7 +3,7 @@ const authorizeRandomizerUsage  = require("../../middleware/authorizeRandomizerU
 const Randomizer = require("../../Models/Randomizer");
 
 const deleteRandomizer = [
-    authenticateUser,
+    authenticateUser(),
     authorizeRandomizerUsage,
     async (req, res, next) => {
         try {

@@ -1,7 +1,7 @@
 const authenticateUser = require("../../middleware/authenticateUser");
 const Account = require("../../Models/Account");
 
-const accountExists = [authenticateUser,
+const accountExists = [authenticateUser(),
     async (req, res, next) => {
         try {
             const docs = await Account.find({ userId: req.user.uid }).lean().exec();

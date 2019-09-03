@@ -6,7 +6,7 @@ const validationSchema = require("../../Validation/randomizer");
 const ContentGenerator = require("randomcontentgenerator").ContentGenerator;
 
 const editRandomizer = [
-    authenticateUser,
+    authenticateUser(),
     authorizeRandomizerUsage,
     requireBody(["name", "description", "private", "schema"]),
     validateBodyMatchSchema(validationSchema),

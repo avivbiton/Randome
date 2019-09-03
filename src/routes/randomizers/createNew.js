@@ -11,7 +11,7 @@ const validationSchema = require("../../Validation/randomizer");
 const createNew = [
     requireBody(["name", "description", "schema", "private"]),
     validateBodyMatchSchema(validationSchema),
-    authenticateUser,
+    authenticateUser(),
     async (req, res, next) => {
 
         const { name, description, schema, private } = req.body;
