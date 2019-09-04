@@ -1,8 +1,6 @@
 const authenticateUser = require("../../middleware/authenticateUser");
 const requireBody = require("../../middleware/requireBody");
 const service = require("../../services/randomizerService");
-const AsyncLock = require("async-lock");
-const lock = new AsyncLock();
 
 const lockEndpoint = require("../../middleware/lockEndpoint");
 const unlockOnError = require("../../middleware/unlockOnError");
