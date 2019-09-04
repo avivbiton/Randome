@@ -28,13 +28,11 @@ class RandomizerAPI {
         }
     }
 
-    async fetchMyRandomizers() {
-        try {
-            const response = await axios.get("/randomizer/fetch/own");
-            return response.data;
-        } catch (error) {
-            throw new RequestError(error);
-        }
+    fetchMyRandomizers() {
+        return {
+            url: "/randomizer/fetch/own",
+            method: "get"
+        };
     }
 
 

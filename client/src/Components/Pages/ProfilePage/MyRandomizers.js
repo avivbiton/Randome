@@ -8,25 +8,28 @@ import useReactRouter from "use-react-router";
 import Moment from "react-moment";
 import DeleteModal from "./DeleteModal";
 import useModal from "../../../Hooks/useModal";
+import useAPI from "../../../Hooks/useAPI";
 
 
 export default function MyRandomizers() {
 
+    const [fetchRandomizers, cancelFetch] = useAPI();
     const [randomizers, setRandomizers] = useState(null);
     const [displayModal, bindModal] = useModal();
     const { history } = useReactRouter();
 
     useEffect(() => {
         async function fetch() {
-            try {
-                const data = await API.randomizers.fetchMyRandomizers();
+            fetchRandomizers(API.randomizers.fetchMyRandomizers(), (data) => {
                 setRandomizers(data);
-            } catch (error) {
+            }, () => {
                 toastr.error("Could not retrive data, please try again later.", "Error", toastrDefault);
-            }
+            });
         }
         fetch();
-    }, []);
+
+        return () => cancelFetch();
+    }, [fetchRandomizers, cancelFetch]);
 
     const onViewClicked = useCallback(id => {
         history.push(`/randomizer/${id}`);

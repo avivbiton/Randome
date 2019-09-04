@@ -3,11 +3,11 @@ import { useCallback, useRef } from "react";
 
 const CancelToken = axios.CancelToken;
 
-const useAPI = (config) => {
+const useAPI = () => {
 
     const source = useRef(CancelToken.source());
 
-    const request = useCallback(async (onResolve, onError) => {
+    const request = useCallback(async (config, onResolve, onError = () => { }) => {
         try {
             const response = await axios({
                 cancelToken: source.current.token,
@@ -17,10 +17,9 @@ const useAPI = (config) => {
             else return response.data;
         } catch (error) {
             if (axios.isCancel(error)) return;
-            if (onError) return onError(error.response.data);
-            throw error.response.data;
+            onError(error.response.data);
         }
-    }, [config, source]);
+    }, [source]);
 
     return [
         request,
