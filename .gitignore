@@ -4,3 +4,4 @@ client/build
 firebaseConfig.json
 firebase-admin.json
 .env
+/logs

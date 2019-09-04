@@ -20,7 +20,8 @@
     "morgan": "~1.9.0",
     "randomcontentgenerator": "^0.3.1",
     "rate-limiter-flexible": "^1.1.1",
-    "validate": "^4.5.1"
+    "validate": "^4.5.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "concurrently": "^4.1.1",

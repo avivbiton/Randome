@@ -4,6 +4,8 @@ const connectionURL = process.env.DB_CONNECTION_STRING;
 const Randomizer = require("./Models/Randomizer");
 const seedSchema = require("./seedingSchema.json");
 
+const logger = require("./services/logger");
+
 const connectionOptions = {
     useNewUrlParser: true,
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
@@ -19,11 +21,10 @@ const initializeConnection = async () => {
     try {
         await mongoose.connect(connectionURL, connectionOptions);
         bindHandlers(mongoose.connection);
-        console.log("Mongoose Connected.");
+        logger.info("Mongoose Connected.");
         seedDatabase();
     } catch (error) {
-        console.error("Mongoose initial connection failed.");
-        console.error(error);
+        logger.error(`Mongoose initial connection failed. ${error}`);
     }
 };
 
@@ -67,8 +68,7 @@ function makeid(length) {
 
 const bindHandlers = (connection) => {
     connection.on("error", error => {
-        // TODO: addd loggin method
-        console.error(error);
+        logger.error(`MongoDB connection error: ${error}`);
     });
 };
 

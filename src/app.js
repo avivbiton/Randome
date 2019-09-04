@@ -6,7 +6,12 @@ const firebase = require("./firebase");
 const LoadRoutes = require("./routes/index");
 const production = require("./production");
 const middleware = require("./middleware/startup");
+const logger = require("./services/logger");
 const app = express();
+
+process.on("uncaughtException", error => {
+    logger.error(`Uncaught Exception: ${error}`);
+});
 
 firebase.initialize();
 database.initializeConnection();
