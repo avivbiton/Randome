@@ -2,11 +2,11 @@ const express = require("express");
 const logger = require("morgan");
 const helmet = require("helmet");
 const basicLimiter = require("../rateLimiters/basicLimiter");
-const blockLimiter = require("../rateLimiters/basicLimiter");
+const blockLimiter = require("../rateLimiters/blockLimiter");
 
 const useMiddleware = (app) => {
     app.use(helmet());
-    
+
     app.use(blockLimiter);
     app.use(basicLimiter);
 

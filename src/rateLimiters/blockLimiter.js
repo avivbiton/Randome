@@ -3,11 +3,11 @@ const { RateLimiterMemory } = require("rate-limiter-flexible");
 // against DDOS attacks
 
 const rateLimiter = new RateLimiterMemory({
-    points: 300, 
-    duration: 60, 
-    blockDuration: 120, 
-    inmemoryBlockOnConsumed: 301, 
-    inmemoryBlockDuration: 120, 
+    points: 200,
+    duration: 60,
+    blockDuration: 120,
+    inmemoryBlockOnConsumed: 301,
+    inmemoryBlockDuration: 120,
 });
 
 const rateLimiterMiddleware = (req, res, next) => {
@@ -17,7 +17,7 @@ const rateLimiterMiddleware = (req, res, next) => {
             next();
         })
         .catch(() => {
-            res.status(429).send("Too Many Requests");
+            res.status(429).send("Blocked - Too Many Requests");
         });
 };
 
