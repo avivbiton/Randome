@@ -1,19 +1,14 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
-//import thunk from "redux-thunk";
 
-// import reducers here
 import auth from "./Reducers/authReducer";
-import errors from "./Reducers/errorReducer";
 
 const initialState = {};
 
 const rootReducer = combineReducers({
- // set reducers here
-    auth,
-    errors
+    auth
 });
 
-const middleware = []; //[thunk];
+const middleware = [];
 
 // composeEnhancer is created to assure the dev tools only available while the app is running in dev mode &&
 // The user has the extension installed otherwise the site will not work.
