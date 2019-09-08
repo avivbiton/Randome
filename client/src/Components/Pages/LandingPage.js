@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import FeaturedItems from "../FeaturedItems";
 
+import "../../css/LandingPage.css";
+
 function LandingPage() {
 
     const user = useSelector(state => state.auth.user);
 
     return (
         <>
-            <div className="container">
+            <div id="landing" className="container-fluid">
                 <div className="row">
-                    <section className="col-md-6 pb-5" style={{ minHeight: "75vh" }}>
+                    <section className="col-md-6 pb-5 ml-lg-5" style={{ minHeight: "75vh" }}>
                         <h1 className="display-3 text-primary mt-3">Randome</h1>
                         <p className="lead" style={{ fontSize: "2rem" }}>
                             Create, share and use a large variety of randomizers. Randome stores a collection of randomizers that will kick in your inspiration, give you some ideas or just make you laugh.
@@ -31,7 +33,7 @@ function LandingPage() {
                             </div>
                         </div>
                     </section>
-                    <section className="col-md-6 d-flex justify-content-center justify-content-lg-end" style={{ maxHeight: "550px" }}>
+                    <section className="col-md-5 d-flex justify-content-center" style={{ maxHeight: "550px" }}>
                         {!user ?
                             <RegisterForm title="Join Our Community" />
                             :

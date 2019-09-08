@@ -70,7 +70,7 @@ export default function LikeAndFavoriteCounter({ id, likeCount, favoriteCount })
 
     }, [hasFavorited, accountMeta, favorites, id]);
 
-    let likeButtonStyles = "btn shadow-sm px-4 btn-outline-info";
+    let likeButtonStyles = "btn shadow-sm px-4 btn-outline-secondary";
     likeButtonStyles += hasLiked ? " btn-like-active" : "";
 
     let favoriteButtonStyles = "btn shadow-sm px-4 btn-outline-softRed ml-4";
