@@ -38,7 +38,7 @@ export default function FeaturedItems() {
                 <hr />
                 <DragScroll className="d-flex flex-row overflow-auto scrollbar dragscroll">
                     {featured.map(i =>
-                        <div key={i._id} className="m-1">
+                        <div key={i._id} className="m-1" style={{ maxWidth: "350px" }}>
                             <ItemDisplay
                                 name={i.name}
                                 description={i.description}
