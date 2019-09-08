@@ -42,7 +42,7 @@ $orange:  #fd7e14 !default; // warning
 $red:     #DF4B5F !default; // danger
 $begonia: #DF4B5F !default;
 
-$lightBlue:    rgb(247, 248, 252) !default;
+$lightBlue:    rgba(247, 248, 252, 0.048) !default;
 
 $lightGray:    #72818B !default;
 
@@ -542,7 +542,7 @@ $custom-control-indicator-disabled-bg:          $input-disabled-bg !default;
 $custom-control-label-disabled-color:           $gray-600 !default;
 
 $custom-control-indicator-checked-color:        $component-active-color !default;
-$custom-control-indicator-checked-bg:           $component-active-bg !default;
+$custom-control-indicator-checked-bg:           theme-color("secondary") !default;
 $custom-control-indicator-checked-disabled-bg:  rgba(theme-color("primary"), .5) !default;
 $custom-control-indicator-checked-box-shadow:   none !default;
 $custom-control-indicator-checked-border-color: $custom-control-indicator-checked-bg !default;
