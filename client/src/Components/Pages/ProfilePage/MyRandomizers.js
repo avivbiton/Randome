@@ -63,7 +63,6 @@ export default function MyRandomizers() {
         );
     return (
         <div className="container-fluid">
-            <h1>My Randomizers</h1>
             <DeleteModal
                 {...bindModal}
                 onDelete={onDeleteEvent}
