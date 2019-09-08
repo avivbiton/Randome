@@ -49,7 +49,7 @@ function App() {
     <Provider store={reduxStore}>
       <Router>
         <Navbar />
-        <div style={{paddingBottom: "30px"}}>
+     
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/randomizer/:id" component={RandomizerPage} />
@@ -62,7 +62,7 @@ function App() {
             <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
             <Route path="*" render={NotFound} />
           </Switch>
-        </div>
+      
         <Footer />
       </Router>
     </Provider>
