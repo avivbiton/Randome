@@ -7,6 +7,7 @@ import { useSpring, animated } from "react-spring";
 import useReactRouter from "use-react-router";
 import { useCheckbox } from "../../../Hooks/formInput";
 import RandomizerIsPrivate from "./RandomizerIsPrivate";
+import Checkbox from "../../Form/Checkbox";
 
 function RandomizerPage() {
 
@@ -79,12 +80,11 @@ function RandomizerPage() {
                         <p className="text-danger">You've set this to be private. Only you can view this page.</p>
                         : null
                     }
-                    <div className="form-check">
-                        <input className="form-check-input" type="checkbox" value="" id="animationCheckbox" {...bindSkipAnimation} />
-                        <label className="form-check-label" htmlFor="animationCheckbox">
-                            Skip Animation
-                        </label>
-                    </div>
+                    <Checkbox
+                        id="checkboxSkipForAnim"
+                        label="Skip Animation"
+                        {...bindSkipAnimation}
+                    />
                     <button className="btn btn-primary btn-lg" onClick={() => onRollClicked()}>
                         Roll the Dice<i className="fas fa-dice ml-2" />
                     </button>
