@@ -9,22 +9,19 @@ export default function Sidemenu({ active, items, onActiveChanged }) {
     }, [onActiveChanged]);
 
     return (
-        <div className="card">
-            <div className="card-header text-center d-md-block d-none">
-                <h4>Your Profile</h4>
-            </div>
-            <ul className="list-group">
-                {items.map((i, index) => {
-                    let classNames = "btn menu-item";
-                    // eslint-disable-next-line
-                    if (active == index) {
-                        classNames += " menu-hover";
-                    }
-                    return (
-                        <button key={index} onClick={() => onButtonClicked(index)} className={classNames}>{i}</button>
-                    );
-                })}
-            </ul>
-        </div>
+        <ul className="nav nav-tabs">
+            {items.map((i, index) => {
+                let classNames = "btn nav-link";
+                // eslint-disable-next-line
+                if (active == index) {
+                    classNames += " active";
+                }
+                return (
+                    <li key={index} className="nav-item">
+                        <button onClick={() => onButtonClicked(index)} className={classNames}>{i}</button>
+                    </li>
+                );
+            })}
+        </ul>
     );
 }

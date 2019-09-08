@@ -28,21 +28,19 @@ export default function ProfilePage() {
 
     return (
         <div className="container mt-4">
-            <div className="row">
-                <div className="col-md-3 float-left pr-4">
-                    <Sidemenu
-                        active={currentPage}
-                        items={["My Randomizers", "Favorites", "Settings", "Account"]}
-                        onActiveChanged={onActiveChanged} />
-                </div>
-                <div className="col-md-8">
-                    <PageSwitcher currentPageIndex={currentPage}>
-                        <PageSection index="0" component={MyRandomizers} />
-                        <PageSection index="1" component={Favorites} />
-                        <PageSection index="2" component={SettingsPage} />
-                    </PageSwitcher>
-                </div>
+            <div className="mb-4">
+                <Sidemenu
+                    active={currentPage}
+                    items={["Randomizers", "Favorites", "Settings"]}
+                    onActiveChanged={onActiveChanged} />
             </div>
-        </div>
+            <PageSwitcher currentPageIndex={currentPage}>
+                <PageSection index="0" component={MyRandomizers} />
+                <PageSection index="1" component={Favorites} />
+                <PageSection index="2" component={SettingsPage} />
+            </PageSwitcher>
+
+
+        </div >
     );
 }

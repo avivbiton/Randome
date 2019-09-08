@@ -34,17 +34,23 @@ $grays: map-merge(
   $grays
 );
 
-$lightBlue:    rgb(247, 248, 252) !default;
-$indigo:  #4F57AA !default;
-$purple:  #454857 !default;
-$lightGray:    #72818B !default;
-$red:     #8F002E !default;
-$orange:  #fd7e14 !default;
-$yellow:  #ffc107 !default;
-$green:   #28a745 !default;
-$teal:    #20c997 !default;
-$cyan:    #17a2b8 !default;
+$indigo:  #2A4064 !default; // primary
+$purple:  #5598A6 !default; // secondary
+$cyan:    #C3BF9C !default; // info
+$green:   #04a172 !default; // success
+$orange:  #fd7e14 !default; // warning
+$red:     #DF4B5F !default; // danger
 $begonia: #DF4B5F !default;
+
+$lightBlue:    rgba(247, 248, 252, 0.048) !default;
+
+$lightGray:    #72818B !default;
+
+
+$yellow:  #ffc107 !default;
+
+$teal:    #20c997 !default;
+
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -197,7 +203,8 @@ $grid-breakpoints: (
   sm: 576px,
   md: 768px,
   lg: 992px,
-  xl: 1200px
+  xl: 1200px,
+  xxl: 1800px
 ) !default;
 
 @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
@@ -535,7 +542,7 @@ $custom-control-indicator-disabled-bg:          $input-disabled-bg !default;
 $custom-control-label-disabled-color:           $gray-600 !default;
 
 $custom-control-indicator-checked-color:        $component-active-color !default;
-$custom-control-indicator-checked-bg:           $component-active-bg !default;
+$custom-control-indicator-checked-bg:           theme-color("secondary") !default;
 $custom-control-indicator-checked-disabled-bg:  rgba(theme-color("primary"), .5) !default;
 $custom-control-indicator-checked-box-shadow:   none !default;
 $custom-control-indicator-checked-border-color: $custom-control-indicator-checked-bg !default;

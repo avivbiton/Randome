@@ -24,12 +24,15 @@ export default function DeleteModal({ showing, toggle, onDelete, data }) {
         <Modal show={showing} onHide={toggle}>
             <Modal.Body style={{ fontSize: "150%" }}>
                 Delete <span className="font-weight-bold">{data ? data.name : ""}?</span>
-                <br />This can not be un-done in anyway!
+                <div className="row mt-2">
+                    <div className="col-6">
+                        <button className="btn btn-primary btn-block" onClick={() => toggle(false)}>Nevermind</button>
+                    </div>
+                    <div className="col-6">
+                        <button className="btn btn-outline-danger btn-block" onClick={() => deleteRandomizer()}>Delete</button>
+                    </div>
+                </div>
             </Modal.Body>
-            <Modal.Footer>
-                <button className="btn btn-outline-primary" onClick={() => toggle(false)}>Nevermind</button>
-                <button className="btn btn-danger" onClick={() => deleteRandomizer()}>Delete</button>
-            </Modal.Footer>
         </Modal >
     );
 }

@@ -10,6 +10,7 @@ import { ContentGenerator } from "randomcontentgenerator";
 import AskBeforeLeave from "./AskBeforeLeave";
 import SchemaField from "./SchemaField";
 import ErrorDisplay from "./ErrorDisplay";
+import Checkbox from "./Form/Checkbox";
 
 
 export default function RandomizerForm({ inital = { name: "", description: "", jsonSchema: "", isPrivate: false },
@@ -40,7 +41,15 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                 <Textarea rows="5" placeholder="Short description, explaining what your randomizers does." className="form-control form-control-lg mt-2"
                     {...bindDescription}
                     error={errors.description} />
-
+                <div className="mt-2">
+                    <Checkbox
+                        id="checkboxIsPrivate"
+                        label="Make This Private"
+                        {...bindPrivate}
+                    />
+                    <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
+                </div>
+                
                 <div className="alert alert-info mt-4">
                     <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -56,19 +65,10 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                     error={errors.schema}
                     onChange={onSchemaChange}
                     initial={inital.jsonSchema} />
-
-                <div className="form-check">
-                    <input type="checkbox" className="form-check-input mt-2" id="checkboxIsPrivate"
-                        {...bindPrivate} />
-                    <label htmlFor="checkboxIsPrivate" className="form-check-label text-danger">
-                        Private
-                    </label>
-                    <small className="form-text text-muted text-danger">Warning! no one will be able to view, like or favorite your randomizer if it is private. You can change this later.</small>
-                </div>
                 <div className="d-flex flex-column mt-4">
                     <i className="far fa-hand-point-down fa-3x mx-auto"></i>
                     <br />
-                    <button className="btn btn-info mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
+                    <button className="btn btn-primary mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
                         Show / Hide Preview
                     </button>
                     <div id="previewCollapse" className="collapse">

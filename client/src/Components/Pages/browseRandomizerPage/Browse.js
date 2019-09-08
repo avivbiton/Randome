@@ -4,6 +4,7 @@ import API from "../../../API/api";
 import queryString from "query-string";
 import useReactRouter from "use-react-router";
 import { useInput } from "../../../Hooks/formInput";
+import Pagination from "./Pagination";
 
 
 export const SORT_TYPES = {
@@ -93,14 +94,14 @@ function Browse() {
                     <tr>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
+                                className={"btn btn-outline-secondary btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.LATEST)}>
                                 Latest
                         </button>
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.MOST_LIKES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                                 Most Liked
@@ -108,7 +109,7 @@ function Browse() {
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.MOST_FAVORITES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                                 Most Favorites
@@ -116,7 +117,7 @@ function Browse() {
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.RECENTLY_UPDATED ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                                 Recently Updated
@@ -136,57 +137,5 @@ function Browse() {
         </div >
     );
 }
-
-const LEFT_ARROW = 37;
-const RIGH_ARROW = 39;
-
-function Pagination({ currentPage, totalPages, setPage }) {
-    useEffect(() => {
-        window.addEventListener("keydown", onKeyDown, false);
-        function onKeyDown(e) {
-            if (e.keyCode === LEFT_ARROW && currentPage !== 1) {
-                setPage(currentPage - 1);
-            } else if (e.keyCode === RIGH_ARROW && currentPage !== totalPages) {
-                setPage(currentPage + 1);
-            }
-        }
-        return () => {
-            window.removeEventListener("keydown", onKeyDown, false);
-        }
-    }, [currentPage, totalPages, setPage]);
-
-
-    const pageItems = useMemo(() => {
-        const offset = 5;
-        const arrayOfItems = [];
-        for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
-            arrayOfItems.push(
-                <li key={i} className={"page-item" + (currentPage === i ? " active" : "")}>
-                    <button type="button"
-                        className="btn page-link"
-                        onClick={() => setPage(i)}>{i}</button>
-                </li>
-            );
-        }
-        return arrayOfItems;
-    }, [currentPage, setPage, totalPages]);
-
-
-    return (
-        <nav aria-label="Page navigation example">
-            <ul className="pagination">
-                <li className="page-item"><button type="button"
-                    disabled={currentPage === 1} className="btn page-link"
-                    onClick={() => setPage(currentPage - 1)}>Previous</button></li>
-                {pageItems}
-                <li className="page-item"><button type="button"
-                    disabled={currentPage === totalPages}
-                    className="btn page-link"
-                    onClick={() => setPage(currentPage + 1)}>Next</button></li>
-            </ul>
-        </nav>
-    );
-}
-
 
 export default Browse;

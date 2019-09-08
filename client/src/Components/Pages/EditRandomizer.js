@@ -5,6 +5,7 @@ import toastr from "toastr";
 import { toastrDefault } from "../../config";
 import LoadingSpinner from "../LoadingSpinner";
 import RandomizerForm from "../RandomizerForm";
+import useAPI from "../../Hooks/useAPI";
 
 export default function EditRandomizer() {
     const { match, history } = useReactRouter();
@@ -13,6 +14,7 @@ export default function EditRandomizer() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [blockLeave, setBlockLeave] = useState(true);
+    const [fetch, cancelFetch] = useAPI();
 
     const fetchRandomizerData = useCallback(() => {
         async function fetchRandomizer() {
@@ -28,24 +30,29 @@ export default function EditRandomizer() {
 
     useEffect(() => {
         async function verifyOwner() {
-            try {
-                const data = await api.randomizers.fetchMyRandomizers();
-                // eslint-disable-next-line
-                if (data.findIndex(e => e._id == match.params.id) === -1) {
-                    throw new Error("Unauthorized");
-                }
-                return true;
-            } catch (error) {
-                history.push("/not-found");
-                return false;
-            }
+            return new Promise((resolve, reject) => {
+                fetch(api.randomizers.fetchMyRandomizers(),
+                    data => {
+                        // eslint-disable-next-line eqeqeq
+                        if (data.findIndex(e => e._id == match.params.id) === -1) {
+                            return resolve(false);
+                        }
+                        return resolve(true);
+                    }, () => {
+                        resolve(false);
+                    });
+            });
         };
         verifyOwner().then(isOwner => {
             if (isOwner) {
                 fetchRandomizerData();
+            } else {
+                history.push("/");
             }
         });
-    }, [fetchRandomizerData, match.params.id, history]);
+
+        return () => cancelFetch();
+    }, [fetchRandomizerData, match.params.id, history, fetch, cancelFetch]);
 
 
     const onEditSubmit = useCallback(({ name, description, isPrivate, schema }) => {

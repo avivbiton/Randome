@@ -78,7 +78,7 @@ export default function SchemaField({ error, initial, onChange }) {
                     defaultSnapshot={defaultSnapshot}
                 />
                 <ErrorDisplay error={error} />
-                <button type="button" className="btn btn-outline-primary mt-2" onClick={populateEditorFromRawJson}>
+                <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={populateEditorFromRawJson}>
                     Populate Editor from Raw JSON
                     </button>
             </div>
@@ -86,7 +86,7 @@ export default function SchemaField({ error, initial, onChange }) {
                 <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
                     {...bindSchema}
                     error={error} />
-                <button type="button" className="btn btn-outline-primary mt-2" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
+                <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={convertFromEditorClicked}>Copy JSON from Editor</button>
             </div>
         </>
     );
