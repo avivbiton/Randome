@@ -68,7 +68,7 @@ export default function RandomizerForm({ inital = { name: "", description: "", j
                 <div className="d-flex flex-column mt-4">
                     <i className="far fa-hand-point-down fa-3x mx-auto"></i>
                     <br />
-                    <button className="btn btn-info mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
+                    <button className="btn btn-primary mx-auto" type="button" data-toggle="collapse" data-target="#previewCollapse" aria-expanded="false" aria-controls="previewCollapse">
                         Show / Hide Preview
                     </button>
                     <div id="previewCollapse" className="collapse">

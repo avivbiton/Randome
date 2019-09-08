@@ -93,14 +93,14 @@ function Browse() {
                     <tr>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
+                                className={"btn btn-outline-secondary btn-lg mx-1" + (searchQuery.sort === SORT_TYPES.LATEST ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.LATEST)}>
                                 Latest
                         </button>
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.MOST_LIKES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_LIKES)}>
                                 Most Liked
@@ -108,7 +108,7 @@ function Browse() {
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.MOST_FAVORITES ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.MOST_FAVORITES)}>
                                 Most Favorites
@@ -116,7 +116,7 @@ function Browse() {
                         </td>
                         <td>
                             <button style={{ width: "12rem" }}
-                                className={"btn btn-outline-info btn-lg mx-1" +
+                                className={"btn btn-outline-secondary btn-lg mx-1" +
                                     (searchQuery.sort === SORT_TYPES.RECENTLY_UPDATED ? " active" : "")}
                                 onClick={() => setSort(SORT_TYPES.RECENTLY_UPDATED)}>
                                 Recently Updated
