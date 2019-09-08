@@ -128,13 +128,15 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
 
     return (
         <>
-            <div className="card">
+            <div className="card overflow-auto">
                 <div className="card-body">
                     <div className="d-flex">
                         <button type="button"
-                            className="btn btn-outline-primary mr-2" onClick={onAddFieldClicked}>Add Field</button>
+                            className="btn btn-outline-primary mr-2" onClick={onAddFieldClicked}>
+                            <i className="fas fa-plus-square mr-2" />Add Field</button>
                         <button type="button"
-                            className="btn btn-outline-primary mr-2" onClick={onAddGlobalClicked}>Add Global Property</button>
+                            className="btn btn-outline-primary mr-2" onClick={onAddGlobalClicked}>
+                            <i className="fas fa-plus-square mr-2" />Add Property</button>
                         <button type="button"
                             className="btn btn-outline-primary mr-1" onClick={redoAction}>Redo<i className="fas fa-redo mx-1"></i></button>
                         <button type="button"
