@@ -13,6 +13,11 @@ process.on("uncaughtException", error => {
     logger.error(`Uncaught Exception: ${error}`);
 });
 
+app.use((req, res, next) => {
+    console.log(`request to: ${req.originalUrl}`);
+    next();
+});
+
 firebase.initialize();
 database.initializeConnection();
 
