@@ -79,29 +79,39 @@ export default function BuildViewer({ snapshot, dispatch, fieldModal, propertyMo
     return (
         <div>
             <h2>Fields</h2>
-            {snapshot.iterateFields().map(({ name, data }, key) => <FieldDisplay
-                key={key}
-                name={name}
-                field={data}
-                onDelete={() => onFieldDelete(key)}
-                onEdit={() => onEditFieldClicked(key, name, data)}
-                onAddProperty={() => onAddPropertyClicked(key)}
-                onEditProperty={(index, propertyObject) => onEditPropertyClicked(key, index, propertyObject)}
-                onDeleteProperty={index => onPropertyDelete(key, index)}
-                orderUp={() => changeOrder(key, key - 1)}
-                orderDown={() => changeOrder(key, key + 1)}
-            />)}
+            {snapshot.iterateFields().length === 0 ?
+                <p className="lead">
+                    You don't have any fields. Please add at least one field before submitting your randomizer.
+                </p>
+                :
+                snapshot.iterateFields().map(({ name, data }, key) => <FieldDisplay
+                    key={key}
+                    name={name}
+                    field={data}
+                    onDelete={() => onFieldDelete(key)}
+                    onEdit={() => onEditFieldClicked(key, name, data)}
+                    onAddProperty={() => onAddPropertyClicked(key)}
+                    onEditProperty={(index, propertyObject) => onEditPropertyClicked(key, index, propertyObject)}
+                    onDeleteProperty={index => onPropertyDelete(key, index)}
+                    orderUp={() => changeOrder(key, key - 1)}
+                    orderDown={() => changeOrder(key, key + 1)}
+                />)}
             <hr />
             <h2>Global Properties</h2>
-            <div className="row">
-                {snapshot.getSchema().globalProperties.map((i, key) => <GlobalPropertyDisplay
-                    key={key}
-                    index={key}
-                    field={i}
-                    onDelete={() => onGlobalDelete(key)}
-                    onEdit={() => onEditGlobalClicked(key, i)}
-                />)}
-            </div>
+
+            {snapshot.getSchema().globalProperties.length === 0 ?
+                <p className="lead"> You don't have any properties yet.</p>
+                :
+                <div className="row">
+                    {snapshot.getSchema().globalProperties.map((i, key) => <GlobalPropertyDisplay
+                        key={key}
+                        index={key}
+                        field={i}
+                        onDelete={() => onGlobalDelete(key)}
+                        onEdit={() => onEditGlobalClicked(key, i)}
+                    />)}
+                </div>}
+
         </div>
     );
 }
