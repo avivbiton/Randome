@@ -12,8 +12,8 @@ function RegisterForm({ title }) {
 
     const [displayName, bindDisplayName] = useInput("");
     const [email, bindEmail] = useInput("");
-    const [password, bindPassword] = useInput("");
-    const [confirmPassword, bindConfirmPassword] = useInput("");
+    const [password, bindPassword] = useInput("", (newValue) => validatePasswordMatch(newValue.target.value, confirmPassword));
+    const [confirmPassword, bindConfirmPassword] = useInput("", (newValue) => validatePasswordMatch(password, newValue.target.value));
 
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
@@ -41,8 +41,10 @@ function RegisterForm({ title }) {
         setErrors(newErrors);
     }, [errors, setErrors]);
 
-    useEffect(function validatePasswordMatch() {
-        if (password !== confirmPassword) {
+    const validatePasswordMatch = (pass, confirm) => {
+        console.log(pass);
+        console.log(confirm);
+        if (pass !== confirm) {
             setErrors({ ...errors, confirmPassword: "Passwords do not match." });
             setButtonDisable(true);
         } else {
@@ -50,7 +52,6 @@ function RegisterForm({ title }) {
             removeError("confirmPassword");
         }
     }
-        , [password, confirmPassword, removeError, errors]);
 
     function isFormValid() {
         const errors = validateSchema(registerSchema, { displayName, email, password });
