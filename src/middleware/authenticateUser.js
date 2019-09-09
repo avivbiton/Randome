@@ -7,10 +7,14 @@ module.exports = (required = true) => async (req, res, next) => {
     try {
         const decoded = await admin.auth().verifyIdToken(authToken);
         req.user = decoded;
+        console.log(req.user);
         try {
+            console.log("finding account");
             const data = await Account.find({ userId: decoded.uid }).lean().exec();
+            console.log("found " + data);
             req.account = data[0];
         } catch (error) {
+            console.log(error);
             req.account = null;
         }
         next();
