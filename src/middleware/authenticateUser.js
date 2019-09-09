@@ -4,20 +4,14 @@ const Account = require("../Models/Account");
 
 module.exports = (required = true) => async (req, res, next) => {
     try {
-        console.log("require auth");
         const authToken = req.get("Authorization");
-        console.log("auth token " + authToken);
         try {
             const decoded = await admin.auth().verifyIdToken(authToken);
             req.user = decoded;
-            console.log(req.user);
             try {
-                console.log("finding account");
                 const data = await Account.find({ userId: decoded.uid }).lean().exec();
-                console.log("found " + data);
                 req.account = data[0];
             } catch (error) {
-                console.log(error);
                 req.account = null;
             }
             next();
@@ -32,8 +26,6 @@ module.exports = (required = true) => async (req, res, next) => {
         }
     }
     catch (error) {
-        console.log("failed to get auth header");
-        console.error(error);
         next(new AuthenticationError());
     }
 
