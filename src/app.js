@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === "production")
 
 LoadRoutes(app);
 
+console.log(process.env.FIREBASE_ADMIN);
 
 module.exports = app;
 
