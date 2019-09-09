@@ -3,3 +3,5 @@ client/node_modules
 client/build
 .env
 /logs
+package-lock.json
+client/package-lock.json
