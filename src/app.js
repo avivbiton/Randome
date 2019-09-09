@@ -24,10 +24,14 @@ app.use((req, res, next) => {
 
 middleware.useMiddleware(app);
 
+LoadRoutes(app);
+
 if (process.env.NODE_ENV === "production")
     production.initializeProductionBuild(app);
 
-LoadRoutes(app);
+app.use((req, res) => {
+    res.status(404).send("Not Found");
+});
 
 app.listen(process.env.PORT, () => {
     logger.info(`Server started on port ${process.env.PORT}`);

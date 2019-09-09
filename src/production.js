@@ -4,7 +4,7 @@ const path = require("path");
 const initializeProductionBuild = (app) => {
     const combinedPath = path.join(__dirname + "/..", "client", "build");
     app.use(express.static(combinedPath));
-    app.get("/", (req, res) => {
+    app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname + "/..", "client", "build", "index.html"));
     });
 };
