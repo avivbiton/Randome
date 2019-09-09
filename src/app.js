@@ -9,6 +9,7 @@ const logger = require("./services/logger");
 const app = express();
 
 process.on("uncaughtException", error => {
+    console.error(`Uncaught Exception: ${error}`);
     logger.error(`Uncaught Exception: ${error}`);
 });
 

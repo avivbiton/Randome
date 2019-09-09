@@ -3,7 +3,7 @@ const { RateLimiterMemory } = require("rate-limiter-flexible");
 // against DDOS attacks
 
 const rateLimiter = new RateLimiterMemory({
-    points: 200,
+    points: 500,
     duration: 60,
     blockDuration: 120,
     inmemoryBlockOnConsumed: 301,
