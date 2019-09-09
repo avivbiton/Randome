@@ -1,7 +1,6 @@
 const admin = require("firebase-admin");
 
 const initialize = () => {
-
     admin.initializeApp({
         credential: admin.credential.cert(getServiceAccount()),
         databaseURL: process.env.FIREBASE_DB

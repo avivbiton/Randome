@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-
 const database = require("./database");
 const firebase = require("./firebase");
 const LoadRoutes = require("./routes/index");
@@ -29,7 +28,9 @@ if (process.env.NODE_ENV === "production")
 
 LoadRoutes(app);
 
-console.log(process.env.FIREBASE_ADMIN);
+app.listen(process.env.PORT, () => {
+    logger.info(`Server started on port ${process.env.PORT}`);
+});
 
 module.exports = app;
 
