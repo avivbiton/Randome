@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useInput } from "../Hooks/formInput";
 import Input from "./Form/Input";
 import Button from "./Form/Button";
@@ -42,8 +42,6 @@ function RegisterForm({ title }) {
     }, [errors, setErrors]);
 
     const validatePasswordMatch = (pass, confirm) => {
-        console.log(pass);
-        console.log(confirm);
         if (pass !== confirm) {
             setErrors({ ...errors, confirmPassword: "Passwords do not match." });
             setButtonDisable(true);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 
-export default function DragScroll({ className, children, mobileDisabled = true }) {
+export default function DragScroll({ className, children, style, mobileDisabled = true }) {
 
     const [dragging, setDragging] = useState(false);
     const [lastPosition, setPosition] = useState({ x: 0, y: 0 });
@@ -38,7 +38,7 @@ export default function DragScroll({ className, children, mobileDisabled = true 
         }
     }, [mouseUp]);
 
-    
+
     if (mobileDisabled && isMobile) {
         return <div className={className}>{children}</div>
     }
@@ -47,7 +47,9 @@ export default function DragScroll({ className, children, mobileDisabled = true 
         <div className={className}
             onMouseDown={mouseDown}
             onMouseMove={mouseMove}
-            ref={container}>
+            ref={container}
+            style={style}
+        >
             {children}
         </div>
     );

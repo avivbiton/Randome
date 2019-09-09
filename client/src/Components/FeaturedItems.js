@@ -36,7 +36,8 @@ export default function FeaturedItems() {
             <div className="text-center">
                 <h1 className="border border-primary rounded py-4">Featured</h1>
                 <hr />
-                <DragScroll className="d-flex flex-row overflow-auto scrollbar dragscroll">
+                <DragScroll className="d-flex flex-row overflow-auto scrollbar dragscroll"
+                    style={{ cursor: "Grab" }}>
                     {featured.map(i =>
                         <div key={i._id} className="m-1" style={{ maxWidth: "350px" }}>
                             <ItemDisplay
