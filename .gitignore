@@ -1,7 +1,5 @@
 node_modules
 client/node_modules
 client/build
-firebaseConfig.json
-firebase-admin.json
 .env
 /logs
