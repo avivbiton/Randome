@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import FeaturedItems from "../FeaturedItems";
 
-import "../../css/LandingPage.css";
-
 function LandingPage() {
 
     const user = useSelector(state => state.auth.user);

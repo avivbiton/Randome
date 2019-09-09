@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // CSS
 import "./css/Bootstrap.css";
 import "./css/App.css";
-import "../node_modules/toastr/build/toastr.min.css";
+import "./css/toastr.css";
 
 // authentication imports
 import { loginUser } from "./Authentication/auth";
