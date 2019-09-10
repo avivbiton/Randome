@@ -5,7 +5,7 @@ import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
-import { snapshotReducer, UPDATE_SNAPSHOT_HISTORY, INCREASE_INDEX, DECREASE_INDEX } from "./snapshotReducer";
+import { snapshotReducer, UPDATE_SNAPSHOT_HISTORY, INCREASE_INDEX, DECREASE_INDEX, ADD_FIELD, ADD_GLOBAL, EDIT_FIELD, EDIT_GLOBAL, ADD_PROPERTY } from "./snapshotReducer";
 
 export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
 
@@ -53,42 +53,29 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
         }
     }, [defaultSnapshot, updateSnapshotHistory]);
 
-    const addField = useCallback((name, parser) => {
-        const snapshot = currentSnapshot
-            .addField(name, parser);
-        updateSnapshotHistory(snapshot);
+    const addField = (name, parser) => {
+        dispatchSnapshot({ type: ADD_FIELD, name, parser });
+    };
 
-    }, [updateSnapshotHistory, currentSnapshot]);
+    const addGlobal = parser => {
+        dispatchSnapshot({ type: ADD_GLOBAL, parser });
+    };
 
-    const addGlobal = useCallback(parser => {
-        const snapshot = currentSnapshot
-            .addGlobal(parser);
-        updateSnapshotHistory(snapshot);
-    }, [updateSnapshotHistory, currentSnapshot]);
+    const editField = (index, name, parser) => {
+        dispatchSnapshot({ type: EDIT_FIELD, index, name, parser });
+    }
 
-    const editField = useCallback((index, name, parser) => {
-        const snapshot = currentSnapshot
-            .editField(index, name, parser);
-        updateSnapshotHistory(snapshot);
-    }, [updateSnapshotHistory, currentSnapshot]);
+    const editGlobal = (index, parser) => {
+        dispatchSnapshot({ type: EDIT_GLOBAL, index, parser });
+    }
 
-    const editGlobal = useCallback((index, parser) => {
-        const snapshot = currentSnapshot
-            .editGlobal(index, parser);
-        updateSnapshotHistory(snapshot);
-    }, [updateSnapshotHistory, currentSnapshot]);
+    const addProperty = (fieldIndex, parser) => {
+        dispatchSnapshot({ type: ADD_PROPERTY, fieldIndex, parser });
+    }
 
-    const addProperty = useCallback((fieldIndex, parser) => {
-        const snapshot = currentSnapshot
-            .appendPropertyToField(fieldIndex, parser);
-        updateSnapshotHistory(snapshot);
-    }, [updateSnapshotHistory, currentSnapshot]);
-
-    const editProperty = useCallback((fieldIndex, index, parser) => {
-        const snapshot = currentSnapshot
-            .editPropertyField(fieldIndex, index, parser);
-        updateSnapshotHistory(snapshot);
-    }, [updateSnapshotHistory, currentSnapshot]);
+    const editProperty = (fieldIndex, index, parser) => {
+        dispatchSnapshot({ type: EDIT_FIELD, fieldIndex, index, parser });
+    }
 
     const undoLastAction = useCallback(() => {
         if (snapshot.index === 0) return;
@@ -109,7 +96,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                 return editField(data.fieldIndex, name, parser);
             default: return
         }
-    }, [addField, editField]);
+    }, []);
 
     const onPropertyModalResolved = useCallback((parser, data) => {
         const mode = data.mode;
@@ -124,7 +111,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                 return editProperty(data.fieldIndex, data.index, parser);
             default: return;
         }
-    }, [addGlobal, editGlobal, addProperty, editProperty]);
+    }, []);
 
     return (
         <>
