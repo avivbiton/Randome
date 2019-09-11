@@ -1,60 +1,54 @@
 {
-	"fields": {
-		"CreatureName": {
-			"text": [
-				"@{0} @g{0} Dragon",
-				"@{0} @g{0} Troll"
-			],
-			"properties": [{
+	"fields": [
+		{
+			"name": "Creature Name",
+			"data": {
+				"text": [
+					"@g{0} Dragon",
+					"@g{0} Troll"
+				]
+			}
+		},
+		{
+			"name": "Attack",
+			"data": {
+				"min": 5,
+				"max": 11
+			}
+		},
+		{
+			"name": "Description",
+			"data": {
 				"options": [
 					[
-						"Strong ",
-						"Weak ",
-						"Fearless "
+						"Increased @{0}% move speed while hidden. ",
+						"Deal bonus @{1} @g{0} damage while attacking. "
 					],
 					[
-						" and large",
-						" and restless"
+						"While moving has increased resistance.",
+						"Immune to @g{0} damage."
 					]
-				]
-			}]
-		},
-		"Attack": {
-			"min": 5,
-			"max": 11
-		},
-		"Health": {
-			"min": 100,
-			"max": 500
-		},
-		"Description": {
-			"options": [
-				[
-					"Increased @{0}% move speed while hidden. ",
-					"Deal bonus @{1} @g{0} damage while attacking. "
 				],
-				[
-					"While moving has increased resistance.",
-					"Immune to @g{0} damage."
+				"properties": [
+					{
+						"min": 5,
+						"max": 11
+					},
+					{
+						"min": 100,
+						"max": 251
+					}
 				]
-			],
-			"properties": [
-				{
-					"min": 5,
-					"max": 11
-				},
-				{
-					"min": 100,
-					"max": 251
-				}
+			}
+		}
+	],
+	"globalProperties": [
+		{
+			"text": [
+				"Fire",
+				"Frost",
+				"Earth"
 			]
 		}
-	},
-	"globalProperties": [
-		[
-			"Fire",
-			"Frost",
-			"Earth"
-		]
 	]
 }

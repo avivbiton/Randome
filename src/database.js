@@ -22,7 +22,8 @@ const initializeConnection = async () => {
         await mongoose.connect(connectionURL, connectionOptions);
         bindHandlers(mongoose.connection);
         logger.info("Mongoose Connected.");
-        //seedDatabase();
+        if (process.env.NODE_ENV === "development")
+            seedDatabase();
         console.log("Database connected successfully.");
     } catch (error) {
         logger.error(`Mongoose initial connection failed. ${error}`);

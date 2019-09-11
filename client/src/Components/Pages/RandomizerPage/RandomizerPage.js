@@ -38,12 +38,14 @@ function RandomizerPage() {
                 if (!randomizer) return history.push("/not-found");
                 setRandomizer(randomizer);
             } catch (requestError) {
-                const privateError = requestError.data.private;
-                if (privateError) {
-                    setError({ private: privateError })
-                    return;
+                if (requestError.data) {
+                    const privateError = requestError.data.private;
+                    if (privateError) {
+                        setError({ private: privateError })
+                        return;
+                    }
                 }
-
+                console.error(requestError);
                 history.push("/not-found");
             }
         }
