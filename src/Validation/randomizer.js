@@ -14,7 +14,7 @@ const validationSchema = new Schema({
         required: true,
         length: {
             min: 1,
-            max: 500
+            max: 5000
         }
     },
     schema: {
