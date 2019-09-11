@@ -71,13 +71,13 @@ function RandomizerPage() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col text-center">
+                <div className="col text-center text-break">
                     <h1 className="display-3">{currentRandomizer.name}</h1>
                     <LikeAndFavoriteCounter
                         id={match.params.id}
                         likeCount={currentRandomizer.meta.likes}
                         favoriteCount={currentRandomizer.meta.favorites} />
-                    <p className="lead text-break">{currentRandomizer.description}</p>
+                    <p className="lead">{currentRandomizer.description}</p>
                     {currentRandomizer.private === true ?
                         <p className="text-danger">You've set this to be private. Only you can view this page.</p>
                         : null
