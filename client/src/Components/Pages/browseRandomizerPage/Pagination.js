@@ -20,9 +20,9 @@ export default function Pagination({ currentPage, totalPages, setPage }) {
 
 
     const pageItems = useMemo(() => {
-        const offset = 5;
+        const offset = 3;
         const arrayOfItems = [];
-        for (let i = Math.min(currentPage, Math.max(currentPage - offset, 1)); i <= Math.min(totalPages, currentPage + offset); i++) {
+        for (let i = Math.max(currentPage - offset, 1); i <= Math.min(totalPages, currentPage + offset); i++) {
             arrayOfItems.push(
                 <li key={i} className={"page-item" + (currentPage === i ? " active" : "")}>
                     <button type="button"
@@ -41,7 +41,15 @@ export default function Pagination({ currentPage, totalPages, setPage }) {
                 <li className="page-item"><button type="button"
                     disabled={currentPage === 1} className="btn page-link"
                     onClick={() => setPage(currentPage - 1)}>Previous</button></li>
+                <li className="page-item">
+                    <button type="button" className="btn page-link"
+                        onClick={() => setPage(1)}>{"<<"}</button>
+                </li>
                 {pageItems}
+                <li className="page-item">
+                    <button type="button" className="btn page-link"
+                        onClick={() => setPage(totalPages)}>{">>"}</button>
+                </li>
                 <li className="page-item"><button type="button"
                     disabled={currentPage === totalPages}
                     className="btn page-link"
