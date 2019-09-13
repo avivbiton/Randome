@@ -22,7 +22,8 @@ const initializeConnection = async () => {
         await mongoose.connect(connectionURL, connectionOptions);
         bindHandlers(mongoose.connection);
         logger.info("Mongoose Connected.");
-        //seedDatabase();
+        if (process.env.NODE_ENV === "development")
+            seedDatabase();
         console.log("Database connected successfully.");
     } catch (error) {
         logger.error(`Mongoose initial connection failed. ${error}`);
@@ -30,11 +31,11 @@ const initializeConnection = async () => {
 };
 
 const seedDatabase = async () => {
-    if (await Randomizer.count() < 50) {
+    if (await Randomizer.count() < 2000) {
         let failCount = 0;
         console.log("Seeding database");
         console.time("seed");
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 2000; i++) {
             try {
                 const newRandomizer = new Randomizer({
                     name: makeid(25),

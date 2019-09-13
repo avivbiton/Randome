@@ -1,6 +1,8 @@
 import axios from "axios";
 import RequestError from "./RequestError";
 
+axios.defaults.baseURL = "/api";
+
 class AccountAPI {
     async createNewAccount() {
         try {
