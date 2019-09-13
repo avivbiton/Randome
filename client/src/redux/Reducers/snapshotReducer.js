@@ -1,5 +1,6 @@
 import { SchemaSnapshot } from "../../SchemaBuilder/schemaSnapshot";
 
+export const RESET_HISTORY = "RESET_HISTORY";
 export const UPDATE_SNAPSHOT_HISTORY = "UPDATE_SNAPSHOT_HISTORY";
 export const INCREASE_INDEX = "INCREASE_INDEX";
 export const DECREASE_INDEX = "DECREASE_INDEX";
@@ -21,6 +22,8 @@ const initialState = {
 
 export default function snapshotReducer(state = initialState, action) {
     switch (action.type) {
+        case RESET_HISTORY:
+            return { ...initialState };
         case UPDATE_SNAPSHOT_HISTORY:
             return updateHistory(state, action.payload)
         case INCREASE_INDEX:

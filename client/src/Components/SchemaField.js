@@ -8,11 +8,16 @@ import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
 import { useInput } from "../Hooks/formInput";
 import { UPDATE_SNAPSHOT_HISTORY } from "./Pages/RandomizerBuilder/snapshotReducer";
 import { toastrDefault } from "../config";
+import { RESET_HISTORY } from "../redux/Reducers/snapshotReducer";
 
 export default function SchemaField({ error, initial, onChange }) {
 
     const [schema, bindSchema, setSchema] = useInput(initial);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => dispatch({ type: RESET_HISTORY });
+    }, []);
 
     useEffect(function onInitialChanged() {
         setSchema(initial);
