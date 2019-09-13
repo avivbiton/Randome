@@ -6,14 +6,16 @@
 				"text": [
 					"@g{0} Dragon",
 					"@g{0} Troll"
-				]
+				],
+				"properties": []
 			}
 		},
 		{
 			"name": "Attack",
 			"data": {
 				"min": 5,
-				"max": 11
+				"max": 11,
+				"properties": []
 			}
 		},
 		{
