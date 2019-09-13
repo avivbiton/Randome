@@ -16,7 +16,6 @@ export const useWindowMedia = (size) => {
         if (typeof mediaString === "undefined") return console.error(`useWindowMedia received invalid size: ${size}`);
         setMatch(window.matchMedia(mediaString).matches);
         function onResize() {
-            console.log("resize");
             setMatch(window.matchMedia(mediaString).matches);
         }
         window.addEventListener("resize", onResize, false);
