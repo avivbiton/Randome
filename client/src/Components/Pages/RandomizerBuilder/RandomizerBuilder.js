@@ -1,30 +1,21 @@
-import React, { useCallback, useEffect, useReducer } from "react";
-import { SchemaSnapshot } from "../../../SchemaBuilder/schemaSnapshot";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import BuildViewer from "./BuildViewer";
 import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
-import { snapshotReducer, UPDATE_SNAPSHOT_HISTORY, INCREASE_INDEX, DECREASE_INDEX, ADD_FIELD, ADD_GLOBAL, EDIT_FIELD, EDIT_GLOBAL, ADD_PROPERTY } from "./snapshotReducer";
+import { INCREASE_INDEX, DECREASE_INDEX, ADD_FIELD, ADD_GLOBAL, EDIT_FIELD, EDIT_GLOBAL, ADD_PROPERTY } from "../../../redux/Reducers/snapshotReducer";
 
-export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
+export default function RandomizerBuilder() {
 
-    const [snapshot, dispatchSnapshot] = useReducer(snapshotReducer,
-        {
-            history: [new SchemaSnapshot()],
-            index: 0
-        });
+    const snapshot = useSelector(state => state.snapshot);
+    const dispatchSnapshot = useDispatch();
 
     const currentSnapshot = snapshot.history[snapshot.index];
 
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
-
-
-    useEffect(() => {
-        onSnapshot(currentSnapshot);
-    }, [currentSnapshot, onSnapshot]);
-
 
     const onAddFieldClicked = useCallback(() => {
         toggleFieldModal(true, {
@@ -39,19 +30,6 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
             title: "Add Global Property"
         });
     }, [togglePropertyModal]);
-
-    const updateSnapshotHistory = useCallback(snapshot => {
-        dispatchSnapshot({
-            type: UPDATE_SNAPSHOT_HISTORY,
-            payload: snapshot
-        })
-    }, []);
-
-    useEffect(() => {
-        if (defaultSnapshot) {
-            updateSnapshotHistory(defaultSnapshot);
-        }
-    }, [defaultSnapshot, updateSnapshotHistory]);
 
     const addField = (name, parser) => {
         dispatchSnapshot({ type: ADD_FIELD, name, parser });
@@ -80,12 +58,12 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
     const undoLastAction = useCallback(() => {
         if (snapshot.index === 0) return;
         dispatchSnapshot({ type: DECREASE_INDEX });
-    }, [snapshot]);
+    }, [snapshot, dispatchSnapshot]);
 
     const redoAction = useCallback(() => {
         if (snapshot.index === snapshot.history.length - 1) return;
         dispatchSnapshot({ type: INCREASE_INDEX });
-    }, [snapshot]);
+    }, [snapshot, dispatchSnapshot]);
 
     const onFieldModalResolved = useCallback((name, parser, data) => {
         const mode = data.mode;
@@ -96,6 +74,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                 return editField(data.fieldIndex, name, parser);
             default: return
         }
+        // eslint-disable-next-line 
     }, []);
 
     const onPropertyModalResolved = useCallback((parser, data) => {
@@ -111,6 +90,7 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                 return editProperty(data.fieldIndex, data.index, parser);
             default: return;
         }
+        // eslint-disable-next-line 
     }, []);
 
     return (
@@ -128,12 +108,9 @@ export default function RandomizerBuilder({ defaultSnapshot, onSnapshot }) {
                             className="btn btn-outline-primary mr-1" onClick={redoAction}>Redo<i className="fas fa-redo mx-1"></i></button>
                         <button type="button"
                             className="btn btn-outline-primary mr-1" onClick={undoLastAction}>Undo<i className="fas fa-undo mx-1"></i></button>
-
                     </div>
                     <hr />
                     <BuildViewer
-                        snapshot={currentSnapshot}
-                        dispatch={dispatchSnapshot}
                         fieldModal={toggleFieldModal}
                         propertyModal={togglePropertyModal}
                     />

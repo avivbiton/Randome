@@ -1,48 +1,40 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import toastr from "toastr";
+import { useSelector, useDispatch } from "react-redux";
 import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
 import ErrorDisplay from "./ErrorDisplay";
 import Textarea from "./Form/Textarea";
-import { fromJS } from "immutable";
 import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
 import { useInput } from "../Hooks/formInput";
+import { UPDATE_SNAPSHOT_HISTORY } from "./Pages/RandomizerBuilder/snapshotReducer";
+import { toastrDefault } from "../config";
 
 export default function SchemaField({ error, initial, onChange }) {
 
     const [schema, bindSchema, setSchema] = useInput(initial);
-    const [defaultSchema, setDefaultSchema] = useState(initial)
-
+    const dispatch = useDispatch();
 
     useEffect(function onInitialChanged() {
-        setDefaultSchema(initial);
         setSchema(initial);
+        if (initial)
+            dispatchSchema(initial);
+        // eslint-disable-next-line 
     }, [initial, setSchema]);
 
-    const defaultSnapshot = useMemo(() => {
-        try {
-            return new SchemaSnapshot(fromJS((JSON.parse(defaultSchema))));
-        } catch (error) {
-            return null;
-        }
-    }, [defaultSchema]);
-
     const [editorActive, setEditorActive] = useState(true);
-    const [editorSnapshot, setSnapshot] = useState(null);
-    const onSnapshot = useCallback(snapshot => {
-        setSnapshot(snapshot);
-    }, []);
+    const editorSnapshot = useSelector(state => state.snapshot.history[state.snapshot.index]);
 
     const convertFromEditorClicked = useCallback(() => {
         setSchema(editorSnapshot.extractString());
     }, [setSchema, editorSnapshot]);
 
     const populateEditorFromRawJson = useCallback(() => {
-        setDefaultSchema(schema);
+        dispatchSchema(schema);
+        // eslint-disable-next-line 
     }, [schema]);
-
 
     const getJsonString = useCallback(() => {
         if (editorActive) {
-            if (editorSnapshot === null) return "";
             return editorSnapshot.extractString();
         } else {
             return schema;
@@ -54,6 +46,17 @@ export default function SchemaField({ error, initial, onChange }) {
             onChange(getJsonString());
         }
     }, [editorSnapshot, schema, onChange, getJsonString]);
+
+    function dispatchSchema(jsonSchema) {
+        const snapshot = new SchemaSnapshot();
+        try {
+            snapshot.set(JSON.parse(jsonSchema));
+        } catch (error) {
+            toastr.error("Either use Raw JSON option or fix your JSON object.", "Failed to parse JSON", toastrDefault);
+        }
+        dispatch({ type: UPDATE_SNAPSHOT_HISTORY, payload: snapshot });
+    }
+
 
     return (
         <>
@@ -73,10 +76,7 @@ export default function SchemaField({ error, initial, onChange }) {
             </ul>
 
             <div className={(editorActive ? "d-block" : "d-none")}>
-                <RandomizerBuilder
-                    onSnapshot={onSnapshot}
-                    defaultSnapshot={defaultSnapshot}
-                />
+                <RandomizerBuilder />
                 <ErrorDisplay error={error} />
                 <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={populateEditorFromRawJson}>
                     Populate Editor from Raw JSON

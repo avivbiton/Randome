@@ -57,7 +57,7 @@ function App() {
             <Route exact path="/register" component={RegisterPage} />
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/guide" component={Guide} />
-            <PrivateRoute exact path="/create" component={CreatePage} requireLogin />
+            <PrivateRoute exact path="/create" component={CreatePage} access={true} />
             <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
             <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
             <Route path="*" render={NotFound} />

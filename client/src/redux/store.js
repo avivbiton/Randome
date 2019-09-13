@@ -1,11 +1,13 @@
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 import auth from "./Reducers/authReducer";
+import snapshot from "./Reducers/snapshotReducer";
 
 const initialState = {};
 
 const rootReducer = combineReducers({
-    auth
+    auth,
+    snapshot
 });
 
 const middleware = [];
