@@ -30,6 +30,7 @@ import ProfilePage from "./Components/Pages/ProfilePage/ProfilePage";
 import Footer from "./Components/Footer";
 import EditRandomizer from "./Components/Pages/EditRandomizer";
 import Guide from "./Components/Pages/Guide";
+import ContactUs from "./Components/Pages/ContactUs/ContactUs";
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
             <Route exact path="/register" component={RegisterPage} />
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/guide" component={Guide} />
+            <Route exact path="/contact" component={ContactUs} />
             <PrivateRoute exact path="/create" component={CreatePage} access={true} />
             <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
             <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
