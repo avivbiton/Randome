@@ -5,8 +5,6 @@ export const sendContactMessage = message => {
     return {
         url: "/contact",
         method: "post",
-        data: {
-            message
-        }
+        data: message
     }
 }

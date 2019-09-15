@@ -4,6 +4,9 @@ import { useInput } from "../../../Hooks/formInput";
 import useAPI from "../../../Hooks/useAPI";
 import Button from "../../Form/Button";
 import { sendContactMessage } from "../../../API/contactAPI";
+import Input from "../../Form/Input";
+import Textarea from "../../Form/Textarea";
+
 
 
 export default function ContactUs() {
@@ -12,6 +15,7 @@ export default function ContactUs() {
     const [message, bindMessage] = useInput();
 
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const [call, cancel] = useAPI();
 
@@ -24,7 +28,7 @@ export default function ContactUs() {
             },
             function onError(error) {
                 setLoading(false);
-                console.log(error);
+                setErrors(error);
             });
     }
 
@@ -37,11 +41,14 @@ export default function ContactUs() {
         <div className="container">
             <h1 className="mt-2">Contact Us</h1>
             <form id="contact-form" onSubmit={onSubmit}>
-                <input className="form-control" type="text" placeholder="Title" {...bindTitle} />
-                <input className="form-control" type="email" placeholder="Your Email" {...bindEmail} />
-                <textarea className="form-control" rows="10" placeholder="Write your message here"
+                <Input className="form-control" type="text" placeholder="Title"
+                    {...bindTitle} error={errors.title} />
+                <Input className="form-control" type="email" placeholder="Your Email"
+                    {...bindEmail} error={errors.email} />
+                <Textarea className="form-control" rows="10" placeholder="Write your message here"
+                    error={errors.message}
                     {...bindMessage}>
-                </textarea>
+                </Textarea>
                 <Button type="submit" className="btn btn-lg btn-primary btn-block"
                     loading={loading}>Send</Button>
             </form>

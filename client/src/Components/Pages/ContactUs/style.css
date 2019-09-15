@@ -1,3 +1,3 @@
-#contact-form input, #contact-form textarea {
-    margin-bottom: 0.5rem;
+#contact-form .form-control {
+    margin-top: 0.5rem;
 }
