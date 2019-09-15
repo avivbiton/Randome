@@ -18,6 +18,11 @@ const editRandomizer = [
             if (isValid !== true) {
                 throw isValid;
             }
+
+            const passRequirement = randomizerService.schemaMatchRequirements(parsedSchema);
+            if (passRequirement !== true) {
+                return res.status(400).json({ schema: `Schema Error: \n${passRequirement}` });
+            }
         }
         catch (error) {
             return res.status(400).json({ schema: `Schema Error: \n${error}` });

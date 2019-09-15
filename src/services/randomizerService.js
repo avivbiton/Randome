@@ -126,6 +126,15 @@ const favoriteRandomizer = async (randomizerId, account) => {
     return !hasFavorite;
 };
 
+
+const schemaMatchRequirements = (schema) => {
+    for (let i = 0; i < schema.fields.length; i++) {
+        const element = schema.fields[i];
+        if (element.name.length > 50) return `Field ${element.name} can not be more than 50 characters long.`;
+    }
+    return true;
+}
+
 module.exports = {
     fetch,
     createNew,
@@ -133,5 +142,6 @@ module.exports = {
     likeRandomizer,
     favoriteRandomizer,
     fetchByOwnerId,
-    fetchManyById
+    fetchManyById,
+    schemaMatchRequirements
 };
