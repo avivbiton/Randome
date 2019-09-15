@@ -27,6 +27,7 @@ function Navbar() {
             <div className="collapse navbar-collapse" id="mainNavbar">
                 <div className="navbar-nav mr-auto">
                     <NavbarLink text="Collection" to="/browse" />
+                    <NavbarLink text={<small>Contact</small>} to="/contact" />
                 </div>
                 <div className="navbar-nav ml-auto">
                     {user ?

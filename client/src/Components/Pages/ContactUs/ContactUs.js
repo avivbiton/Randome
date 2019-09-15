@@ -24,7 +24,7 @@ export default function ContactUs() {
         setLoading(true);
         call(sendContactMessage({ title, email, message }),
             function onResolve() {
-                console.log("resolve");
+                // TODO: Redirect
             },
             function onError(error) {
                 setLoading(false);
