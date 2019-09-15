@@ -40,7 +40,7 @@ function CreatePage() {
     const feedSampleData = () => {
         const snapshot = new SchemaSnapshot();
         snapshot.set(sampleSchema);
-        dispatch(updateSnapshotHistory(sampleSchema));
+        dispatch(updateSnapshotHistory(sampleSchema, false));
     }
 
     return (

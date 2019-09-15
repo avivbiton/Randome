@@ -10,12 +10,12 @@ export const updateSnapshotHistory = (schema, parse = true) => {
         const parsedSchema = parse ? JSON.parse(schema) : schema;
         snapshot.set(parsedSchema);
         if (new ContentGenerator(parsedSchema).isValid() !== true) {
-            toastr.error("You have an error in your JSON schema. ", "Invalid JSON schema", toastrDefault);
+            toastr.error("You have an error in your JSON schema. Try not to mess around the Raw JSON option unless you know what you are doing.", "Invalid JSON schema", toastrDefault);
             return { type: "ERROR_DISPLAY" };
         }
 
     } catch (error) {
-        toastr.error("Either use Raw JSON option or fix your JSON object.", "Failed to parse JSON", toastrDefault);
+        toastr.error("There's something wrong in your JSON object.", "Failed to parse JSON", toastrDefault);
         return { type: "ERROR_DISPLAY" };
     }
     return { type: UPDATE_SNAPSHOT_HISTORY, payload: snapshot };
