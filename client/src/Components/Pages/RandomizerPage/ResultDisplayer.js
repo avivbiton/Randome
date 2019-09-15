@@ -11,11 +11,9 @@ export default function ResultDisplayer({ result }) {
     );
 }
 
-//TODO: add different ways to display the results
-
 function RowDisplay(result, key) {
     return (
-        <div key={key} className="row text-center text-md-left p-4 border-bottom">
+        <div key={key} className="row text-center text-md-left p-4 border-bottom text-break">
             <div className="col-md-2 font-weight-bold">
                 {key}
             </div>
