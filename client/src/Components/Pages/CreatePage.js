@@ -7,8 +7,8 @@ import { toastrDefault } from "../../config";
 import sampleSchema from "../../sampleSchema.json";
 import useReactRouter from "use-react-router";
 import RandomizerForm from "../RandomizerForm";
-import { UPDATE_SNAPSHOT_HISTORY } from "./RandomizerBuilder/snapshotReducer";
 import { SchemaSnapshot } from "../../SchemaBuilder/schemaSnapshot";
+import { updateSnapshotHistory } from "../../redux/Actions/snapshotActions";
 
 function CreatePage() {
 
@@ -40,7 +40,7 @@ function CreatePage() {
     const feedSampleData = () => {
         const snapshot = new SchemaSnapshot();
         snapshot.set(sampleSchema);
-        dispatch({ type: UPDATE_SNAPSHOT_HISTORY, payload: snapshot });
+        dispatch(updateSnapshotHistory(sampleSchema));
     }
 
     return (

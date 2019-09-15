@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Builder } from "../../../config";
 import { convertTypeToName } from "../../../utils";
-import { DELETE_FIELD, DELETE_FIELD_FROM_PROPERTY, DELETE_GLBOAL_PROPERTY, SWAP_FIELDS } from "./snapshotReducer";
+import { DELETE_FIELD, DELETE_FIELD_FROM_PROPERTY, DELETE_GLBOAL_PROPERTY, SWAP_FIELDS } from "../../../redux/Reducers/snapshotReducer";
 
 
 

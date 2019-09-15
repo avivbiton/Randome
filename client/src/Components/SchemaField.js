@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import toastr from "toastr";
 import { useSelector, useDispatch } from "react-redux";
 import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
 import ErrorDisplay from "./ErrorDisplay";
 import Textarea from "./Form/Textarea";
-import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
 import { useInput } from "../Hooks/formInput";
-import { UPDATE_SNAPSHOT_HISTORY } from "./Pages/RandomizerBuilder/snapshotReducer";
-import { toastrDefault } from "../config";
 import { RESET_HISTORY } from "../redux/Reducers/snapshotReducer";
+import { updateSnapshotHistory } from "../redux/Actions/snapshotActions";
 
 export default function SchemaField({ error, initial, onChange }) {
 
@@ -17,14 +14,15 @@ export default function SchemaField({ error, initial, onChange }) {
 
     useEffect(() => {
         return () => dispatch({ type: RESET_HISTORY });
+        // eslint-disable-next-line
     }, []);
 
     useEffect(function onInitialChanged() {
         setSchema(initial);
         if (initial)
-            dispatchSchema(initial);
-        // eslint-disable-next-line 
-    }, [initial, setSchema]);
+            dispatch(updateSnapshotHistory(initial));
+        // eslint-disable-next-line
+    }, [initial]);
 
     const [editorActive, setEditorActive] = useState(true);
     const editorSnapshot = useSelector(state => state.snapshot.history[state.snapshot.index]);
@@ -34,9 +32,8 @@ export default function SchemaField({ error, initial, onChange }) {
     }, [setSchema, editorSnapshot]);
 
     const populateEditorFromRawJson = useCallback(() => {
-        dispatchSchema(schema);
-        // eslint-disable-next-line 
-    }, [schema]);
+        dispatch(updateSnapshotHistory(schema));
+    }, [schema, dispatch]);
 
     const getJsonString = useCallback(() => {
         if (editorActive) {
@@ -51,17 +48,6 @@ export default function SchemaField({ error, initial, onChange }) {
             onChange(getJsonString());
         }
     }, [editorSnapshot, schema, onChange, getJsonString]);
-
-    function dispatchSchema(jsonSchema) {
-        const snapshot = new SchemaSnapshot();
-        try {
-            snapshot.set(JSON.parse(jsonSchema));
-        } catch (error) {
-            toastr.error("Either use Raw JSON option or fix your JSON object.", "Failed to parse JSON", toastrDefault);
-        }
-        dispatch({ type: UPDATE_SNAPSHOT_HISTORY, payload: snapshot });
-    }
-
 
     return (
         <>

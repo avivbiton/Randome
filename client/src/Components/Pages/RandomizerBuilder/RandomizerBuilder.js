@@ -12,8 +12,6 @@ export default function RandomizerBuilder() {
     const snapshot = useSelector(state => state.snapshot);
     const dispatchSnapshot = useDispatch();
 
-    const currentSnapshot = snapshot.history[snapshot.index];
-
     const [toggleFieldModal, bindFieldModal] = useModal();
     const [togglePropertyModal, bindGlobalModal] = useModal();
 
