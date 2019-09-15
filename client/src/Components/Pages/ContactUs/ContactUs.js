@@ -40,6 +40,9 @@ export default function ContactUs() {
     return (
         <div className="container">
             <h1 className="mt-2">Contact Us</h1>
+            <p className="lead">
+                Write us something and we'll get back to you as soon as possible.
+            </p>
             <form id="contact-form" onSubmit={onSubmit}>
                 <Input className="form-control" type="text" placeholder="Title"
                     {...bindTitle} error={errors.title} />

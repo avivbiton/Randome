@@ -19,6 +19,11 @@ const contactRequestSchema = new Schema({
         type: String,
         required: true,
         maxlength: 10000
+    },
+    read: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 }, { timestamps: true });
 
