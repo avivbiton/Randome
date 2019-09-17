@@ -5,7 +5,7 @@ import useModal from "../../../Hooks/useModal";
 import FieldModal from "./FieldModal";
 import PropertyModal from "./PropertyModal";
 import { Builder } from "../../../config";
-import { INCREASE_INDEX, DECREASE_INDEX, ADD_FIELD, ADD_GLOBAL, EDIT_FIELD, EDIT_GLOBAL, ADD_PROPERTY } from "../../../redux/Reducers/snapshotReducer";
+import { INCREASE_INDEX, DECREASE_INDEX, ADD_FIELD, ADD_GLOBAL, EDIT_FIELD, EDIT_GLOBAL, ADD_PROPERTY, EDIT_PROPERTY } from "../../../redux/Reducers/snapshotReducer";
 
 export default function RandomizerBuilder() {
 
@@ -50,7 +50,7 @@ export default function RandomizerBuilder() {
     }
 
     const editProperty = (fieldIndex, index, parser) => {
-        dispatchSnapshot({ type: EDIT_FIELD, fieldIndex, index, parser });
+        dispatchSnapshot({ type: EDIT_PROPERTY, fieldIndex, index, parser });
     }
 
     const undoLastAction = useCallback(() => {

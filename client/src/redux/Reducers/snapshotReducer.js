@@ -91,14 +91,14 @@ export default function snapshotReducer(state = initialState, action) {
             }
             case EDIT_PROPERTY: {
                 const currentSnapshot = state.history[state.index];
-                const newSnapshot = currentSnapshot.editProperty(action.fieldIndex, action.index, action.parser);
+                const newSnapshot = currentSnapshot.editPropertyField(action.fieldIndex, action.index, action.parser);
                 return updateHistory(state, newSnapshot);
             }
             default:
                 return state;
         }
     } catch (error) {
-        
+        console.error(error);
         toastr.error("This may be due to invalid data in your Raw JSON editor", "Something went wrong with the editor", toastrDefault);
         return state;
     }
