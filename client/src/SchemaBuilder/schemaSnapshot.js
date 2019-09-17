@@ -8,6 +8,10 @@ export class SchemaSnapshot {
         this.schema = schema;
     }
 
+    set(schemaObject) {
+        this.schema = fromJS(schemaObject);
+    }
+
     getSchema() {
         return this.schema.toJS();
     }

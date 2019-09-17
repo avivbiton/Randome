@@ -77,7 +77,7 @@ export default function EditRandomizer() {
         <div className="container">
             <div className="row">
                 <div className="col">
-                    <h1>Editing - {randomizer.name}</h1>
+                    <h1 className="text-break">Editing - {randomizer.name}</h1>
                 </div>
             </div>
             <div className="row">

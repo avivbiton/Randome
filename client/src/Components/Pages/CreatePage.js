@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import API from "../../API/api";
 import toastr from "toastr";
@@ -6,6 +7,8 @@ import { toastrDefault } from "../../config";
 import sampleSchema from "../../sampleSchema.json";
 import useReactRouter from "use-react-router";
 import RandomizerForm from "../RandomizerForm";
+import { SchemaSnapshot } from "../../SchemaBuilder/schemaSnapshot";
+import { updateSnapshotHistory } from "../../redux/Actions/snapshotActions";
 
 function CreatePage() {
 
@@ -14,7 +17,9 @@ function CreatePage() {
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [blockLeave, setBlockLeave] = useState(true);
-    const [schemaFeed, setSchemaFeed] = useState("");
+    const dispatch = useDispatch();
+
+
 
     const onFormSubmit = useCallback(async function ({ name, description, schema, isPrivate }) {
         try {
@@ -32,9 +37,11 @@ function CreatePage() {
         }
     }, [history]);
 
-    const feedSampleData = useCallback(function () {
-        setSchemaFeed(JSON.stringify(sampleSchema));
-    }, []);
+    const feedSampleData = () => {
+        const snapshot = new SchemaSnapshot();
+        snapshot.set(sampleSchema);
+        dispatch(updateSnapshotHistory(sampleSchema, false));
+    }
 
     return (
         <div className="container">
@@ -50,7 +57,6 @@ function CreatePage() {
             <div className="border p-4 shadow mb-4">
                 <RandomizerForm
                     onSubmit={onFormSubmit}
-                    inital={{ name: "", description: "", isPrivate: false, jsonSchema: schemaFeed }}
                     errors={errors}
                     submitText="Create"
                     loading={isLoading}

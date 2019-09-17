@@ -22,11 +22,14 @@ const createNew = [
             if (isValid !== true) {
                 throw isValid;
             }
-            
+
             if (parsedSchema.fields.length === 0) {
                 return res.status(400).json({ schema: "Must have at least one field." });
             }
-
+            const passRequirement = randomizerService.schemaMatchRequirements(parsedSchema);
+            if (passRequirement !== true) {
+                return res.status(400).json({ schema: `Schema Error: \n${passRequirement}` });
+            }
         }
         catch (error) {
             return res.status(400).json({ schema: `Schema Error: \n${error}` });

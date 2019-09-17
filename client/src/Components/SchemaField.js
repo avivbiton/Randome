@@ -1,48 +1,42 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import RandomizerBuilder from "./Pages/RandomizerBuilder/RandomizerBuilder";
 import ErrorDisplay from "./ErrorDisplay";
 import Textarea from "./Form/Textarea";
-import { fromJS } from "immutable";
-import { SchemaSnapshot } from "../SchemaBuilder/schemaSnapshot";
 import { useInput } from "../Hooks/formInput";
+import { RESET_HISTORY } from "../redux/Reducers/snapshotReducer";
+import { updateSnapshotHistory } from "../redux/Actions/snapshotActions";
 
 export default function SchemaField({ error, initial, onChange }) {
 
     const [schema, bindSchema, setSchema] = useInput(initial);
-    const [defaultSchema, setDefaultSchema] = useState(initial)
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+        return () => dispatch({ type: RESET_HISTORY });
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(function onInitialChanged() {
-        setDefaultSchema(initial);
         setSchema(initial);
-    }, [initial, setSchema]);
-
-    const defaultSnapshot = useMemo(() => {
-        try {
-            return new SchemaSnapshot(fromJS((JSON.parse(defaultSchema))));
-        } catch (error) {
-            return null;
-        }
-    }, [defaultSchema]);
+        if (initial)
+            dispatch(updateSnapshotHistory(initial));
+        // eslint-disable-next-line
+    }, [initial]);
 
     const [editorActive, setEditorActive] = useState(true);
-    const [editorSnapshot, setSnapshot] = useState(null);
-    const onSnapshot = useCallback(snapshot => {
-        setSnapshot(snapshot);
-    }, []);
+    const editorSnapshot = useSelector(state => state.snapshot.history[state.snapshot.index]);
 
     const convertFromEditorClicked = useCallback(() => {
         setSchema(editorSnapshot.extractString());
     }, [setSchema, editorSnapshot]);
 
     const populateEditorFromRawJson = useCallback(() => {
-        setDefaultSchema(schema);
-    }, [schema]);
-
+        dispatch(updateSnapshotHistory(schema));
+    }, [schema, dispatch]);
 
     const getJsonString = useCallback(() => {
         if (editorActive) {
-            if (editorSnapshot === null) return "";
             return editorSnapshot.extractString();
         } else {
             return schema;
@@ -73,10 +67,7 @@ export default function SchemaField({ error, initial, onChange }) {
             </ul>
 
             <div className={(editorActive ? "d-block" : "d-none")}>
-                <RandomizerBuilder
-                    onSnapshot={onSnapshot}
-                    defaultSnapshot={defaultSnapshot}
-                />
+                <RandomizerBuilder />
                 <ErrorDisplay error={error} />
                 <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={populateEditorFromRawJson}>
                     Populate Editor from Raw JSON
