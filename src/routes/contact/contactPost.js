@@ -16,7 +16,7 @@ module.exports = [
                 title,
                 email,
                 message,
-                user: req.user ? { displayName: req.user.displayName } : null
+                user: req.user ? req.user.displayName : null
             });
 
             return res.status(203).json({ success: "Request sent." });
