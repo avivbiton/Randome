@@ -46,7 +46,7 @@ export default function ContactUs() {
             <form id="contact-form" onSubmit={onSubmit}>
                 <Input className="form-control" type="text" placeholder="Title"
                     {...bindTitle} error={errors.title} />
-                <Input className="form-control" type="email" placeholder="Your Email"
+                <Input className="form-control" type="email" placeholder="Your Email (Optional)"
                     {...bindEmail} error={errors.email} />
                 <Textarea className="form-control" rows="10" placeholder="Write your message here"
                     error={errors.message}

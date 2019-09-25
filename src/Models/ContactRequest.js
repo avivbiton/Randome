@@ -9,7 +9,8 @@ const contactRequestSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: false,
+        default: "NONE"
     },
     user: {
         type: mongoose.SchemaTypes.ObjectId,
