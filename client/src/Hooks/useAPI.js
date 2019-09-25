@@ -17,7 +17,7 @@ const useAPI = () => {
             else return response.data;
         } catch (error) {
             if (axios.isCancel(error)) return;
-            onError(error.response.data);
+            onError(error.response.data, error.response.status);
         }
     }, [source]);
 
