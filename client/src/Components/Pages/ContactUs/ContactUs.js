@@ -6,8 +6,6 @@ import Button from "../../Form/Button";
 import { sendContactMessage } from "../../../API/contactAPI";
 import Input from "../../Form/Input";
 import Textarea from "../../Form/Textarea";
-import useRectRouter from "use-react-router";
-
 
 export default function ContactUs() {
     const [title, bindTitle] = useInput();
@@ -19,14 +17,12 @@ export default function ContactUs() {
 
     const [call, cancel] = useAPI();
 
-    const { history } = useRectRouter();
-
     function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
         call(sendContactMessage({ title, email, message }),
             function onResolve() {
-                    setLoading(false);
+                setLoading(false);
             },
             function onError(error) {
                 setLoading(false);
