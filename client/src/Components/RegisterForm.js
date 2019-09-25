@@ -73,20 +73,19 @@ function RegisterForm({ title }) {
                             null
                     }
                 </div>
-                <Input type="text" className="form-control large-input" placeholder="Display Name"
+                <Input type="text" className="form-control" placeholder="Display Name"
                     {...bindDisplayName} error={errors.displayName} />
-                <Input type="email" className="form-control large-input mt-2" placeholder="Email"
+                <Input type="email" className="form-control mt-2" placeholder="Email"
                     {...bindEmail} error={errors.email} />
-                <Input type="password" className="form-control large-input mt-2" placeholder="Password"
+                <Input type="password" className="form-control mt-2" placeholder="Password"
                     {...bindPassword} error={errors.password} />
-                <Input type="password" className="form-control large-input mt-2" placeholder="ConfirmPassword"
+                <Input type="password" className="form-control mt-2" placeholder="ConfirmPassword"
                     {...bindConfirmPassword} error={errors.confirmPassword} />
                 <Button type="submit" className="btn btn-outline-primary btn-lg btn-block mt-2" loading={isLoading}
                     disabled={buttonDisable || isLoading}>Register</Button>
                 <div className="text-muted text-center mt-1">Already have an account? <Link to="/login">Login</Link></div>
             </div>
-            <div className="card-footer text-center">
-                OR
+            <div className="card-footer text-center" style={{ padding: "none" }}>
                 <FirebaseUILogin />
             </div>
         </form>
