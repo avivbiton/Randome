@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import useReactRouter from "use-react-router";
 
 const CancelToken = axios.CancelToken;
@@ -8,6 +8,11 @@ const useAPI = () => {
 
     const source = useRef(CancelToken.source());
     const { history } = useReactRouter();
+
+    useEffect(() => {
+        // eslint-disable-next-line
+        return () => source.current.cancel();
+    }, []);
 
     const request = useCallback(async (config, onResolve, onError = () => { }) => {
         try {

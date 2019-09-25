@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import API from "../../API/api";
+import API from "../../API/randomizerAPI";
 import toastr from "toastr";
 import { toastrDefault } from "../../config";
 import sampleSchema from "../../sampleSchema.json";
@@ -9,10 +9,12 @@ import useReactRouter from "use-react-router";
 import RandomizerForm from "../RandomizerForm";
 import { SchemaSnapshot } from "../../SchemaBuilder/schemaSnapshot";
 import { updateSnapshotHistory } from "../../redux/Actions/snapshotActions";
+import useAPI from "../../Hooks/useAPI";
 
 function CreatePage() {
 
     const { history } = useReactRouter();
+    const [call] = useAPI()
 
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
@@ -21,21 +23,22 @@ function CreatePage() {
 
 
 
-    const onFormSubmit = useCallback(async function ({ name, description, schema, isPrivate }) {
-        try {
-            setLoading(true);
-            await API.randomizers.create(name, description, schema, isPrivate);
-            setBlockLeave(false);
-            history.push("/profile");
-        } catch (error) {
-            setLoading(false);
-            if (error.data.serverError) {
-                toastr.error(error.data.serverError, "Error", toastrDefault);
-                return;
-            }
-            setErrors(error.data);
-        }
-    }, [history]);
+    const onFormSubmit = useCallback(function ({ name, description, schema, isPrivate }) {
+        setLoading(true);
+        call(API.create(name, description, schema, isPrivate),
+            function onResolve() {
+                setBlockLeave(false);
+                history.push("/profile");
+            },
+            function onError(error) {
+                setLoading(false);
+                if (error.serverError) {
+                    toastr.error(error.serverError, "Error", toastrDefault);
+                    return;
+                }
+                setErrors(error);
+            });
+    }, [history, call]);
 
     const feedSampleData = () => {
         const snapshot = new SchemaSnapshot();
