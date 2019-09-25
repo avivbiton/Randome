@@ -26,13 +26,9 @@ export default function ContactUs() {
         setLoading(true);
         call(sendContactMessage({ title, email, message }),
             function onResolve() {
-                
+                    setLoading(false);
             },
-            function onError(error, status) {
-                if (status === 429) {
-                    history.push("/blocked");
-                    return;
-                }
+            function onError(error) {
                 setLoading(false);
                 setErrors(error);
             });
