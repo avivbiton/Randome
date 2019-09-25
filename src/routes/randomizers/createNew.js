@@ -3,7 +3,7 @@ const requireBody = require("../../middleware/requireBody");
 const authenticateUser = require("../../middleware/authenticateUser");
 const ValidationError = require("../../Errors/ValidationError");
 const ContentGenerator = require("randomcontentgenerator").ContentGenerator;
-
+const randomizerLimiter = require("../../rateLimiters/randomizerLimiter");
 const validateBodyMatchSchema = require("../../middleware/validateBodyMatchSchema");
 
 const validationSchema = require("../../Validation/randomizer");
@@ -36,7 +36,12 @@ const createNew = [
         }
 
         try {
+            const limiterRes = await randomizerLimiter.get(req.user.uid);
+            if (limiterRes !== null && limiterRes.remainingPoints <= 0) {
+                return res.status(429).send("Too many requests");
+            }
             await randomizerService.createNew(req.user.uid, name, description, schema, private);
+            await randomizerLimiter.consume(req.user.uid, 1);
             return res.status(201).send("Created.");
         } catch (error) {
             if (error instanceof ValidationError) {
