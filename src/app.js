@@ -7,7 +7,6 @@ const production = require("./production");
 const middleware = require("./middleware/startup");
 const logger = require("./services/logger");
 const app = express();
-app.use(require("cors")());
 
 process.on("uncaughtException", error => {
     logger.error(`Uncaught Exception: ${error}`);
