@@ -31,15 +31,15 @@ h1,h2,h3,h4,h5 {
 }
 
 .footer {
-    background-color: white;
+    background-color: rgb(24, 24, 24);
 }
 
 .footer li a {
-    color: #495057;
+    color: #d1d1d1;
 }
 
 .footer a {
-    color: black;
+    color: #d1d1d1;
     text-decoration: none;
 }
 
