@@ -5,13 +5,16 @@ const contactValidation = new Schema({
         type: String,
         required: true,
         length: {
-            min: 1,
             max: 100
+        },
+        message: {
+            required: "Title is required",
+            length: "Title is too long"
         }     
     },
     email: {
         type: String,
-        required: true
+        required: false
     },
     message: {
         type: String,
@@ -20,6 +23,7 @@ const contactValidation = new Schema({
             max: 10000
         },
         message: {
+            required: "Please write something first",
             length: "Too Long!"
         }
     }

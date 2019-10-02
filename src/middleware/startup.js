@@ -9,8 +9,8 @@ const useMiddleware = (app) => {
     app.use(blockLimiter);
     app.use(basicLimiter);
 
-    app.use(express.json({ limit: "500kb" }));
-    app.use(express.urlencoded({ extended: false, limit: "500kb" }));
+    app.use(express.json({ limit: "250kb" }));
+    app.use(express.urlencoded({ extended: false, limit: "250kb" }));
 };
 
 module.exports = { useMiddleware };

@@ -7,8 +7,6 @@ import { sendContactMessage } from "../../../API/contactAPI";
 import Input from "../../Form/Input";
 import Textarea from "../../Form/Textarea";
 
-
-
 export default function ContactUs() {
     const [title, bindTitle] = useInput();
     const [email, bindEmail] = useInput();
@@ -24,7 +22,7 @@ export default function ContactUs() {
         setLoading(true);
         call(sendContactMessage({ title, email, message }),
             function onResolve() {
-                // TODO: Redirect
+                setLoading(false);
             },
             function onError(error) {
                 setLoading(false);
@@ -46,7 +44,7 @@ export default function ContactUs() {
             <form id="contact-form" onSubmit={onSubmit}>
                 <Input className="form-control" type="text" placeholder="Title"
                     {...bindTitle} error={errors.title} />
-                <Input className="form-control" type="email" placeholder="Your Email"
+                <Input className="form-control" type="email" placeholder="Your Email (Optional)"
                     {...bindEmail} error={errors.email} />
                 <Textarea className="form-control" rows="10" placeholder="Write your message here"
                     error={errors.message}

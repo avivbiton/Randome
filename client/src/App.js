@@ -31,6 +31,7 @@ import Footer from "./Components/Footer";
 import EditRandomizer from "./Components/Pages/EditRandomizer";
 import Guide from "./Components/Pages/Guide";
 import ContactUs from "./Components/Pages/ContactUs/ContactUs";
+import BlockedPage from "./Components/Pages/BlockedPage";
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/guide" component={Guide} />
             <Route exact path="/contact" component={ContactUs} />
+            <Route exact path="/blocked" component={BlockedPage} />
             <PrivateRoute exact path="/create" component={CreatePage} access={true} />
             <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
             <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />

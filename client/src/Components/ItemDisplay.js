@@ -18,8 +18,8 @@ export default function ItemDisplay({ name, description, likes, favorites, id, o
                 <Link className="btn btn-outline-primary btn-block btn-lg mt-auto" to={`/randomizer/${id}`}>View</Link>
             </div>
             <div className="card-footer d-inline-flex align-items-center text-white bg-primary">
-                <i className="fas fa-thumbs-up fa-lg mx-2 like-icon"></i><span className="lead">{likes}</span>
-                <i className="fas fa-heart fa-lg mx-2 heart-icon"></i><span className="lead">{favorites}</span>
+                <i className="fas fa-thumbs-up fa-lg mx-2 text-white"></i><span className="lead">{likes}</span>
+                <i className="fas fa-heart fa-lg mx-2 text-white"></i><span className="lead">{favorites}</span>
                 <div className="ml-auto">by {owner}</div>
             </div>
         </div>
