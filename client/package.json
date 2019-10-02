@@ -9,7 +9,7 @@
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.24.0",
     "query-string": "^6.8.3",
-    "randomcontentgenerator": "^0.3.1",
+    "randomcontentgenerator": "^0.3.6",
     "react": "^16.10.1",
     "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.10.1",
