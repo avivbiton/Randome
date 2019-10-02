@@ -1,56 +1,82 @@
 {
-	"fields": [
-		{
-			"name": "Creature Name",
-			"data": {
-				"text": [
-					"@g{0} Dragon",
-					"@g{0} Troll"
-				],
-				"properties": []
-			}
-		},
-		{
-			"name": "Attack",
-			"data": {
-				"min": 5,
-				"max": 11,
-				"properties": []
-			}
-		},
-		{
-			"name": "Description",
-			"data": {
-				"options": [
-					[
-						"Increased @{0}% move speed while hidden. ",
-						"Deal bonus @{1} @g{0} damage while attacking. "
-					],
-					[
-						"While moving has increased resistance.",
-						"Immune to @g{0} damage."
-					]
-				],
-				"properties": [
-					{
-						"min": 5,
-						"max": 11
-					},
-					{
-						"min": 100,
-						"max": 251
-					}
-				]
-			}
-		}
-	],
-	"globalProperties": [
-		{
-			"text": [
-				"Fire",
-				"Frost",
-				"Earth"
-			]
-		}
-	]
+    "fields": [
+        {
+            "name": "Item Name",
+            "data": {
+                "options": [
+                    [
+                        "The @g{0} Shield ",
+                        "The @g{0} Sword ",
+                        "The @g{0} Armour ",
+                        "The @g{0} Bow "
+                    ],
+                    [
+                        "Of The Titan",
+                        "Of the Gods",
+                        "Of the Creator",
+                        "Of the Incredible Mage",
+                        "Of the Rusty Blacksmith",
+                        ""
+                    ]
+                ],
+                "properties": []
+            }
+        },
+        {
+            "name": "Effect",
+            "data": {
+                "text": [
+                    "The wearer gains increased @{0} damage against non-@g{0} enemies"
+                ],
+                "properties": [
+                    {
+                        "min": 100,
+                        "max": 750
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Ability",
+            "data": {
+                "text": [
+                    "Channel for @{0} seconds and then explode, doing @g{0} damage to all nearby enemies",
+                    "Infuse your attacks with @g{0} power.",
+                    "You are immune to @g{0} damage but takes double damage from other resources.",
+                    "Damaging @g{0} attacks heals you instead of damaging you."
+                ],
+                "properties": [
+                    {
+                        "min": 1,
+                        "max": 10
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Drawback",
+            "data": {
+                "text": [
+                    "Magic skills from other class costs double the mana.",
+                    "You may only use your ability once per battle.",
+                    "Casting spells of other types of magic will harm you.",
+                    "Positive effects that are not @g{0} type, harm you instead."
+                ],
+                "properties": []
+            }
+        }
+    ],
+    "globalProperties": [
+        {
+            "text": [
+                "Holy",
+                "Fire",
+                "Ice",
+                "Water",
+                "Heavenly",
+                "Dark",
+                "Corrupted"
+            ]
+        }
+    ]
 }
