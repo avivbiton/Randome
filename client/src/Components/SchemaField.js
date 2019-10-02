@@ -6,6 +6,7 @@ import Textarea from "./Form/Textarea";
 import { useInput } from "../Hooks/formInput";
 import { RESET_HISTORY } from "../redux/Reducers/snapshotReducer";
 import { updateSnapshotHistory } from "../redux/Actions/snapshotActions";
+import { OverlayTrigger } from "react-bootstrap";
 
 export default function SchemaField({ error, initial, onChange }) {
 
@@ -71,7 +72,13 @@ export default function SchemaField({ error, initial, onChange }) {
                 <ErrorDisplay error={error} />
                 <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={populateEditorFromRawJson}>
                     Import from Raw JSON
-                </button> <i className="far fa-question-circle ml-1 align-middle text-secondary" />
+                </button>
+                <OverlayTrigger
+                    placement="right-start"
+                    delay={{ show: 100, hide: 400 }}
+                    overlay={tooltip}>
+                    <i className="far fa-question-circle ml-1 align-middle text-secondary" />
+                </OverlayTrigger>
             </div>
             <div className={(editorActive ? "d-none" : "d-block")}>
                 <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
@@ -82,3 +89,10 @@ export default function SchemaField({ error, initial, onChange }) {
         </>
     );
 }
+
+
+const tooltip = ({ placement, scheduleUpdate, arrowProps, outOfBoundaries, show, ...props }) => (
+    <div {...props} className="tooltip">
+        This will try to convert your Raw JSON into the Editor. Do NOT use unless you know what you are doing.
+    </div>
+)
