@@ -70,8 +70,8 @@ export default function SchemaField({ error, initial, onChange }) {
                 <RandomizerBuilder />
                 <ErrorDisplay error={error} />
                 <button type="button" className="btn btn-sm btn-outline-secondary mt-2" onClick={populateEditorFromRawJson}>
-                    Populate Editor from Raw JSON
-                    </button>
+                    Import from Raw JSON
+                </button> <i className="far fa-question-circle ml-1 align-middle text-secondary" />
             </div>
             <div className={(editorActive ? "d-none" : "d-block")}>
                 <Textarea rows="10" placeholder="Post your schema here" className="form-control form-control-lg mt-2"
