@@ -30,10 +30,10 @@ function CreatePage() {
                 setBlockLeave(false);
                 history.push("/profile");
             },
-            function onError(error) {
+            function onError(error, status) {
                 setLoading(false);
-                if (error.serverError) {
-                    toastr.error(error.serverError, "Error", toastrDefault);
+                if (status === 500) {
+                    toastr.error("Sorry, something happend. Try again later.", "Internal Server Error", toastrDefault);
                     return;
                 }
                 setErrors(error);
