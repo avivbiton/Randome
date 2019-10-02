@@ -4,6 +4,7 @@ const requireBody = require("../../middleware/requireBody");
 const validateBodyMatchSchema = require("../../middleware/validateBodyMatchSchema");
 const validationSchema = require("../../Validation/randomizer");
 const ContentGenerator = require("randomcontentgenerator").ContentGenerator;
+const randomizerService = require("../../services/randomizerService");
 
 const editRandomizer = [
     authenticateUser(),
@@ -19,7 +20,7 @@ const editRandomizer = [
                 throw isValid;
             }
 
-            const passRequirement = randomizerService.schemaMatchRequirements(parsedSchema);
+            const passRequirement = randomizerService.schemaMatchRequirements(JSON.parse(req.body.schema));
             if (passRequirement !== true) {
                 return res.status(400).json({ schema: `Schema Error: \n${passRequirement}` });
             }

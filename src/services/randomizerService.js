@@ -133,7 +133,7 @@ const schemaMatchRequirements = (schema) => {
         if (element.name.length > 50) return `Field ${element.name} can not be more than 50 characters long.`;
     }
     return true;
-}
+};
 
 module.exports = {
     fetch,
