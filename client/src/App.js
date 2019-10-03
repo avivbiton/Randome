@@ -32,6 +32,7 @@ import EditRandomizer from "./Components/Pages/EditRandomizer";
 import Guide from "./Components/Pages/Guide";
 import ContactUs from "./Components/Pages/ContactUs/ContactUs";
 import BlockedPage from "./Components/Pages/BlockedPage";
+import MessageSent from "./Components/Pages/ContactUs/MessageSent";
 
 function App() {
 
@@ -51,22 +52,23 @@ function App() {
     <Provider store={reduxStore}>
       <Router>
         <Navbar />
-     
-          <Switch>
-            <Route exact path="/" component={LandingPage} />
-            <Route exact path="/randomizer/:id" component={RandomizerPage} />
-            <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
-            <Route exact path="/register" component={RegisterPage} />
-            <Route exact path="/browse" component={Browse} />
-            <Route exact path="/guide" component={Guide} />
-            <Route exact path="/contact" component={ContactUs} />
-            <Route exact path="/blocked" component={BlockedPage} />
-            <PrivateRoute exact path="/create" component={CreatePage} access={true} />
-            <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
-            <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
-            <Route path="*" render={NotFound} />
-          </Switch>
-      
+
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/randomizer/:id" component={RandomizerPage} />
+          <Route exact path="/login" render={props => <LoginPage onLogin={loginUser} {...props} />} />
+          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/browse" component={Browse} />
+          <Route exact path="/guide" component={Guide} />
+          <Route exact path="/contact" component={ContactUs} />
+          <Route exact path="/blocked" component={BlockedPage} />
+          <Route exact path="/message-sent" component={MessageSent} />
+          <PrivateRoute exact path="/create" component={CreatePage} access={true} />
+          <PrivateRoute exact path="/profile" component={ProfilePage} requireLogin />
+          <PrivateRoute exact path="/randomizer/:id/edit" component={EditRandomizer} requireLogin />
+          <Route path="*" render={NotFound} />
+        </Switch>
+
         <Footer />
       </Router>
     </Provider>
