@@ -17,7 +17,7 @@ function RowDisplay(result, key) {
             <div className="col-md-2 font-weight-bold">
                 {key}
             </div>
-            <div className="col-md-10">
+            <div style={{ fontSize: "150%", letterSpacing: "120%" }} className="col-md-10">
                 {result[key]}
             </div>
         </div>
